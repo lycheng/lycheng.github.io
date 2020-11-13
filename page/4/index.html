@@ -70,6 +70,179 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-golang-learning-3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/04/golang-learning-3/" class="article-date">
+  <time datetime="2016-07-03T16:00:00.000Z" itemprop="datePublished">2016-07-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/04/golang-learning-3/">Golang 学习 3</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="包管理"><a href="#包管理" class="headerlink" title="包管理"></a>包管理</h2><p>Golang 中的包 <code>package</code> 是代码组织的基本单位。与 <code>struct</code> 的方法相同，大写字母开头的就是该包对外可以访问的方法，变量。</p>
+<p>每个文件开头的 <code>package</code> 关键字用来标识该文件所在的包名，通常就是包含该文件的文件目录名。</p>
+<p>当导入包遇到重名的时候，可以像下面的代码一样</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">"crypto/rand"</span></span><br><span class="line">    mrand <span class="string">"math/rand"</span> <span class="comment">// alternative name mrand avoids conflict</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="匿名导入"><a href="#匿名导入" class="headerlink" title="匿名导入"></a>匿名导入</h3><p>因为在使用别的包的时候，如果仅仅是 import 但不使用的话是会报错的，但有种情况是仅仅希望执行某个包对应的 <code>init</code> 函数，因为在 import 的时候，会自动调用包里面各个文件的 <code>init</code> 函数。</p>
+<p>像官网的例子，读取图片文件</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">    <span class="string">"image"</span></span><br><span class="line">    <span class="string">"image/jpeg"</span></span><br><span class="line">    _ <span class="string">"image/png"</span> <span class="comment">// register PNG decoder</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>上述导入的 <code>image/png</code> 实际执行了以下的函数，详见 <a href="https://golang.org/src/image/png/reader.go#L847" target="_blank" rel="noopener">源文件</a></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</span><br><span class="line">    image.RegisterFormat(<span class="string">"png"</span>, pngHeader, Decode, DecodeConfig)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行了 <a href="https://golang.org/src/image/format.go#L24" target="_blank" rel="noopener">image/format</a> 的 <code>RegisterFormat</code> 去注册解码器</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Formats is the list of registered formats.</span></span><br><span class="line"><span class="keyword">var</span> formats []format</span><br><span class="line"></span><br><span class="line"><span class="comment">// RegisterFormat registers an image format for use by Decode.</span></span><br><span class="line"><span class="comment">// Name is the name of the format, like "jpeg" or "png".</span></span><br><span class="line"><span class="comment">// Magic is the magic prefix that identifies the format's encoding. The magic</span></span><br><span class="line"><span class="comment">// string can contain "?" wildcards that each match any one byte.</span></span><br><span class="line"><span class="comment">// Decode is the function that decodes the encoded image.</span></span><br><span class="line"><span class="comment">// DecodeConfig is the function that decodes just its configuration.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RegisterFormat</span><span class="params">(name, magic <span class="keyword">string</span>, decode <span class="keyword">func</span>(io.Reader)</span> <span class="params">(Image, error)</span>, <span class="title">decodeConfig</span> <span class="title">func</span><span class="params">(io.Reader)</span> <span class="params">(Config, error)</span>)</span> &#123;</span><br><span class="line">    formats = <span class="built_in">append</span>(formats, format&#123;name, magic, decode, decodeConfig&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当然，这里的仅仅是用来读文件，如果需要对 png 进行操作的话，还是需要导入 png 的 package。除了这里的图片操作以外，数据库操作也是类似的 <a href="https://github.com/go-sql-driver/mysql#usage" target="_blank" rel="noopener">代码</a>。</p>
+<h3 id="工作区"><a href="#工作区" class="headerlink" title="工作区"></a>工作区</h3><p>Golang 中需要配置 <code>$GOPATH</code> 来指定工作区，换个角度来讲，只要控制 <code>$GOPATH</code> 就可以控制不同的工作区，防止不同的项目依赖互相污染。</p>
+<h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><p>在编译的时候不知道变量的值，但是运行时可以进行检查判断，更新，这在 Golang 中就是反射。简单来说，反射是一种检验变量的类型和值的机制。这里面的操作对象是 interface。</p>
+<h3 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x <span class="keyword">float64</span> = <span class="number">3.4</span></span><br><span class="line">v := reflect.ValueOf(x)</span><br><span class="line">fmt.Println(<span class="string">"type:"</span>, v.Type())</span><br><span class="line">fmt.Println(<span class="string">"kind is float64:"</span>, v.Kind() == reflect.Float64)</span><br><span class="line">fmt.Println(<span class="string">"value:"</span>, v.Float())</span><br><span class="line"></span><br><span class="line"><span class="comment">// type: float64</span></span><br><span class="line"><span class="comment">// kind is float64: true</span></span><br><span class="line"><span class="comment">// value: 3.4</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="从-interface-value-到-reflection-object-的"><a href="#从-interface-value-到-reflection-object-的" class="headerlink" title="从 interface value 到 reflection object 的"></a>从 interface value 到 reflection object 的</h3><p>reflect pacakge 的两个基本函数 <code>reflect.TypeOf</code> 和 <code>reflect.ValueOf</code>，都是接收 <code>interface{}</code> 的参数。任何类型都包含 empty interface，所以任何 interface 都能转成 <code>interface{}</code>。</p>
+<p>如上述的代码一样，可以通过判断 reflect object 的类型来进行相应的输出</p>
+<h3 id="从-reflection-object-到-interface-object"><a href="#从-reflection-object-到-interface-object" class="headerlink" title="从 reflection object 到 interface object"></a>从 reflection object 到 interface object</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> MyInt <span class="keyword">int</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> x MyInt = <span class="number">7</span></span><br><span class="line"></span><br><span class="line">    v := reflect.ValueOf(x)</span><br><span class="line">    y := v.Interface().(MyInt) <span class="comment">// 这里如果用 int 会 panic</span></span><br><span class="line"></span><br><span class="line">    fmt.Println(v)</span><br><span class="line">    fmt.Println(v.Kind()) <span class="comment">// int</span></span><br><span class="line">    fmt.Println(v.Type()) <span class="comment">// main.MyInt</span></span><br><span class="line">    fmt.Println(y)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码可以看到，<code>Kind</code> 方法不能正确辨识变量的类型，但 <code>Type</code> 可以，虽然底层类型都是一样的。</p>
+<p>v 调用 <code>Interface</code> 之后返回的是 empty interface，可以用 <code>fmt.Println</code> 等方法能正确识别为 int 类型。</p>
+<h3 id="想要修改-reflection-object，那该变量必须是-settable"><a href="#想要修改-reflection-object，那该变量必须是-settable" class="headerlink" title="想要修改 reflection object，那该变量必须是 settable"></a>想要修改 reflection object，那该变量必须是 settable</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x <span class="keyword">float64</span> = <span class="number">3.4</span></span><br><span class="line">v := reflect.ValueOf(x)</span><br><span class="line">v.SetFloat(<span class="number">7.1</span>) <span class="comment">// panic</span></span><br><span class="line"></span><br><span class="line">fmt.Println(<span class="string">"settability of v:"</span>, v.CanSet()) <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<p>错误的原因是 <code>reflect.Value.SetFloat using unaddressable value</code>，该变量是无法寻址的。reflect 中，可寻址标识可以修改变量实际存储的东西。在上面的函数调用中，复制了 <code>x</code>，即使修改也只是对函数内部的临时变量进行修改。</p>
+<p>改成指针</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">p := reflect.ValueOf(&amp;x) <span class="comment">// Note: take the address of x.</span></span><br><span class="line">fmt.Println(<span class="string">"type of p:"</span>, p.Type())</span><br><span class="line">fmt.Println(<span class="string">"settability of p:"</span>, p.CanSet()) <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<p>指针也不行，我们实际需要修改的东西是 <code>p</code> 指向的内存，而不是 <code>p</code> 本身。正确的用法如下</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x <span class="keyword">float64</span> = <span class="number">3.4</span></span><br><span class="line">p := reflect.ValueOf(&amp;x)</span><br><span class="line">v := p.Elem()</span><br><span class="line"></span><br><span class="line">v.SetFloat(<span class="number">7.1</span>)</span><br><span class="line">fmt.Println(v.Interface())</span><br><span class="line">fmt.Println(x)</span><br><span class="line">fmt.Println(v)</span><br></pre></td></tr></table></figure>
+
+<p>这里有点绕，需要仔细理解下才行。</p>
+<p>三个用法看下来发现其实反射用起来是比较危险的，因为无法进行静态分析，程序可能在某个地方就 panic 了，在实际场景中因该尽量避免使用反射。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="https://wizardforcel.gitbooks.io/gopl-zh/content/" target="_blank" rel="noopener">Go 语言圣经</a></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/07/04/golang-learning-3/" data-id="ckhfy2cn6000kp1az6jx7emxh" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/" rel="tag">golang</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-golang-learning-2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/06/25/golang-learning-2/" class="article-date">
+  <time datetime="2016-06-24T16:00:00.000Z" itemprop="datePublished">2016-06-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/25/golang-learning-2/">Golang 学习 2</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="struct"><a href="#struct" class="headerlink" title="struct"></a>struct</h2><p>用于聚合数据的结构体，简单用法如下</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Employee <span class="keyword">struct</span> &#123;</span><br><span class="line">    ID        <span class="keyword">int</span></span><br><span class="line">    Name      <span class="keyword">string</span></span><br><span class="line">    Address   <span class="keyword">string</span></span><br><span class="line">    DoB       time.Time</span><br><span class="line">    Position  <span class="keyword">string</span></span><br><span class="line">    Salary    <span class="keyword">int</span></span><br><span class="line">    ManagerID <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> dilbert Employee</span><br><span class="line"></span><br><span class="line"><span class="comment">// . 操作</span></span><br><span class="line">dilbert.Salary = <span class="number">4000</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 指针也是同样</span></span><br><span class="line">ptr := &amp;Employee&#123;&#125;</span><br><span class="line">ptr.ID = <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>结构体还是该结构体的指针，都支持 . 操作，两者是等效的。在需要传结构体当作参数的时候，最好是使用指针的方式，这就减少了复制结构体的成本。</p>
+<p>结构体的成员大小写也跟 Go 本身的包导出规则类似，小写开头的参数如果使用在包外使用会报错。</p>
+<h3 id="匿名嵌入"><a href="#匿名嵌入" class="headerlink" title="匿名嵌入"></a>匿名嵌入</h3><p>当需要一个结构体内加入另一个结构体的时候，可以用匿名成员，只在结构体内写类型或类型指针而不是成员变量。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> AA <span class="keyword">struct</span> &#123;</span><br><span class="line">    A <span class="keyword">int</span></span><br><span class="line">    C <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> BB <span class="keyword">struct</span> &#123;</span><br><span class="line">    AA</span><br><span class="line">    B <span class="keyword">int</span></span><br><span class="line">    C <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 直接访问而不是指定 b.AA.A</span></span><br><span class="line"></span><br><span class="line">b := BB&#123;&#125;</span><br><span class="line">b.A = <span class="number">1</span></span><br><span class="line">b.B = <span class="number">2</span></span><br><span class="line">b.C = <span class="number">3</span></span><br><span class="line">b.AA.C = <span class="number">1111</span></span><br><span class="line">fmt.Println(b) <span class="comment">// 结果 &#123;1 1111&#125; 2 3</span></span><br></pre></td></tr></table></figure>
+
+<p>上面最后可以看到，如果是同名成员的话，会优先访问本类型的成员，忽略匿名成员，这点和其它语言类似。</p>
+<p>但是初始化的时候还是得按照类型来。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">bb := BB&#123;</span><br><span class="line">    AA: AA&#123;A: <span class="number">1</span>&#125;,</span><br><span class="line">    B:  <span class="number">2</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><p>函数声明时，在函数前面加类型，则为该类型添加了一个方法。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Point <span class="keyword">struct</span> &#123;</span><br><span class="line">    X <span class="keyword">float64</span></span><br><span class="line">    Y <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 这里如果使用 p Point 来声明，在使用的时候也是一样的</span></span><br><span class="line"><span class="comment">// 但是调用的时候会发生以此 Point 的复制，所以尽量使用指针</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p *Point)</span> <span class="title">ScaleBy</span><span class="params">(factor <span class="keyword">float64</span>)</span></span> &#123;</span><br><span class="line">    p.X *= factor</span><br><span class="line">    p.Y *= factor</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Point&#123;<span class="number">1</span>, <span class="number">2</span>&#125;.ScaleBy(<span class="number">2</span>) <span class="comment">// 临时变量则无法获取其地址，不能这样用</span></span><br></pre></td></tr></table></figure>
+
+<p>须明确一点，<strong>所有的函数调用都是传值的，哪怕是 receiver</strong>。所以对于数据量大的方法更多应该考虑指针的 receiver。</p>
+<h2 id="interface"><a href="#interface" class="headerlink" title="interface"></a>interface</h2><h3 id="方法集合"><a href="#方法集合" class="headerlink" title="方法集合"></a>方法集合</h3><p>类似于 <code>duck typing</code> 的意思，<code>interface</code>是一种类型，它定义一组方法，任何有实现这些方法的类型都能使用。常用于函数的参数定义中，我们不去关心这个类型具体做什么，而是关心这个类型能不能做我们想要的某些东西。如下面的 <code>fmt.Stringer</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> fmt</span><br><span class="line"><span class="comment">// The String method is used to print values passed</span></span><br><span class="line"><span class="comment">// as an operand to any format that accepts a string</span></span><br><span class="line"><span class="comment">// or to an unformatted printer such as Print.</span></span><br><span class="line"><span class="keyword">type</span> Stringer <span class="keyword">interface</span> &#123;</span><br><span class="line">    String() <span class="keyword">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>假如有一个函数，需要使用上述的 <code>String()</code>，则你在函数声明的时候可以传入一个 <code>fmt.Stringer</code>，任何实现了 <code>String()</code> 方法的类型都可以使用。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">testString</span><span class="params">(i fmt.Stringer)</span></span> &#123;</span><br><span class="line">    fmt.Println(i.String())</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Human <span class="keyword">struct</span> &#123;</span><br><span class="line">    Name <span class="keyword">string</span></span><br><span class="line">    Age  <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(h Human)</span> <span class="title">String</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> fmt.Sprintf(<span class="string">"Name %s, Age %d"</span>, h.Name, h.Age)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>值得注意的是，这里 <code>Human</code> 的 <code>String</code> 方法使用变量而不是指针作为 recevier。因为值类型的方法可以使用指针去访问，但是反过来不行。使用值类型的方法相对更通用一些。</p>
+<h3 id="通用类型"><a href="#通用类型" class="headerlink" title="通用类型"></a>通用类型</h3><p>interface 无关是指针还是值，它是什么取决于你怎么去处理。</p>
+<p>在很多标准库的定义中，很多函数接收 <code>v inteface{}</code> 的参数，意味着可以传入任何类型的变量。</p>
+<p>使用原则简单来说就是 <a href="https://en.wikipedia.org/wiki/Robustness_principle" target="_blank" rel="noopener">宽以待人，严于律己</a>，如果返回 interface 类型的话则会需要后人去猜测变量的类型。你会看到在许多的函数参数中都会有 interface 类型，使用上更多是传入一个指针，这样就可以确认函数修改 / 更新的值是确定的。</p>
+<h2 id="Goroutines-amp-amp-Channels"><a href="#Goroutines-amp-amp-Channels" class="headerlink" title="Goroutines &amp;&amp; Channels"></a>Goroutines &amp;&amp; Channels</h2><p>使用简单的语法就可以开启一个新的线程去执行函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go f()</span><br></pre></td></tr></table></figure>
+
+<p>主函数也是一个 <code>goroutine</code>，当主函数退出，所有的 <code>goroutine</code> 都会退出。</p>
+<p>不同的 <code>goroutine</code> 之间使用 <code>channel</code> 进行通信，<code>channel</code> 是指定类型的。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>) <span class="comment">// 无缓冲</span></span><br><span class="line">ch1 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">1</span>) <span class="comment">// 有缓冲</span></span><br><span class="line"></span><br><span class="line">ch &lt;- x  <span class="comment">// 发送</span></span><br><span class="line">x = &lt;-ch <span class="comment">// 接收</span></span><br><span class="line">&lt;-ch     <span class="comment">// 接收并抛弃</span></span><br></pre></td></tr></table></figure>
+
+<p>上方代码中创建的无缓冲的 <code>channel</code>，这样子接受者和发送者都会同时阻塞，相当于两者做一次同步，当通过无缓冲的 <code>channel</code> 进行发送时，接受者收到数据发生在发送者唤醒之前。</p>
+<p>需要注意的是，哪怕是有缓冲的 <code>channel</code> 在其没有元素的时候，接收动作 <code>&lt;-ch</code> 是阻塞的，直到有数据过来。</p>
+<h3 id="select-的多路复用"><a href="#select-的多路复用" class="headerlink" title="select 的多路复用"></a>select 的多路复用</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> &#123;</span><br><span class="line"><span class="keyword">case</span> &lt;-ch1:</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"><span class="keyword">case</span> x := &lt;-ch2:</span><br><span class="line">    <span class="comment">// ...use x...</span></span><br><span class="line"><span class="keyword">case</span> ch3 &lt;- y:</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当有多个 <code>channel</code> 需要进行监控的时候，可以用 <code>select</code> 的语法进行操作，只有在某个 <code>channel</code> 有数据时才会执行相应的 <code>case</code>，否则执行 <code>default</code> 块。</p>
+<p><code>time</code> 包中有一个 Tick 函数能很方便地执行定时任务</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    tick := time.Tick(<span class="number">3</span> * time.Second)</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">100</span>; i++ &#123;</span><br><span class="line">        <span class="keyword">select</span> &#123;</span><br><span class="line">        <span class="keyword">case</span> &lt;-tick:</span><br><span class="line">            fmt.Println(<span class="string">"Do Some Thing"</span>)</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            fmt.Println(<span class="string">"Sleep 1s"</span>)</span><br><span class="line">            time.Sleep(time.Duration(<span class="number">1</span>) * time.Second)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出如下</span></span><br><span class="line">Sleep <span class="number">1</span>s</span><br><span class="line">Sleep <span class="number">1</span>s</span><br><span class="line">Sleep <span class="number">1</span>s</span><br><span class="line">Do Some Thing</span><br><span class="line">Sleep <span class="number">1</span>s</span><br><span class="line">Sleep <span class="number">1</span>s</span><br><span class="line">Sleep <span class="number">1</span>s</span><br><span class="line">Do Some Thing</span><br><span class="line">Sleep <span class="number">1</span>s</span><br><span class="line">Sleep <span class="number">1</span>s</span><br><span class="line">Sleep <span class="number">1</span>s</span><br><span class="line">Do Some Thing</span><br><span class="line">Sleep <span class="number">1</span>s</span><br><span class="line">Sleep <span class="number">1</span>s</span><br><span class="line">Sleep <span class="number">1</span>s</span><br><span class="line">Do Some Thing</span><br><span class="line">Sleep <span class="number">1</span>s</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h3 id="channel-泄漏"><a href="#channel-泄漏" class="headerlink" title="channel 泄漏"></a>channel 泄漏</h3><p>上述代码中，<code>tick</code> 在循环之外还会继续作用，这种情况叫做 <code>channel</code> 的泄漏，它只适合用在整个程序生命周期都存在的情况。</p>
+<p>当你试图去 <code>close</code> 的时候，则会报错</p>
+<blockquote>
+<p>invalid operation: close(tick) (cannot close receive-only channel)</p>
+</blockquote>
+<p>还有另一种 tick 能使用</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ticker := time.NewTicker(<span class="number">1</span> * time.Second)</span><br><span class="line">&lt;-ticker.C    <span class="comment">// receive from the ticker's channel</span></span><br><span class="line">ticker.Stop() <span class="comment">// cause the ticker's goroutine to terminate</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="退出多个-goroutine"><a href="#退出多个-goroutine" class="headerlink" title="退出多个 goroutine"></a>退出多个 goroutine</h3><p>如果维护了多个 goroutine 的话，需要类似于广播的一类事件，可以通过关闭一个 channel 来进行类似的操作。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> done = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;) <span class="comment">// 注意是无缓冲的</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">cancelled</span><span class="params">()</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">	<span class="keyword">select</span> &#123;</span><br><span class="line">	<span class="keyword">case</span> &lt;-done:</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">	<span class="keyword">default</span>:</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">worker</span><span class="params">(i <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> cancelled() &#123;</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        &#125;</span><br><span class="line">        fmt.Printf(<span class="string">"worker %d work\n"</span>, i)</span><br><span class="line">        time.Sleep(time.Duration(<span class="number">1</span>) * time.Second)</span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Printf(<span class="string">"worker %d cancelled\n"</span>, i)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">manager</span><span class="params">()</span></span> &#123;</span><br><span class="line">    time.Sleep(time.Duration(<span class="number">2</span>) * time.Second)</span><br><span class="line">    fmt.Println(<span class="string">"close workers"</span>)</span><br><span class="line">    <span class="built_in">close</span>(done)</span><br><span class="line">    time.Sleep(time.Duration(<span class="number">5</span>) * time.Second)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">1</span>; i &lt; <span class="number">5</span>; i++ &#123;</span><br><span class="line">        j := i</span><br><span class="line">        <span class="keyword">go</span> worker(j)</span><br><span class="line">    &#125;</span><br><span class="line">    manager()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="一些有趣的文章"><a href="#一些有趣的文章" class="headerlink" title="一些有趣的文章"></a>一些有趣的文章</h2><ol>
+<li><a href="http://marcio.io/2015/07/handling-1-million-requests-per-minute-with-golang/" target="_blank" rel="noopener">Handling 1 Million Requests per Minute with Go</a></li>
+<li><a href="http://jordanorelli.com/post/32665860244/how-to-use-interfaces-in-go" target="_blank" rel="noopener">Golang 的 interface</a></li>
+<li><a href="http://research.swtch.com/interfaces" target="_blank" rel="noopener">Golang interface 的内存实现</a></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/06/25/golang-learning-2/" data-id="ckhfy2cn1000cp1azhgsy4due" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/" rel="tag">golang</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-golang-learning-1" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/06/07/golang-learning-1/" class="article-date">
@@ -149,7 +322,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/06/07/golang-learning-1/" data-id="cke3yzion000crwaz2igr5bbs" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/06/07/golang-learning-1/" data-id="ckhfy2cn3000fp1azgkataqo9" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/" rel="tag">golang</a></li></ul>
@@ -238,7 +411,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/05/29/golang-at-ubuntu-16.04/" data-id="cke3yziom000brwaz5d0z0pu4" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/05/29/golang-at-ubuntu-16.04/" data-id="ckhfy2cmy0008p1az6q5icnkl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a></li></ul>
@@ -298,7 +471,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/03/12/virtualenvwrapper/" data-id="cke3yzioh0005rwaz9uj0drtj" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/03/12/virtualenvwrapper/" data-id="ckhfy2cmv0005p1az3q0p8s6n" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/virtualenv/" rel="tag">virtualenv</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/virtualenvwrapper/" rel="tag">virtualenvwrapper</a></li></ul>
@@ -377,7 +550,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/20/javascript-oo/" data-id="cke3yziol0009rwaz36f9bhxd" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/20/javascript-oo/" data-id="ckhfy2cmx0007p1azbf23agnt" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li></ul>
@@ -442,7 +615,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/06/about-react/" data-id="cke3yziog0004rwaz5mf7byxo" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/06/about-react/" data-id="ckhfy2cmu0004p1azco5k3jfu" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/react/" rel="tag">react</a></li></ul>
@@ -587,7 +760,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/03/about-python-reading-notes/" data-id="cke3yzioj0008rwazhtr0ezwt" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/03/about-python-reading-notes/" data-id="ckhfy2cn0000ap1az83a788vv" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
@@ -665,7 +838,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/07/about-git/" data-id="cke3yziof0003rwaz0o8cc66o" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/07/about-git/" data-id="ckhfy2cmt0003p1az0u3e5g7g" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/" rel="tag">git</a></li></ul>
@@ -717,53 +890,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/08/30/travis-cli/" data-id="cke3yziob0001rwaz9de698g7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/08/30/travis-cli/" data-id="ckhfy2cml0000p1az2zydbbrv" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ci/" rel="tag">ci</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Jekyll-Github-Pages" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/08/23/Jekyll-Github-Pages/" class="article-date">
-  <time datetime="2015-08-22T16:00:00.000Z" itemprop="datePublished">2015-08-23</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/23/Jekyll-Github-Pages/">Jekyll + Github Pages</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>现在的目录结构如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">├── about.html</span><br><span class="line">├── config.rb</span><br><span class="line">├── _config.yml</span><br><span class="line">├── css</span><br><span class="line">│   └── blog.css</span><br><span class="line">├── index.html</span><br><span class="line">├── _layouts</span><br><span class="line">│   ├── layout.html</span><br><span class="line">│   └── post.html</span><br><span class="line">├── LICENSE</span><br><span class="line">├── _posts</span><br><span class="line">│   ├── 2015-08-23-first.md</span><br><span class="line">│   └── 2015-08-23-Jekyll-Github-Pages.md</span><br><span class="line">├── README.md</span><br><span class="line">├── sass</span><br><span class="line">│   ├── blog.scss</span><br><span class="line">│   └── partials</span><br><span class="line">│       ├── _layout.scss</span><br><span class="line">│       ├── _post.scss</span><br><span class="line">│       ├── _public.scss</span><br><span class="line">│       └── _reset.scss</span><br><span class="line">└── static</span><br><span class="line">    └── css</span><br><span class="line">        └── blog.css</span><br></pre></td></tr></table></figure>
-
-<p>其中，<code>config.rb</code> 是 compass 的配置文件，<code>sass</code> 用于存放 <code>*.scss</code> 文件。当前使用的 <code>sass</code> 的写法参考的是之前的项目，需要更多研究下这个东西。</p>
-<p><code>_config.yml</code> 为 <code>jekyll</code> 的配置文件，<code>_layout</code> 文件夹存放的是页面结构定义的 html，<code>_post</code> 存放的是实际的日志文件。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/08/23/Jekyll-Github-Pages/" data-id="cke3yzio30000rwaz3i41dpva" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/blog/" rel="tag">blog</a></li></ul>
 
     </footer>
   </div>
@@ -776,7 +906,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/3/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+    <a class="extend prev" rel="prev" href="/page/3/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/">Next &amp;raquo;</a>
   </nav>
 
 </section>
@@ -790,7 +920,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/annotation/" rel="tag">annotation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ci/" rel="tag">ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/concurrency/" rel="tag">concurrency</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/container/" rel="tag">container</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/context/" rel="tag">context</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/debug/" rel="tag">debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/encoding/" rel="tag">encoding</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/error/" rel="tag">error</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/eval/" rel="tag">eval</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/generic/" rel="tag">generic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/" rel="tag">https</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/influxdb/" rel="tag">influxdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jenkins/" rel="tag">jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lambda/" rel="tag">lambda</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/metaclass/" rel="tag">metaclass</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/metrics/" rel="tag">metrics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/microservice/" rel="tag">microservice</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mock/" rel="tag">mock</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/" rel="tag">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/partitions/" rel="tag">partitions</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/patch/" rel="tag">patch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pipeline/" rel="tag">pipeline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/" rel="tag">proxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react/" rel="tag">react</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/" rel="tag">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/security/" rel="tag">security</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/" rel="tag">ssl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sync/" rel="tag">sync</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/" rel="tag">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thread/" rel="tag">thread</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/timezone/" rel="tag">timezone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tls/" rel="tag">tls</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/traefik/" rel="tag">traefik</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/unittest/" rel="tag">unittest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/virtualenv/" rel="tag">virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/virtualenvwrapper/" rel="tag">virtualenvwrapper</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/annotation/" rel="tag">annotation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/architecture/" rel="tag">architecture</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ci/" rel="tag">ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/concurrency/" rel="tag">concurrency</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/container/" rel="tag">container</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/context/" rel="tag">context</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/database/" rel="tag">database</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/debug/" rel="tag">debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/encoding/" rel="tag">encoding</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/engineering/" rel="tag">engineering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/error/" rel="tag">error</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/eval/" rel="tag">eval</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/generic/" rel="tag">generic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/" rel="tag">https</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/influxdb/" rel="tag">influxdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/innodb/" rel="tag">innodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jenkins/" rel="tag">jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lambda/" rel="tag">lambda</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/metaclass/" rel="tag">metaclass</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/metrics/" rel="tag">metrics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/microservice/" rel="tag">microservice</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mock/" rel="tag">mock</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/" rel="tag">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/partitions/" rel="tag">partitions</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/patch/" rel="tag">patch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pipeline/" rel="tag">pipeline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/" rel="tag">proxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react/" rel="tag">react</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/" rel="tag">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/security/" rel="tag">security</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/" rel="tag">ssl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sync/" rel="tag">sync</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/" rel="tag">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thread/" rel="tag">thread</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/timezone/" rel="tag">timezone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tls/" rel="tag">tls</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/traefik/" rel="tag">traefik</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/unittest/" rel="tag">unittest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/virtualenv/" rel="tag">virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/virtualenvwrapper/" rel="tag">virtualenvwrapper</a></li></ul>
     </div>
   </div>
 
@@ -800,7 +930,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/annotation/" style="font-size: 10px;">annotation</a> <a href="/tags/blog/" style="font-size: 10px;">blog</a> <a href="/tags/ci/" style="font-size: 10px;">ci</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/container/" style="font-size: 10px;">container</a> <a href="/tags/context/" style="font-size: 10px;">context</a> <a href="/tags/debug/" style="font-size: 10px;">debug</a> <a href="/tags/docker/" style="font-size: 16.67px;">docker</a> <a href="/tags/encoding/" style="font-size: 13.33px;">encoding</a> <a href="/tags/error/" style="font-size: 10px;">error</a> <a href="/tags/eval/" style="font-size: 10px;">eval</a> <a href="/tags/generic/" style="font-size: 10px;">generic</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/influxdb/" style="font-size: 10px;">influxdb</a> <a href="/tags/java/" style="font-size: 16.67px;">java</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/tags/k8s/" style="font-size: 13.33px;">k8s</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/tags/metaclass/" style="font-size: 10px;">metaclass</a> <a href="/tags/metrics/" style="font-size: 10px;">metrics</a> <a href="/tags/microservice/" style="font-size: 10px;">microservice</a> <a href="/tags/mock/" style="font-size: 10px;">mock</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/nginx/" style="font-size: 13.33px;">nginx</a> <a href="/tags/partitions/" style="font-size: 10px;">partitions</a> <a href="/tags/patch/" style="font-size: 10px;">patch</a> <a href="/tags/pipeline/" style="font-size: 10px;">pipeline</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/react/" style="font-size: 10px;">react</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/security/" style="font-size: 10px;">security</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/sync/" style="font-size: 10px;">sync</a> <a href="/tags/tcp/" style="font-size: 10px;">tcp</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/timezone/" style="font-size: 10px;">timezone</a> <a href="/tags/tls/" style="font-size: 10px;">tls</a> <a href="/tags/traefik/" style="font-size: 10px;">traefik</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/unittest/" style="font-size: 10px;">unittest</a> <a href="/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/tags/virtualenvwrapper/" style="font-size: 10px;">virtualenvwrapper</a>
+      <a href="/tags/annotation/" style="font-size: 10px;">annotation</a> <a href="/tags/architecture/" style="font-size: 10px;">architecture</a> <a href="/tags/blog/" style="font-size: 10px;">blog</a> <a href="/tags/ci/" style="font-size: 10px;">ci</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/container/" style="font-size: 10px;">container</a> <a href="/tags/context/" style="font-size: 10px;">context</a> <a href="/tags/database/" style="font-size: 10px;">database</a> <a href="/tags/debug/" style="font-size: 10px;">debug</a> <a href="/tags/docker/" style="font-size: 17.5px;">docker</a> <a href="/tags/encoding/" style="font-size: 12.5px;">encoding</a> <a href="/tags/engineering/" style="font-size: 10px;">engineering</a> <a href="/tags/error/" style="font-size: 10px;">error</a> <a href="/tags/eval/" style="font-size: 10px;">eval</a> <a href="/tags/generic/" style="font-size: 10px;">generic</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/influxdb/" style="font-size: 10px;">influxdb</a> <a href="/tags/innodb/" style="font-size: 10px;">innodb</a> <a href="/tags/java/" style="font-size: 17.5px;">java</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/tags/metaclass/" style="font-size: 10px;">metaclass</a> <a href="/tags/metrics/" style="font-size: 10px;">metrics</a> <a href="/tags/microservice/" style="font-size: 10px;">microservice</a> <a href="/tags/mock/" style="font-size: 10px;">mock</a> <a href="/tags/mysql/" style="font-size: 12.5px;">mysql</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/partitions/" style="font-size: 10px;">partitions</a> <a href="/tags/patch/" style="font-size: 10px;">patch</a> <a href="/tags/pipeline/" style="font-size: 10px;">pipeline</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/react/" style="font-size: 10px;">react</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/security/" style="font-size: 10px;">security</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/sync/" style="font-size: 10px;">sync</a> <a href="/tags/tcp/" style="font-size: 10px;">tcp</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/timezone/" style="font-size: 10px;">timezone</a> <a href="/tags/tls/" style="font-size: 10px;">tls</a> <a href="/tags/traefik/" style="font-size: 10px;">traefik</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/unittest/" style="font-size: 10px;">unittest</a> <a href="/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/tags/virtualenvwrapper/" style="font-size: 10px;">virtualenvwrapper</a>
     </div>
   </div>
 
@@ -809,7 +939,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a></li></ul>
     </div>
   </div>
 
@@ -822,6 +952,14 @@
       <ul>
         
           <li>
+            <a href="/2020/11/13/mysql-innodb/">MySQL InnoDB Introduction</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/14/cloud-design-patterns/">Cloud Design Patterns</a>
+          </li>
+        
+          <li>
             <a href="/2020/08/21/about-ssl-tls/">About SSL And TLS</a>
           </li>
         
@@ -831,14 +969,6 @@
         
           <li>
             <a href="/2020/06/03/jenkins-pipeline-thinking/">Jenkins pipeline thinking</a>
-          </li>
-        
-          <li>
-            <a href="/2019/10/11/golang-in-2019/">Golang 2019 重新配置</a>
-          </li>
-        
-          <li>
-            <a href="/2019/01/14/python-memory-leak-debug/">Python 内存暴涨的问题排查</a>
           </li>
         
       </ul>
