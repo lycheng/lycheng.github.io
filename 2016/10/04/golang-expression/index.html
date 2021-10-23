@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Golang 算术表达式解析 | Shing&#39;s logs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言项目中需要用到解析算术表达式的模块，简单来说，就是 eval 函数，但并没有相应的标准库有类似的实现，所以想使用栈实现一个简单的算术表达式解析的模块。 首先，需要明确的是运算符优先级，这里只需要实现加减乘除，括号，and，or，不等号相关的符号即可。对应的优先级如下  括号 类型运算符（前缀 + -） 乘，除 加，减 大于，小于，不大于，不小于 不等于，等于 and or  程序需要做的就是把">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang 算术表达式解析">
+<meta property="og:url" content="http://yoursite.com/2016/10/04/golang-expression/index.html">
+<meta property="og:site_name" content="Shing&#39;s logs">
+<meta property="og:description" content="前言项目中需要用到解析算术表达式的模块，简单来说，就是 eval 函数，但并没有相应的标准库有类似的实现，所以想使用栈实现一个简单的算术表达式解析的模块。 首先，需要明确的是运算符优先级，这里只需要实现加减乘除，括号，and，or，不等号相关的符号即可。对应的优先级如下  括号 类型运算符（前缀 + -） 乘，除 加，减 大于，小于，不大于，不小于 不等于，等于 and or  程序需要做的就是把">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-10-03T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-10-23T06:49:34.223Z">
+<meta property="article:author" content="Shing">
+<meta property="article:tag" content="golang">
+<meta property="article:tag" content="eval">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Shing&#39;s logs" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Shing&#39;s logs</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-golang-expression" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/10/04/golang-expression/" class="article-date">
+  <time datetime="2016-10-03T16:00:00.000Z" itemprop="datePublished">2016-10-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Golang 算术表达式解析
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>项目中需要用到解析算术表达式的模块，简单来说，就是 <code>eval</code> 函数，但并没有相应的标准库有类似的实现，所以想使用栈实现一个简单的算术表达式解析的模块。</p>
+<p>首先，需要明确的是运算符优先级，这里只需要实现加减乘除，括号，and，or，不等号相关的符号即可。对应的优先级如下</p>
+<ol>
+<li>括号</li>
+<li>类型运算符（前缀 + -）</li>
+<li>乘，除</li>
+<li>加，减</li>
+<li>大于，小于，不大于，不小于</li>
+<li>不等于，等于</li>
+<li>and</li>
+<li>or</li>
+</ol>
+<p>程序需要做的就是把优先级相关的东西去掉，然后转化成后缀表达式，即逆波兰表达式。</p>
+<h2 id="处理流程"><a href="#处理流程" class="headerlink" title="处理流程"></a>处理流程</h2><p>需要两个栈，<code>result</code> 和 <code>ops</code> 前者用于保存结果，后者用于暂存操作符。</p>
+<ol>
+<li>如果遇到操作数，则 <code>result</code> 入栈</li>
+<li>如果遇到操作符，则检查 <code>ops</code> 栈顶元素优先级</li>
+<li>如果其优先级不低于当前操作符（左括号除外），则弹出 <code>ops</code> 栈顶元素并压入 <code>result</code> 中</li>
+<li>重复此过程直到 <code>ops</code> 栈顶元素优先级小于当前操作符，或为左括号，或者 <code>ops</code> 为空</li>
+<li>将当前操作符压入 <code>ops</code> 中</li>
+<li>如果遇到左括号，直接压入 <code>ops</code></li>
+<li>如果遇到右括号，则将 <code>ops</code> 中元素弹出，直到遇到左括号为止。左括号只弹出栈而不输出</li>
+<li>表达式处理完毕，则将栈中元素依次压入 <code>result</code> 中</li>
+</ol>
+<p>例如，<code>1 * 2 + 3 * 4</code> 就变成 <code>1 2 * 3 4 * +</code>。后缀表达式的计算比中缀要容易得多，也不需要关心优先级，只需要简单的使用栈处理下就好。这里需要注意的是，由于比较运算法需要关注左右操作数的位置，所以实际运算的时候需要注意使用栈弹出之后位置就发生了交换。</p>
+<p>上面的逻辑没有处理 <code>+</code> <code>-</code> 的类型前缀的情况。如果需要进行相关处理，则需要判断符号前面是不是数，如果是数的话，则认为当前的符号是二元操作符。因为一元操作符比二元操作符的优先级高，所以也可以将其转化为二元操作符。例如 <code>-1 + 1</code> 则可转变为 <code>-1 * 1 + 1</code>。</p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>首先用正则解析出合法的输入</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> legalArthmeticRegex <span class="keyword">string</span> = <span class="string">`^(\d+(\.\d+)?|\+|\-|\*|\/|and|or|\(|\)|==|&gt;=|&lt;=|!=|&gt;|&lt;)+$`</span></span><br></pre></td></tr></table></figure>
+
+<p>然后需要实现一个简单的 <a target="_blank" rel="noopener" href="https://github.com/lycheng/gox/blob/master/stacks/stack.go">stack</a>，Golang 里面竟然没有实现 stack 这样的东西啊。</p>
+<p>然后解析出来之后，将其转为逆波兰式，这里需要用到 stack 来帮助解析。解析出来之后的计算就很简单了。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">calculateRPN</span><span class="params">(tokens []<span class="keyword">string</span>)</span> <span class="params">(result <span class="keyword">float64</span>, err error)</span></span> &#123;</span><br><span class="line">	stack := stacks.NewStack()</span><br><span class="line">	<span class="keyword">for</span> _, token := <span class="keyword">range</span> tokens &#123;</span><br><span class="line">		<span class="keyword">if</span> isNumber(token) &#123;</span><br><span class="line">			stack.Push(token)</span><br><span class="line">			<span class="keyword">continue</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> stack.Size() &lt; <span class="number">2</span> &#123;</span><br><span class="line">			err = fmt.Errorf(<span class="string">&quot;reverse polish notation is wrong&quot;</span>)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">		b := stack.Pop()</span><br><span class="line">		a := stack.Pop()</span><br><span class="line">		result, err = calculate(a.(<span class="keyword">string</span>), b.(<span class="keyword">string</span>), token)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">		stack.Push(fmt.Sprintf(<span class="string">&quot;%.2f&quot;</span>, result))</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后输出的结果是 <code>float64</code> 的类型，布尔类型的结果只能以是否为 0 来进行判断。</p>
+<h2 id="高级玩法"><a href="#高级玩法" class="headerlink" title="高级玩法"></a>高级玩法</h2><p>使用后缀表达式，没办法解决例如 <code>and</code> <code>or</code> 的优化，只能简单的处理计算而已。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>其实真正写的时间就一个下午而已，使用栈来实现的算法也是一搜一大堆。写下来发现其实感觉编译原理挺好玩的。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://github.com/lycheng/gox">gox</a></li>
+<li><a target="_blank" rel="noopener" href="https://msdn.microsoft.com/zh-cn/library/126fe14k.aspx">C++ 运算符优先级</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/zdebeer99/goexpression">github 上一个类似的 Golang 项目 goexpression</a></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/10/04/golang-expression/" data-id="ckv3iop6i000pesc8avjqgoe0" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/eval/" rel="tag">eval</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/" rel="tag">golang</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/10/19/golang-context/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Golang context
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/08/07/golang-reflect-performance/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Golang reflect 性能测试</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/annotation/" rel="tag">annotation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/architecture/" rel="tag">architecture</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ci/" rel="tag">ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/concurrency/" rel="tag">concurrency</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/container/" rel="tag">container</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/context/" rel="tag">context</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/database/" rel="tag">database</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/debug/" rel="tag">debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/encoding/" rel="tag">encoding</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/engineering/" rel="tag">engineering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/error/" rel="tag">error</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/eval/" rel="tag">eval</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/generic/" rel="tag">generic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/" rel="tag">https</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/influxdb/" rel="tag">influxdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/innodb/" rel="tag">innodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jenkins/" rel="tag">jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lambda/" rel="tag">lambda</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/metaclass/" rel="tag">metaclass</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/metrics/" rel="tag">metrics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/microservice/" rel="tag">microservice</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mock/" rel="tag">mock</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/" rel="tag">network</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/" rel="tag">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/partitions/" rel="tag">partitions</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/patch/" rel="tag">patch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pipeline/" rel="tag">pipeline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/protocol/" rel="tag">protocol</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/" rel="tag">proxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react/" rel="tag">react</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/" rel="tag">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/security/" rel="tag">security</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/" rel="tag">ssl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sync/" rel="tag">sync</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/" rel="tag">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thread/" rel="tag">thread</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/timezone/" rel="tag">timezone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tls/" rel="tag">tls</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/traefik/" rel="tag">traefik</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/unittest/" rel="tag">unittest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/virtualenv/" rel="tag">virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/virtualenvwrapper/" rel="tag">virtualenvwrapper</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/annotation/" style="font-size: 10px;">annotation</a> <a href="/tags/architecture/" style="font-size: 10px;">architecture</a> <a href="/tags/blog/" style="font-size: 10px;">blog</a> <a href="/tags/ci/" style="font-size: 10px;">ci</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/container/" style="font-size: 10px;">container</a> <a href="/tags/context/" style="font-size: 10px;">context</a> <a href="/tags/database/" style="font-size: 10px;">database</a> <a href="/tags/debug/" style="font-size: 10px;">debug</a> <a href="/tags/docker/" style="font-size: 17.5px;">docker</a> <a href="/tags/encoding/" style="font-size: 12.5px;">encoding</a> <a href="/tags/engineering/" style="font-size: 10px;">engineering</a> <a href="/tags/error/" style="font-size: 10px;">error</a> <a href="/tags/eval/" style="font-size: 10px;">eval</a> <a href="/tags/generic/" style="font-size: 10px;">generic</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/influxdb/" style="font-size: 10px;">influxdb</a> <a href="/tags/innodb/" style="font-size: 10px;">innodb</a> <a href="/tags/java/" style="font-size: 17.5px;">java</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/tags/metaclass/" style="font-size: 10px;">metaclass</a> <a href="/tags/metrics/" style="font-size: 10px;">metrics</a> <a href="/tags/microservice/" style="font-size: 10px;">microservice</a> <a href="/tags/mock/" style="font-size: 10px;">mock</a> <a href="/tags/mysql/" style="font-size: 12.5px;">mysql</a> <a href="/tags/network/" style="font-size: 10px;">network</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/partitions/" style="font-size: 10px;">partitions</a> <a href="/tags/patch/" style="font-size: 10px;">patch</a> <a href="/tags/pipeline/" style="font-size: 10px;">pipeline</a> <a href="/tags/protocol/" style="font-size: 10px;">protocol</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/react/" style="font-size: 10px;">react</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/security/" style="font-size: 12.5px;">security</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/sync/" style="font-size: 10px;">sync</a> <a href="/tags/tcp/" style="font-size: 10px;">tcp</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/timezone/" style="font-size: 10px;">timezone</a> <a href="/tags/tls/" style="font-size: 10px;">tls</a> <a href="/tags/traefik/" style="font-size: 10px;">traefik</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/unittest/" style="font-size: 10px;">unittest</a> <a href="/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/tags/virtualenvwrapper/" style="font-size: 10px;">virtualenvwrapper</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/10/23/oauth-introduction/">OAuth Introduction</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/13/mysql-innodb/">MySQL InnoDB Introduction</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/14/cloud-design-patterns/">Cloud Design Patterns</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/21/about-ssl-tls/">About SSL And TLS</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/07/nginx-stream-debug/">Nginx stream debug</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Shing<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

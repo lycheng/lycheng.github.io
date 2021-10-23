@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>About SSL And TLS | Shing&#39;s logs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本文旨在简要介绍关于 SSL &#x2F; TLS 的知识 BaseTLS 是 SSL 的迭代版本，SSL 自从 3.0 之后便不再开发，TLS 1.0 为其继任者，目前最新版本为 TLS 1.3，而 TLS 1.0 也在 2020 年被废弃。下文统一使用 TLS 来进行说明，不进行区分 SSL &#x2F; TLS。 HandshakeTLS 连接在建立了 TCP 连接之后，首先是 TLS 握手步骤。TLS 安全性">
+<meta property="og:type" content="article">
+<meta property="og:title" content="About SSL And TLS">
+<meta property="og:url" content="http://yoursite.com/2020/08/21/about-ssl-tls/index.html">
+<meta property="og:site_name" content="Shing&#39;s logs">
+<meta property="og:description" content="本文旨在简要介绍关于 SSL &#x2F; TLS 的知识 BaseTLS 是 SSL 的迭代版本，SSL 自从 3.0 之后便不再开发，TLS 1.0 为其继任者，目前最新版本为 TLS 1.3，而 TLS 1.0 也在 2020 年被废弃。下文统一使用 TLS 来进行说明，不进行区分 SSL &#x2F; TLS。 HandshakeTLS 连接在建立了 TCP 连接之后，首先是 TLS 握手步骤。TLS 安全性">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-08-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-10-23T06:49:34.223Z">
+<meta property="article:author" content="Shing">
+<meta property="article:tag" content="nginx">
+<meta property="article:tag" content="security">
+<meta property="article:tag" content="ssl">
+<meta property="article:tag" content="tls">
+<meta property="article:tag" content="https">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Shing&#39;s logs" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Shing&#39;s logs</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-about-ssl-tls" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/08/21/about-ssl-tls/" class="article-date">
+  <time datetime="2020-08-20T16:00:00.000Z" itemprop="datePublished">2020-08-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      About SSL And TLS
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文旨在简要介绍关于 SSL / TLS 的知识</p>
+<h2 id="Base"><a href="#Base" class="headerlink" title="Base"></a>Base</h2><p>TLS 是 SSL 的迭代版本，SSL 自从 3.0 之后便不再开发，TLS 1.0 为其继任者，目前最新版本为 TLS 1.3，而 TLS 1.0 也在 2020 年被废弃。下文统一使用 TLS 来进行说明，不进行区分 SSL / TLS。</p>
+<h3 id="Handshake"><a href="#Handshake" class="headerlink" title="Handshake"></a>Handshake</h3><p>TLS 连接在建立了 TCP 连接之后，首先是 TLS 握手步骤。TLS 安全性是基于非对称加密，而非对称加密对计算资源消耗十分巨大，并不适合在这种非常频繁的连接 / 数据传输操作上使用，而 TLS 的做法是先使用非对称加密进行握手，得到一个双方可信的对称加密用的秘钥，然后在此后的数据传输中都使用该秘钥来进行加密。</p>
+<p>握手的步骤大致如下（摘自 <a target="_blank" rel="noopener" href="https://zinglix.xyz/2019/05/07/tls-handshake/">TLS 握手究竟做了什么？</a>）</p>
+<ol>
+<li>客户端发起连接，客户端带上自己产生的随机数 A 和支持的加密套件向服务器发出 <code>Client Hello</code> 请求</li>
+<li>服务器收到请求后带上自己的随机数 B 以及选择的 Cypher Suite 返回 <code>Server Hello</code> 信息。在之后服务器发送自己的证书。<strong>此时服务器也可要求客户端出示证书</strong>。发送完成后发送 <code>Server Hello Done</code> 信息</li>
+<li>客户端通过验证服务器证书是否可靠以决定是否继续通信，若不可信则关闭连接</li>
+<li>若认为可信客户端则会生成一个新随机数 C，称为预主密钥（Pre Master Key），用于之后生成会话密钥，通过来自于证书的公钥进行加密提供给服务器</li>
+<li>客户端会再传递一个 <code>Change Cipher Spec</code>表示之后信息会使用新的会话密钥（session keys）加密信息和哈希。然后客户端发送 <code>Client finished</code> 握手结束</li>
+<li>服务器收到数据后解密得到预主密钥，计算得出会话密钥，然后同样向客户端发送 <code>Change Cipher Spec</code>  和 <code>Server finished</code></li>
+</ol>
+<p>这里可以看到，TLS 握手阶段需要 2 个 RTT。这里面还不包括 TCP 建立连接的三次握手的时间。除此以外，步骤 3 还可能进行一次 OCSP（The Online Certificate Status Protocol） 或者 CRL（Certificate revocation list，证书吊销列表） 的请求，这些请求结果会被缓存，我们更关心的是剩下的这 2 个 RTT。</p>
+<p>除此以外，如果断开了 TLS 连接，本身还支持连接复用机制，这样就可以减少 TLS 握手的时间损耗。</p>
+<p>通信双方握手结束后，双方都有了用于进行对称加密的会话密钥，之后通信都使用该密钥来加密 / 解密。上述流程是基于 RSA 算法的秘钥交换，此外还有一种 DH 的算法，可参考文后的链接。</p>
+<h3 id="Certificate"><a href="#Certificate" class="headerlink" title="Certificate"></a>Certificate</h3><p>在上文中提到，握手阶段客户端会验证证书是否可信。在服务器发送自己的证书给到客户端时，客户端需要进行校验该证书是否合法。</p>
+<p>一个证书包括</p>
+<ul>
+<li><strong>The domain name that the certificate was issued for</strong></li>
+<li>Which person, organization, or device it was issued to</li>
+<li><strong>Which certificate authority issued it</strong></li>
+<li><strong>The certificate authority’s digital signature</strong></li>
+<li><strong>Associated subdomains</strong></li>
+<li><strong>Issue date of the certificate</strong></li>
+<li>Expiration date of the certificate</li>
+<li><strong>The public key (the private key is kept secret)</strong></li>
+</ul>
+<p>Certificate Authority（CA）是独立的第三方，负责签发和维护 TLS 证书。证书本身带有数字签名，该数字签名使用的是其父级证书的私钥来签发，通过查询其父级证书通过其公钥即可查询出签名是否一致。而证书校验这个过程是一直递归到根证书，根证书是自签名的，这样就可以验证证书是否合法，这个链路称之为证书链（Chain of trust）。</p>
+<p>而被信任的根证书是随着操作系统，浏览器等分发，只要客户端验证一直到根证书都没问题，则认为该证书是合法的。伪造证书的关键在于 CA 签发证书是否严谨，此外如果没有得到根证书的验证也无法得到信任。</p>
+<p>常用的像 Fiddler 这类抓包工具，需要添加一个它自己的根证书这样才能解析 HTTPS 的流量，它自己本身就是类似于中间人攻击的角色。</p>
+<h3 id="Nginx-Examples"><a href="#Nginx-Examples" class="headerlink" title="Nginx-Examples"></a>Nginx-Examples</h3><p>基本的配置为</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span>              <span class="number">443</span> ssl;</span><br><span class="line">    <span class="attribute">server_name</span>         www.example.com;</span><br><span class="line">    <span class="attribute">ssl_certificate</span>     www.example.com.crt;</span><br><span class="line">    <span class="attribute">ssl_certificate_key</span> www.example.com.key;</span><br><span class="line">    <span class="attribute">ssl_protocols</span>       TLSv1 TLSv1.<span class="number">1</span> TLSv1.<span class="number">2</span>;</span><br><span class="line">    <span class="attribute">ssl_ciphers</span>         HIGH:!aNULL:!MD5;</span><br><span class="line">    <span class="attribute">ssl_client_certificate</span> xxx.pem;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中最重要的是，<code>ssl_certificate</code> 为证书地址，<code>ssl_certificate_key</code> 为私钥地址，其余则为相应的 TLS 的配置，如 TLS 的版本，使用的算法等等。除此以外还有更多的配置可用，具体可查阅 Nginx 的 http ssl module。</p>
+<p>之前的握手阶段也提到过，服务端在返回自己的证书的时候，也可以要求客户端提供证书。客户端证书是用来校验是否是可信用户。上面有个 <code>ssl_client_certificate</code> 配置项，需要制定一个 PEM 格式的 CA 证书来验证客户端。配置了客户端证书就必须在请求是明确指定证书来请求服务端，否则就是 403 错误，常见的 HTTP Library 都支持配置证书。</p>
+<h2 id="Advanced"><a href="#Advanced" class="headerlink" title="Advanced"></a>Advanced</h2><h3 id="False-Start"><a href="#False-Start" class="headerlink" title="False-Start"></a>False-Start</h3><p>之前也提到过，一次 TLS 握手至少需要 2 个 RTT。但其实，在客户端算出随机数 C 时，已经可以得出用于非对称加密用的秘钥。启用 False Start 的特性之后，可以随着 <code>Client finished</code> 返回服务端时，把实际的请求信息也带到服务端。这样算下来，TLS 握手的时间可以减少到 1 个 RTT。</p>
+<h3 id="Keyless"><a href="#Keyless" class="headerlink" title="Keyless"></a>Keyless</h3><p>上述的 Nginx 样例，更多是在自己源站服务端使用 TLS，而现在更多是托管于 CDN 后面，这里就需要一些另外的设置。看了下常见的公有云的文档，都是需要将自己相关域名证书私钥上传才能在 CDN 节点启用 TLS。</p>
+<p>这样子在私钥的管理上会有问题。后来就有了 Cloudflare 提供的 Keyless 服务。其原理就是整个 TLS 握手需要解析一次客户端使用公钥加密的数据，那么只需要额外提供一个 Key Server 去帮忙解析这个加密过的数据就行。而后，我们只需要保证 CDN 节点到 Key Server 的链路是安全的，就可以保证 TLS 的安全性。</p>
+<p>Conclusion</p>
+<p>TLS 本身还是挺有意思的</p>
+<ul>
+<li>对称加密的安全性有问题，于是我们使用非对称加密来加密数据</li>
+<li>非对称加密不能加密太多内容，并且速度比不上对称加密，那么我们就通过非对称加密协商一个用于安全沟通的对称加密秘钥</li>
+<li>握手时考虑了双方的随机数不可信的问题</li>
+<li>有第三方 CA 来保证证书的安全性</li>
+<li>现在有了很多硬件可以加速非对称加密 / 解密的速度</li>
+</ul>
+<p>未来浏览器会逐步停止支持 HTTP 协议的网站，一点点的损耗换来安全，何乐而不为呢？参考阅读中重点推荐最后一个，比较完整的展示了 TLS 的特性。</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://zinglix.xyz/2019/05/07/tls-handshake">https://zinglix.xyz/2019/05/07/tls-handshake</a></li>
+<li><a target="_blank" rel="noopener" href="https://razeencheng.com/post/ssl-handshake-detail">https://razeencheng.com/post/ssl-handshake-detail</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.baidu.com/resources/online/doc/security/https-pratice-1.html">https://developer.baidu.com/resources/online/doc/security/https-pratice-1.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cloudflare.com/learning/ssl/what-is-an-ssl-certificate/">https://www.cloudflare.com/learning/ssl/what-is-an-ssl-certificate/</a></li>
+<li><a target="_blank" rel="noopener" href="https://nginx.org/en/docs/http/ngx_http_ssl_module.html">https://nginx.org/en/docs/http/ngx_http_ssl_module.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.cloudflare.com/keyless-ssl-the-nitty-gritty-technical-details/">https://blog.cloudflare.com/keyless-ssl-the-nitty-gritty-technical-details/</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/08/21/about-ssl-tls/" data-id="ckv3iop740021esc87rkkh5a3" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/https/" rel="tag">https</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nginx/" rel="tag">nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/security/" rel="tag">security</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ssl/" rel="tag">ssl</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tls/" rel="tag">tls</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/09/14/cloud-design-patterns/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Cloud Design Patterns
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/06/07/nginx-stream-debug/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Nginx stream debug</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/annotation/" rel="tag">annotation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/architecture/" rel="tag">architecture</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ci/" rel="tag">ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/concurrency/" rel="tag">concurrency</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/container/" rel="tag">container</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/context/" rel="tag">context</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/database/" rel="tag">database</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/debug/" rel="tag">debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/encoding/" rel="tag">encoding</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/engineering/" rel="tag">engineering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/error/" rel="tag">error</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/eval/" rel="tag">eval</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/generic/" rel="tag">generic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/" rel="tag">https</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/influxdb/" rel="tag">influxdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/innodb/" rel="tag">innodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jenkins/" rel="tag">jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lambda/" rel="tag">lambda</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/metaclass/" rel="tag">metaclass</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/metrics/" rel="tag">metrics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/microservice/" rel="tag">microservice</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mock/" rel="tag">mock</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/" rel="tag">network</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/" rel="tag">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/partitions/" rel="tag">partitions</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/patch/" rel="tag">patch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pipeline/" rel="tag">pipeline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/protocol/" rel="tag">protocol</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/" rel="tag">proxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react/" rel="tag">react</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/" rel="tag">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/security/" rel="tag">security</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/" rel="tag">ssl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sync/" rel="tag">sync</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/" rel="tag">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thread/" rel="tag">thread</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/timezone/" rel="tag">timezone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tls/" rel="tag">tls</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/traefik/" rel="tag">traefik</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/unittest/" rel="tag">unittest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/virtualenv/" rel="tag">virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/virtualenvwrapper/" rel="tag">virtualenvwrapper</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/annotation/" style="font-size: 10px;">annotation</a> <a href="/tags/architecture/" style="font-size: 10px;">architecture</a> <a href="/tags/blog/" style="font-size: 10px;">blog</a> <a href="/tags/ci/" style="font-size: 10px;">ci</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/container/" style="font-size: 10px;">container</a> <a href="/tags/context/" style="font-size: 10px;">context</a> <a href="/tags/database/" style="font-size: 10px;">database</a> <a href="/tags/debug/" style="font-size: 10px;">debug</a> <a href="/tags/docker/" style="font-size: 17.5px;">docker</a> <a href="/tags/encoding/" style="font-size: 12.5px;">encoding</a> <a href="/tags/engineering/" style="font-size: 10px;">engineering</a> <a href="/tags/error/" style="font-size: 10px;">error</a> <a href="/tags/eval/" style="font-size: 10px;">eval</a> <a href="/tags/generic/" style="font-size: 10px;">generic</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/influxdb/" style="font-size: 10px;">influxdb</a> <a href="/tags/innodb/" style="font-size: 10px;">innodb</a> <a href="/tags/java/" style="font-size: 17.5px;">java</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/tags/metaclass/" style="font-size: 10px;">metaclass</a> <a href="/tags/metrics/" style="font-size: 10px;">metrics</a> <a href="/tags/microservice/" style="font-size: 10px;">microservice</a> <a href="/tags/mock/" style="font-size: 10px;">mock</a> <a href="/tags/mysql/" style="font-size: 12.5px;">mysql</a> <a href="/tags/network/" style="font-size: 10px;">network</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/partitions/" style="font-size: 10px;">partitions</a> <a href="/tags/patch/" style="font-size: 10px;">patch</a> <a href="/tags/pipeline/" style="font-size: 10px;">pipeline</a> <a href="/tags/protocol/" style="font-size: 10px;">protocol</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/react/" style="font-size: 10px;">react</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/security/" style="font-size: 12.5px;">security</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/sync/" style="font-size: 10px;">sync</a> <a href="/tags/tcp/" style="font-size: 10px;">tcp</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/timezone/" style="font-size: 10px;">timezone</a> <a href="/tags/tls/" style="font-size: 10px;">tls</a> <a href="/tags/traefik/" style="font-size: 10px;">traefik</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/unittest/" style="font-size: 10px;">unittest</a> <a href="/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/tags/virtualenvwrapper/" style="font-size: 10px;">virtualenvwrapper</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/10/23/oauth-introduction/">OAuth Introduction</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/13/mysql-innodb/">MySQL InnoDB Introduction</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/14/cloud-design-patterns/">Cloud Design Patterns</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/21/about-ssl-tls/">About SSL And TLS</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/07/nginx-stream-debug/">Nginx stream debug</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Shing<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

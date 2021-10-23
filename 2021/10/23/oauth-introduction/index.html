@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>OAuth Introduction | Shing&#39;s logs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="上下文中的 OAuth 仅考虑 OAuth 2.0，不考虑旧版的协议。 Protocol OAuth 2.0 is not an authentication protocol.   As far as an OAuth client is concerned, it asked for a token, got a token, and eventually used that token to">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OAuth Introduction">
+<meta property="og:url" content="http://yoursite.com/2021/10/23/oauth-introduction/index.html">
+<meta property="og:site_name" content="Shing&#39;s logs">
+<meta property="og:description" content="上下文中的 OAuth 仅考虑 OAuth 2.0，不考虑旧版的协议。 Protocol OAuth 2.0 is not an authentication protocol.   As far as an OAuth client is concerned, it asked for a token, got a token, and eventually used that token to">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/images/oauth-abstract-flow.png">
+<meta property="og:image" content="http://yoursite.com/images/single-sign-on.png">
+<meta property="article:published_time" content="2021-10-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-10-23T08:03:58.723Z">
+<meta property="article:author" content="Shing">
+<meta property="article:tag" content="security">
+<meta property="article:tag" content="network">
+<meta property="article:tag" content="protocol">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/images/oauth-abstract-flow.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Shing&#39;s logs" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Shing&#39;s logs</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-oauth-introduction" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/10/23/oauth-introduction/" class="article-date">
+  <time datetime="2021-10-22T16:00:00.000Z" itemprop="datePublished">2021-10-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      OAuth Introduction
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>上下文中的 OAuth 仅考虑 OAuth 2.0，不考虑旧版的协议。</p>
+<h1 id="Protocol"><a href="#Protocol" class="headerlink" title="Protocol"></a>Protocol</h1><blockquote>
+<p>OAuth 2.0 is not an authentication protocol.</p>
+</blockquote>
+<blockquote>
+<p>As far as an OAuth client is concerned, it asked for a token, got a token, and eventually used that token to access some API. It doesn’t know anything about who authorized the application or if there was even a user there at all.</p>
+</blockquote>
+<p>OAuth 并不是一个用户认证协议，并不关注用户是谁和或者谁在使用 API。它关注授权和维护 token。用户认证是一个更大的主题，你可以以 OAuth 来实现。</p>
+<h1 id="Roles"><a href="#Roles" class="headerlink" title="Roles"></a>Roles</h1><p>OAuth defines four roles:</p>
+<ul>
+<li><strong>Resource Owner</strong>: The resource owner is the <em>user</em> who authorizes an <em>application</em> to access their account. The application’s access to the user’s account is limited to the scope of the authorization granted (e.g. read or write access)</li>
+<li><strong>Client</strong>: The client is the <em>application</em> that wants to access the <em>user</em>’s account. Before it may do so, it must be authorized by the user, and the authorization must be validated by the API.</li>
+<li><strong>Resource Server</strong>: The resource server hosts the protected user accounts.</li>
+<li><strong>Authorization Server</strong>: The authorization server verifies the identity of the <em>user</em> then issues access tokens to the <em>application</em>.</li>
+</ul>
+<p>Resource Owner 就是用户，用户委托 Client 以其去获取相应资源。如 Facebook / GitHub / Google 登陆是第三方网站希望获取 ID 信息，在授权确认的网页上会写有需要获取的权限，如邮箱地址。</p>
+<p><img src="/images/oauth-abstract-flow.png" alt="oauth-abstrac-flow"></p>
+<ol>
+<li>The <em>application</em> requests authorization to access service resources from the <em>user</em></li>
+<li>If the <em>user</em> authorized the request, the <em>application</em> receives an authorization grant</li>
+<li>The <em>application</em> requests an access token from the <em>authorization server</em> (API) by presenting authentication of its own identity, and the authorization grant</li>
+<li>If the application identity is authenticated and the authorization grant is valid, the <em>authorization server</em> (API) issues an access token to the application. Authorization is complete.</li>
+<li>The <em>application</em> requests the resource from the <em>resource server</em> (API) and presents the access token for authentication</li>
+<li>If the access token is valid, the <em>resource server</em> (API) serves the resource to the <em>application</em></li>
+</ol>
+<h1 id="Grant-Types"><a href="#Grant-Types" class="headerlink" title="Grant Types"></a>Grant Types</h1><p>在上面 Abstract Protocol Flow 图中，首先是需要获取 authorization grant 以此来获取 access token，OAuth 2 包含有以下几种类型</p>
+<h2 id="Authorization-Code"><a href="#Authorization-Code" class="headerlink" title="Authorization Code"></a><strong>Authorization Code</strong></h2><p>对浏览器友好，基于 HTTP 不断地 redirect</p>
+<ol>
+<li>请求 authorization server 的 API，其中包含一个注册时的 <code>client_id</code> 和想要获取的权限 <code>scope</code>，<code>redirect_uri</code> 和 <code>response_type=code</code></li>
+<li>弹出给用户的是一个权限描述页面，用户确认后，redirect 到 client 的 <code>redirect_uri</code>，请求中包含一个 authorization code</li>
+<li>client 再以 code 去 authorization server 请求 token 接口获取 access token</li>
+<li>authorization server 会返回相应 access token 给到 client<ol>
+<li>payload 中可能会包含一个有效期更长的 refresh token</li>
+</ol>
+</li>
+</ol>
+<p>此外，最开始 authorization code 的 request 会带有一个随机字符串 <code>state</code> ，客户端可以存在 cookie 中，authorization server 返回时，也会带有 <code>state</code> 字段以防 CSRF 攻击。</p>
+<h3 id="PKCE-Proof-Key-for-Code-Exchange"><a href="#PKCE-Proof-Key-for-Code-Exchange" class="headerlink" title="PKCE - Proof Key for Code Exchange"></a>PKCE - Proof Key for Code Exchange</h3><p>在 Authorization Code 流程中，authorization code 可能会被拦截，需要额外安全措施来保证 token 的生成，PKCE 就是一个该协议的扩展来帮助降低安全风险</p>
+<ol>
+<li>请求 authorization server 的 API 时，Client 会新增一个随机的 <code>code_challenge</code> 和相应的 hash 算法 <code>code_challenge_method</code> 字段</li>
+<li>authorization server 记录这些字段，在 Client 请求 access token 时，其会新增一个 <code>code_verifier</code> 字段（使用 hash 算法转换的值）</li>
+<li>authorization server 验证该字段和之前提供的 <code>code_challenge</code> 转换之后的值一致，则认为该 client 合法</li>
+<li>返回 access token</li>
+</ol>
+<p>在 OKTA 服务中，提及到如果需要在浏览器端使用 PKCE，则需要浏览器支持 Web Crypto API，具体可见该 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API">文档</a>。</p>
+<h2 id="Client-Credentials"><a href="#Client-Credentials" class="headerlink" title="Client Credentials"></a>Client Credentials</h2><p>不是针对实际用户的，而是用于 server to server 的 API 认证</p>
+<ol>
+<li>向 authorization server 发送请求，其中 <code>grant_type=client_credentials</code> ，还包括事前约定的 <code>client_id</code> 和 <code>client_secret</code></li>
+<li>authorization server 认证之后就返回 access token</li>
+</ol>
+<h2 id="Device-Code"><a href="#Device-Code" class="headerlink" title="Device Code"></a>Device Code</h2><blockquote>
+<p>The device code grant type provides a means for devices that lack a browser or have limited inputs to obtain an access token and access a user’s account.</p>
+</blockquote>
+<p>为没有浏览器，或者不方便进行输入的设备而设</p>
+<ol>
+<li>client 向 authorization server 发送请求，endpoint 和上述两种类型不同，需要提供 <code>client_id</code></li>
+<li>返回带 <code>device_code</code> 和 <code>user_code</code></li>
+<li>此时设备可以提供一个 QR Code，以 <code>device_code</code> 构成链接，用户端输入 <code>user_code</code> 来即可完成校验</li>
+</ol>
+<h1 id="OpenID-Connect-OIDC"><a href="#OpenID-Connect-OIDC" class="headerlink" title="OpenID Connect - OIDC"></a>OpenID Connect - OIDC</h1><blockquote>
+<p>OpenID Connect protocol is built on the OAuth 2.0 protocol and helps authenticate users and convey information about them. It is also more opinionated than plain OAuth 2.0, for example in its scope definitions.</p>
+</blockquote>
+<p>OAuth 本身其实不关心用户，它是一个授权协议，关注使用 token 去请求 API。OIDC 则是复用其获取 token 的流程，加以扩展功能。</p>
+<blockquote>
+<p>OAuth 2.0 leaves a lot of details up to implementers. For instance, it supports scopes, but scope names are not specified. It supports access tokens, but the format of those tokens are not specified.</p>
+</blockquote>
+<p>OIDC 完善了很多 OAuth 细节，包括 <code>scope</code> 定义，以及一个用于获取用户信息 <a target="_blank" rel="noopener" href="https://openid.net/specs/openid-connect-core-1_0.html#UserInfo">API</a> 等。此外一个重要的不同是，在返回 access token 时，带上了一个 <code>id_token</code> 。这是一个 JWT 格式的字段，解析出来就是用户信息。</p>
+<p>OAuth 定义好了流程，OIDC 则是复用了流程定义好了如字段和格式，而且定义好了 meta 信息的 API，用以做自动发现等功能（此功能是一个 Optional 选项，详情可见 <a target="_blank" rel="noopener" href="https://openid.net/connect/">文档</a>）。</p>
+<p>一些常用的 API</p>
+<ul>
+<li>/userinfo - 获取用户信息</li>
+<li>/introspect - 检查 token</li>
+<li>/token - 获取新的 token</li>
+<li>/revoke - 取消一个 access token 或者 refresh token</li>
+</ul>
+<h2 id="Single-Sign-On-SSO"><a href="#Single-Sign-On-SSO" class="headerlink" title="Single Sign On - SSO"></a>Single Sign On - SSO</h2><p><img src="/images/single-sign-on.png" alt="single-sign-on"></p>
+<p>上图是浏览器端的 SSO 流程。一个场景如下</p>
+<ol>
+<li>用户登录 domain1 时，此时没有 cookie，则需要跳转到 domain3 进行登录</li>
+<li>domain3 登录成功后，则使用返回 token 和 redirect 到 domain1，domain1 使用该 token 即可完成登录</li>
+<li>在登录成功 domain3 时，浏览存会存放有 domain3 的 cookie</li>
+<li>当 domain2 需要登录，跳转到 domain3 则不需要进行用户认证，通过 cookie 即可确认登录状态</li>
+<li>返回 token 和 redirect 到 domain2</li>
+</ol>
+<p>这么做的原因首先是浏览器的 Same Origin Policy 限制，不同域名 cookie 不可见。所以只能通过跳转到入口 domain 来使用其 cookie。</p>
+<h1 id="Token"><a href="#Token" class="headerlink" title="Token"></a>Token</h1><p>OIDC 授权结束后，client 可以拿到三个 token</p>
+<ul>
+<li>access token</li>
+<li>refresh token</li>
+<li>id token</li>
+</ul>
+<p>access token 用于访问资源，refresh token 则用于申请新的 access token ，id token 则是 JWT 格式封装的用户信息，除了 id token 限制使用 JWT 之外，其余没有格式要求。不同 token 的生命周期不同，以 OKTA 平台为例，其默认 token 生命周期为</p>
+<ul>
+<li><strong>ID token:</strong> 60 minutes</li>
+<li><strong>Access token:</strong> 60 minutes</li>
+<li><strong>Refresh token:</strong> 90 days</li>
+</ul>
+<p>OKTA 中 access token 也是使用 JWT 封装，resource server 收到请求时，也可以进行时间和签名认证。其中，JWT header 包含一个 <code>kid</code> 字段，通过一个无需认证 endpoint <code>/.well-known/oauth-authorization-server</code>（这个就是上文提到的 OIDC 用于接口发现的 meta endpoint）可以查询到一个 <code>/keys</code> 的 URI，通过 <code>client_id</code> 和 <code>kid</code> 即可查到相应的公钥，有了公钥就可以进行 access token 的合法性校验。</p>
+<p>access token 到期后，需要使用 refresh token 请求 <code>/token</code> 接口获取新的 access token 。refresh token 生命周期更长，为了防止被滥用，可以考虑</p>
+<ul>
+<li>使用 Native App 需要保证 refresh token 存放到只有自己程序可以访问的区域</li>
+<li>每次申请新的 access token 之后，会带新 refresh token 下来，revoke 旧 refresh token</li>
+<li>用户退出后，revoke 旧 refresh token</li>
+</ul>
+<p>在 OKTA 中，Browser-based 的 App 甚至不支持 refresh token</p>
+<blockquote>
+<p>Note: The Authorization Code flow with PKCE doesn’t support refresh tokens for SPAs and other browser-based apps.</p>
+</blockquote>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>本文是对 OKTA 平台进行调研的一些笔记，我倒是重新认真看了 OAuth / SSO 的一些概念，受益颇多。个人感觉从 OAuth 进化到 OIDC 的路倒是挺有意思的。有文章介绍道说最开始是用了一个 <code>/me</code> 的 endpoint 来获得用户信息，但这样是有违 OAuth 设计的，于是在 OAuth 基础上实现了 OIDC。</p>
+<p>协议的设计和使用范围的确是一个很难平衡的点，总是很容易将就使用某个协议去越级做一些事情。</p>
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://www.digitalocean.com/community/tutorials/an-introduction-to-oauth-2">An Introduction To Oauth 2</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.oauth.com/playground/index.html">https://www.oauth.com/playground/index.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://oauth.net/articles/authentication/">https://oauth.net/articles/authentication/</a></li>
+<li><a target="_blank" rel="noopener" href="https://datatracker.ietf.org/doc/html/rfc6749">https://datatracker.ietf.org/doc/html/rfc6749</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.okta.com/blog/2017/06/21/what-the-heck-is-oauth#pseudo-authentication-with-oauth-20">https://developer.okta.com/blog/2017/06/21/what-the-heck-is-oauth#pseudo-authentication-with-oauth-20</a></li>
+<li><a target="_blank" rel="noopener" href="https://auth0.com/blog/what-is-and-how-does-single-sign-on-work/">https://auth0.com/blog/what-is-and-how-does-single-sign-on-work/</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API">https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API</a></li>
+<li><a target="_blank" rel="noopener" href="https://openid.net/connect/">https://openid.net/connect/</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2021/10/23/oauth-introduction/" data-id="ckv3iop7q004vesc862sb41jk" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/network/" rel="tag">network</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/protocol/" rel="tag">protocol</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/security/" rel="tag">security</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/11/13/mysql-innodb/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">MySQL InnoDB Introduction</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/annotation/" rel="tag">annotation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/architecture/" rel="tag">architecture</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ci/" rel="tag">ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/concurrency/" rel="tag">concurrency</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/container/" rel="tag">container</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/context/" rel="tag">context</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/database/" rel="tag">database</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/debug/" rel="tag">debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/encoding/" rel="tag">encoding</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/engineering/" rel="tag">engineering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/error/" rel="tag">error</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/eval/" rel="tag">eval</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/generic/" rel="tag">generic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/" rel="tag">https</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/influxdb/" rel="tag">influxdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/innodb/" rel="tag">innodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jenkins/" rel="tag">jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lambda/" rel="tag">lambda</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/metaclass/" rel="tag">metaclass</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/metrics/" rel="tag">metrics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/microservice/" rel="tag">microservice</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mock/" rel="tag">mock</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/" rel="tag">network</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/" rel="tag">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/partitions/" rel="tag">partitions</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/patch/" rel="tag">patch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pipeline/" rel="tag">pipeline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/protocol/" rel="tag">protocol</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/" rel="tag">proxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react/" rel="tag">react</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/" rel="tag">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/security/" rel="tag">security</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/" rel="tag">ssl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sync/" rel="tag">sync</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/" rel="tag">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thread/" rel="tag">thread</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/timezone/" rel="tag">timezone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tls/" rel="tag">tls</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/traefik/" rel="tag">traefik</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/unittest/" rel="tag">unittest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/virtualenv/" rel="tag">virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/virtualenvwrapper/" rel="tag">virtualenvwrapper</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/annotation/" style="font-size: 10px;">annotation</a> <a href="/tags/architecture/" style="font-size: 10px;">architecture</a> <a href="/tags/blog/" style="font-size: 10px;">blog</a> <a href="/tags/ci/" style="font-size: 10px;">ci</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/container/" style="font-size: 10px;">container</a> <a href="/tags/context/" style="font-size: 10px;">context</a> <a href="/tags/database/" style="font-size: 10px;">database</a> <a href="/tags/debug/" style="font-size: 10px;">debug</a> <a href="/tags/docker/" style="font-size: 17.5px;">docker</a> <a href="/tags/encoding/" style="font-size: 12.5px;">encoding</a> <a href="/tags/engineering/" style="font-size: 10px;">engineering</a> <a href="/tags/error/" style="font-size: 10px;">error</a> <a href="/tags/eval/" style="font-size: 10px;">eval</a> <a href="/tags/generic/" style="font-size: 10px;">generic</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/influxdb/" style="font-size: 10px;">influxdb</a> <a href="/tags/innodb/" style="font-size: 10px;">innodb</a> <a href="/tags/java/" style="font-size: 17.5px;">java</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/tags/metaclass/" style="font-size: 10px;">metaclass</a> <a href="/tags/metrics/" style="font-size: 10px;">metrics</a> <a href="/tags/microservice/" style="font-size: 10px;">microservice</a> <a href="/tags/mock/" style="font-size: 10px;">mock</a> <a href="/tags/mysql/" style="font-size: 12.5px;">mysql</a> <a href="/tags/network/" style="font-size: 10px;">network</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/partitions/" style="font-size: 10px;">partitions</a> <a href="/tags/patch/" style="font-size: 10px;">patch</a> <a href="/tags/pipeline/" style="font-size: 10px;">pipeline</a> <a href="/tags/protocol/" style="font-size: 10px;">protocol</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/react/" style="font-size: 10px;">react</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/security/" style="font-size: 12.5px;">security</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/sync/" style="font-size: 10px;">sync</a> <a href="/tags/tcp/" style="font-size: 10px;">tcp</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/timezone/" style="font-size: 10px;">timezone</a> <a href="/tags/tls/" style="font-size: 10px;">tls</a> <a href="/tags/traefik/" style="font-size: 10px;">traefik</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/unittest/" style="font-size: 10px;">unittest</a> <a href="/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/tags/virtualenvwrapper/" style="font-size: 10px;">virtualenvwrapper</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/10/23/oauth-introduction/">OAuth Introduction</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/13/mysql-innodb/">MySQL InnoDB Introduction</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/14/cloud-design-patterns/">Cloud Design Patterns</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/21/about-ssl-tls/">About SSL And TLS</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/07/nginx-stream-debug/">Nginx stream debug</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Shing<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>MySQL InnoDB Introduction | Shing&#39;s logs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="用了 MySQL 这么久，现在才第一次看了下官方关于 InnoDB 的文档 Base先简单说一些 InnoDB 的特性  ACID，支持事务 commit 和 rollback Row-level Locking 聚簇索引（clustered index） Foreign Key  Benefits 自动 crash recovery 用 buffer pool 缓存表和索引的数据 可以压缩表和索">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL InnoDB Introduction">
+<meta property="og:url" content="http://yoursite.com/2020/11/13/mysql-innodb/index.html">
+<meta property="og:site_name" content="Shing&#39;s logs">
+<meta property="og:description" content="用了 MySQL 这么久，现在才第一次看了下官方关于 InnoDB 的文档 Base先简单说一些 InnoDB 的特性  ACID，支持事务 commit 和 rollback Row-level Locking 聚簇索引（clustered index） Foreign Key  Benefits 自动 crash recovery 用 buffer pool 缓存表和索引的数据 可以压缩表和索">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://dev.mysql.com/doc/refman/8.0/en/images/innodb-buffer-pool-list.png">
+<meta property="article:published_time" content="2020-11-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-10-23T06:49:34.223Z">
+<meta property="article:author" content="Shing">
+<meta property="article:tag" content="mysql">
+<meta property="article:tag" content="innodb">
+<meta property="article:tag" content="database">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://dev.mysql.com/doc/refman/8.0/en/images/innodb-buffer-pool-list.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Shing&#39;s logs" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Shing&#39;s logs</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-mysql-innodb" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/11/13/mysql-innodb/" class="article-date">
+  <time datetime="2020-11-12T16:00:00.000Z" itemprop="datePublished">2020-11-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      MySQL InnoDB Introduction
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>用了 MySQL 这么久，现在才第一次看了下官方关于 InnoDB 的<a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/innodb-introduction.html" title="innodb-introduction">文档</a></p>
+<h2 id="Base"><a href="#Base" class="headerlink" title="Base"></a>Base</h2><p>先简单说一些 InnoDB 的特性</p>
+<ul>
+<li>ACID，支持事务 commit 和 rollback</li>
+<li>Row-level Locking</li>
+<li>聚簇索引（<a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_clustered_index">clustered index</a>）</li>
+<li>Foreign Key</li>
+</ul>
+<h3 id="Benefits"><a href="#Benefits" class="headerlink" title="Benefits"></a>Benefits</h3><ul>
+<li>自动 crash recovery</li>
+<li>用 buffer pool 缓存表和索引的数据</li>
+<li>可以压缩表和索引</li>
+<li>adaptive hash index，对于 <code>=</code> 和 <code>IN</code> 操作，能缓存常用 pages</li>
+</ul>
+<h3 id="Best-Practices"><a href="#Best-Practices" class="headerlink" title="Best Practices"></a>Best Practices</h3><ul>
+<li>指定主键或者 auto-increment</li>
+<li>关闭 autocommit</li>
+<li>不要使用 <code>LOCK TABLES</code> 而是 <code>SELECT ... FOR UPDATE</code> 锁对应行</li>
+</ul>
+<h2 id="Advanced"><a href="#Advanced" class="headerlink" title="Advanced"></a>Advanced</h2><h3 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a>ACID</h3><p>Atomicity</p>
+<ul>
+<li><p>Autocommit setting</p>
+</li>
+<li><p>COMMIT / ROLLBACK</p>
+</li>
+</ul>
+<p>Consistency</p>
+<ul>
+<li>doublewrite buffer</li>
+<li>crash recovery</li>
+</ul>
+<p>Isolation</p>
+<ul>
+<li>Autocommit setting</li>
+<li><code>SET ISOLATION LEVEL</code> 语句</li>
+<li>Locking</li>
+</ul>
+<p>Durability</p>
+<ul>
+<li>doublewrite buffer</li>
+<li><code>fsync() </code> system call</li>
+</ul>
+<p>其中，Consistency 和 Durability 着重点有点不同，前者是指数据上的一致性，满足相应的约束设置，通过一些策略保证数据在 crash 之后不会丢失或者出现脏数据。后者则是关注与硬件打交道，保证数据库软件上的稳定性。</p>
+<p>上述提到的 <a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_doublewrite_buffer" title="glos_doublewrite_buffer">doublewrite buffer</a> 是一个为了故障恢复的设计。</p>
+<blockquote>
+<p>Before writing <strong>pages</strong> to the <strong>data files</strong>, <code>InnoDB</code> first writes them to a storage area called the doublewrite buffer. Only after the write and the flush to the doublewrite buffer have completed, does <code>InnoDB</code> write the pages to their proper positions in the data file.</p>
+</blockquote>
+<p>意思是先写 buffer，然后确认 buffer 没问题再写到对应的磁盘位置。如果中间出现了 crash，就能直接从 buffer 写到对应的文件。需要注意的是，这里的数据单位是 page，这里的 page 也不是 OS 的 page 的概念，而是引擎本身定义的数据单元。</p>
+<p>如 InnoDB 默认是 16K，计算校验和也是以 16K 作为单位，但如果系统的 page 大小小于 16K 的话，则意味这有多次写入。如果出现 crash 的情况，只要计算 buffer 和磁盘处的校验和是否一致即可。此外，buffer 的写入是线性的，buffer 到实际的磁盘写入是随机的，所以实际上没有 100% 的性能损耗，更详细的可见 <a target="_blank" rel="noopener" href="https://www.percona.com/blog/2006/08/04/innodb-double-write/" title="innodb-double-write">这篇文章</a>。</p>
+<h3 id="Multi-Versioning"><a href="#Multi-Versioning" class="headerlink" title="Multi-Versioning"></a>Multi-Versioning</h3><p>InnoDB 是一个 multi-versioned 的存储引擎， 保留了修改前的信息，用以并发和事务回滚。实现上，有额外三个字段来支持这个功能</p>
+<ul>
+<li><code>DB_TRX_ID</code> insert 或者 update 当前行的上一个事务 ID，此外，删除也会有</li>
+<li><code>DB_ROLL_PTR</code> 指向一个 undo log 记录</li>
+<li><code>DB_ROW_ID</code> 一个单调递增的 row ID，如果没有指定主键，则会自动创建一个聚簇索引指向这个 ID，否则不会有任何索引引用该 ID</li>
+</ul>
+<p>undo log 有两种，一种是 insert undo log，当事务提交之后就可以删除。另一种是 update undo log，与事务生命周期绑定，只有还有事务引用该版本，则会一直保留。如果还有对应的 update undo log 存在，则该行数据则不会实际删除，只有相关事务提交了，update undo log 不在了才会进行删除，这由额外的线程进行 purge 操作。</p>
+<p>而对于聚簇索引和二级索引，两者处理逻辑也不同。前者直接在当前记录上更新，后者则不包含隐藏字段，标记删除然后新增记录。如果标记删除后，则通过聚簇索引相关的 undo log 反查去当时版本的记录。</p>
+<h3 id="In-Memory-Structures"><a href="#In-Memory-Structures" class="headerlink" title="In-Memory Structures"></a>In-Memory Structures</h3><h4 id="Buffer-Pool"><a href="#Buffer-Pool" class="headerlink" title="Buffer Pool"></a>Buffer Pool</h4><blockquote>
+<p>The buffer pool is an area in main memory where <code>InnoDB</code> caches table and index data as it is accessed. The buffer pool permits frequently used data to be processed directly from memory, which speeds up processing. On dedicated servers, up to 80% of physical memory is often assigned to the buffer pool.</p>
+</blockquote>
+<p>具体实现是基于 LRU 算法的 linked list，以 page 为元素。实现上有 new sublist 和 old sublist 两种。</p>
+<p><img src="https://dev.mysql.com/doc/refman/8.0/en/images/innodb-buffer-pool-list.png" alt="innodb-buffer-pool-list"></p>
+<p>insert 位置设计得挺巧妙，看了解释，触发 insert 有两种情况，一是实际调用 SQL，还有就是 read-ahead 产生的数据。那些用一次的 SQL 就会不断淘汰 old sublist 的元素，而不会影响 new sublist 的元素。</p>
+<h4 id="Change-Buffer"><a href="#Change-Buffer" class="headerlink" title="Change Buffer"></a>Change Buffer</h4><blockquote>
+<p>The change buffer is a special data structure that caches changes to secondary index pages when those pages are not in the buffer pool.</p>
+</blockquote>
+<p>与聚簇索引不同，二级索引的写入很多是无序的，所以如果需要对二级索引的更新需要现在缓存中聚合不然会浪费大量 IO。在闲置或者在 slow shutdown 的过程中，才会将 buffer 中的改动同步到磁盘。</p>
+<h4 id="Adaptive-Hash-Index-amp-amp-Log-Buffer"><a href="#Adaptive-Hash-Index-amp-amp-Log-Buffer" class="headerlink" title="Adaptive Hash Index &amp;&amp; Log Buffer"></a>Adaptive Hash Index &amp;&amp; Log Buffer</h4><p>AHI (Adaptive Hash Index) 由引擎本身监控判断如果创建 hash index 会提升速度，才会去创建。其缓存的是 index 和 pages 的关系，其可作用于几乎所有的涉及到 index 使用的场景，如 <code>JOIN</code>，但对 <code>LIKE</code> 的作用则不大。</p>
+<p>Log Buffer 用作 redo log 缓存，减少磁盘 IO。</p>
+<h3 id="On-Disk-Structures"><a href="#On-Disk-Structures" class="headerlink" title="On-Disk Structures"></a>On-Disk Structures</h3><h4 id="AUTO-INCREMENT"><a href="#AUTO-INCREMENT" class="headerlink" title="AUTO_INCREMENT"></a>AUTO_INCREMENT</h4><p>InnoDB 有配置项来针对 auto increment 字段。<a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/innodb-parameters.html#sysvar_innodb_autoinc_lock_mode" title="innodb_autoinc_lock_mode"><code>innodb_autoinc_lock_mode</code></a> 有三个选项</p>
+<ul>
+<li>0 - traditional</li>
+<li>1 - consecutive</li>
+<li>2 - interleaved</li>
+</ul>
+<p>旧版本 MySQL 用的是 1，MySQL 8.0 用的是 2。这个反映了 8.0 的同步机制从 statement-based replication（SBR） 到 row based replication （RBR）的改变。前者对语句的确定性要求很高，但 auto increment 的字段有可能出现不连续的情况，后者则对此并不敏感。创建表需指定 auto increment 的字段为 primary key 或者 unique key 才行（需要查询其最大值），而常见就是作为表的主键。</p>
+<p>目前有几种场景会产生新的记录</p>
+<ul>
+<li>simple insert - 简单的 insert 语句，可以预先得知插入行数</li>
+<li>bulk insert - 不能预先得知插入的行数</li>
+<li>mixed-mode - 插入语句中指定了 auto increment 字段的值和 <code>INSERT ... ON DUPLICATE KEY UPDATE</code>。后者会出现新分配的 auto increment 的值不会被使用的情况</li>
+</ul>
+<p>traditional 是有一个表级锁 AUTO-INC 来限制，而锁的使用是针对 insert 语句的，而不是事务，保证了 binary log 的执行顺序，那么就能保证同步之后的数据也是确定的。</p>
+<p>consecutive 机制是针对 bulk insert。如果在做 bulk insert 的时候，源表和结果表不一致，则目的表在源表进行第一行查询时上一个 shared lock 之后再上一个 AUTO-INC 锁。如果源表和目的表一致，则在所有的行都查询出来时加上 shared lock 再上一个 AUTO-INC 锁。</p>
+<p>如果是 simple insert，则没有 AUTO-INC 锁，而是通过一个 mutex 来获取已知的自增的值。这个 mutex 获取是在资源的阶段，而不是一直持有到语句结束。如果别的事务在使用 bulk insert 则意味着需要等待。目前而言，auto increment 产生的值都是连续的，而在 mixed mode 的情况下，会预先生成多几个值，而用不上的几个就丢失了。</p>
+<p>interleaved 机制则是没有表级别的 AUTO-INC 锁。语句可以同时执行，auto increment 的字段则是保证单调递增的生成，所以无法确定语句最后分配的值是多少。</p>
+<p>上述三种策略都是针对语句级别，意味着在事务回滚的时候，还是会有空缺的 auto increment 的值。第三种情况性能最好，但不能保证生成的值是连续的。</p>
+<h4 id="Index"><a href="#Index" class="headerlink" title="Index"></a>Index</h4><p>InnoDB 用 primary key 或者是第一个 unique index 作为 clustered index。每个表只有一个，如果不定义则会默认生成一个，和别的 index 即 secondary index 相比，其性能好很多。clustered index 指向数据的 page 而 secondary index 指向 clustered index，即 secondary index 会多一次 IO 操作。</p>
+<h4 id="Tablespaces"><a href="#Tablespaces" class="headerlink" title="Tablespaces"></a>Tablespaces</h4><p>system tablespace 是 change buffer 的存储区域，也存放创建于该区域的表和索引。</p>
+<p>file-per-table tablespaces 存放一个 InnoDB 表数据和索引。单个文件的实现在管理上非常方便，如果多个表混用一个文件，涉及到文件磁盘空间管理，备份等操作都相对复杂。相对地，做 <code>fsync</code> 操作时，如果一次写入多个表就涉及到多个 <code>fysnc</code> 的调用。</p>
+<p>general tablespace 通过 <code>CREATE TABLESPACE xx</code> 来创建，是一个 InnoDB 的 shared tablespace。相比上述的 file-per-table tablespaces，general tablespace 可以定义再 MySQL 的目录之外来做数据管理或者数据备份，也有更好的内存优化来做内存表。</p>
+<p>还有如 undo tablespace，temporary tablespace 等在运行时针对特定功能的 tablespace，在实际应用层使用上不会涉及，更多是后续针对实际使用的性能指标来进行微调。</p>
+<h4 id="Redo-Log-and-Undo-Logs"><a href="#Redo-Log-and-Undo-Logs" class="headerlink" title="Redo Log and Undo Logs"></a>Redo Log and Undo Logs</h4><blockquote>
+<p>The redo log is a disk-based data structure used during crash recovery to correct data written by incomplete transactions. During normal operations, the redo log encodes requests to change table data that result from SQL statements or low-level API calls.</p>
+</blockquote>
+<p>Redo Log 是记录准备要去变更数据的 SQL 或者 API。InnoDB 事务中的 A C D 特性就是由 Redo Log 去实现。在故障中恢复时，就是依赖 Redo Log 去将还没持久化的数据写到磁盘中。</p>
+<p>Redo Log 不是直接写磁盘，而是写到一个 log buffer 先，然后由 log buffer 再写到磁盘。在 8.0 之前的版本，log buffer 的写入需要先获取一个全局的 mutex 来，8.0 之后改用了一个基于 atomic 的操作来在 log buffer 预分配空间</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">sn_t</span> start_sn = log.sn.<span class="built_in">fetch_add</span>(len);</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">sn_t</span> end_sn = start_sn + len;</span><br></pre></td></tr></table></figure>
+
+<p>此外还有一个 link buf 来维护 log buffer 到磁盘的写入磁盘的进度，详细细节可见 <a target="_blank" rel="noopener" href="https://mysqlserverteam.com/mysql-8-0-new-lock-free-scalable-wal-design/" title="8.0-wal-design">这篇文章</a>。log buffer 的写入是需要保证顺序的，每一次写入到 log buffer 则会携带一个自增的 LSN（Log Sequence Number），之后顺序写入到磁盘。写如了 log 之后，后续的实际修改数据或者故障恢复就有了保证。</p>
+<p>Undo Logs 相对简单，它记录了需要回滚时用到的旧记录和在多个事务操作过程中需要看修改前的记录的场景。因为仅仅在系统运行时使用，它设计上没有像 Redo Log 那样需要多个 IO 来保证写入，性能上比 Redo Log 好很多。</p>
+<h3 id="Locking-and-Transaction"><a href="#Locking-and-Transaction" class="headerlink" title="Locking and Transaction"></a>Locking and Transaction</h3><h4 id="Shared-Exclusive-Intention-Locks"><a href="#Shared-Exclusive-Intention-Locks" class="headerlink" title="Shared / Exclusive / Intention Locks"></a>Shared / Exclusive / Intention Locks</h4><p>InnoDB 有两种行级别锁</p>
+<ul>
+<li>A shared (S) lock permits the transaction that holds the lock to read a row.</li>
+<li>An exclusive (X) lock permits the transaction that holds the lock to update or delete a row.</li>
+</ul>
+<p>对数据读是共享锁，写时是互斥锁。此外还有一个意向锁</p>
+<ul>
+<li>An intention shared lock (IS) indicates that a transaction intends to set a shared lock on individual rows in a table.</li>
+<li>An intention exclusive lock (IX) indicates that a transaction intends to set an exclusive lock on individual rows in a table.</li>
+</ul>
+<p>意向锁是表级锁</p>
+<blockquote>
+<p>Before a transaction can acquire a shared lock on a row in a table, it must first acquire an IS lock or stronger on the table.<br>Before a transaction can acquire an exclusive lock on a row in a table, it must first acquire an IX lock on the table.</p>
+</blockquote>
+<p>它们的关系如下</p>
+<table>
+<thead>
+<tr>
+<th>*</th>
+<th>X</th>
+<th>IX</th>
+<th>S</th>
+<th>IS</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>X</td>
+<td>Conflict</td>
+<td>Conflict</td>
+<td>Conflict</td>
+<td>Conflict</td>
+</tr>
+<tr>
+<td>IX</td>
+<td>Conflict</td>
+<td>Compatible</td>
+<td>Conflict</td>
+<td>Compatible</td>
+</tr>
+<tr>
+<td>S</td>
+<td>Conflict</td>
+<td>Conflict</td>
+<td>Compatible</td>
+<td>Compatible</td>
+</tr>
+<tr>
+<td>IS</td>
+<td>Conflict</td>
+<td>Compatible</td>
+<td>Compatible</td>
+<td>Compatible</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>A lock is granted to a requesting transaction if it is compatible with existing locks, but not if it conflicts with existing locks. A transaction waits until the conflicting existing lock is released. If a lock request conflicts with an existing lock and cannot be granted because it would cause <a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_deadlock">deadlock</a>, an error occurs.</p>
+</blockquote>
+<p>行锁请求前必须先请求对应意向锁，意向锁间不互斥。意向锁是为了更快地判断是否存在互斥的行锁而不用进行全表扫描，如已经申请了 IX 锁，那么 S 锁就申请失败（这个 S 锁前会有一个 IS 锁但不会与 IX 互斥）。意向锁由系统自身进行控制，我们能操作的是显示声明需要用共享锁或者互斥锁。</p>
+<h4 id="Record-Locks"><a href="#Record-Locks" class="headerlink" title="Record Locks"></a>Record Locks</h4><blockquote>
+<p>A record lock is a lock on an index record. For example, <code>SELECT c1 FROM t WHERE c1 = 10 FOR UPDATE;</code> prevents any other transaction from inserting, updating, or deleting rows where the value of <code>t.c1</code> is <code>10</code>.</p>
+</blockquote>
+<p><code>SELECT ... FOR UPDATE</code> 会申请一个针对索引的锁，即使没有创建索引也会根据其隐含的聚簇索引来加锁，任何 insert / update / delete 相关记录的操作都会被禁止。</p>
+<h4 id="Gap-Locks"><a href="#Gap-Locks" class="headerlink" title="Gap Locks"></a>Gap Locks</h4><blockquote>
+<p>A gap lock is a lock on a gap between index records, or a lock on the gap before the first or after the last index record.</p>
+</blockquote>
+<p>当隔离级别是 <code>READ COMMITTED</code> 时，gap lock 不会生效。与别的锁不一样， 两个事务可以对同一个范围申请 gap lock，只有插入数据到该范围时 lock 才生效。</p>
+<h4 id="Next-Key-Locks"><a href="#Next-Key-Locks" class="headerlink" title="Next-Key Locks"></a>Next-Key Locks</h4><blockquote>
+<p>A next-key lock is a combination of a record lock on the index record and a gap lock on the gap before the index record.</p>
+</blockquote>
+<p>InnoDB 的共享锁和互斥锁实际上是作用在 index 上的。为了解决 <code>REPEATABLE READ</code> 隔离级别情况下的幻读，在申请锁时，会连同数据索引附近的数据范围也会上锁。而如果是唯一索引，则会降级为 Record Lock。</p>
+<h4 id="Insert-Intention-Locks"><a href="#Insert-Intention-Locks" class="headerlink" title="Insert Intention Locks"></a>Insert Intention Locks</h4><p>插入意向锁是一种由 <code>INSERT</code> 语句带来的锁。插入时在相应索引位置的附近的范围申请一个 index gap lock，如果其它事务同时插入到相同位置则需要等待锁释放。</p>
+<p>此外还有一个为地理坐标系数据 Spatial index 设计的 Predicate 锁，这里就不展开说了。在不显示声明使用锁的情况下，不同的隔离级别会有不同的默认锁操作</p>
+<ul>
+<li>READ COMMITTED - 读不加锁，写入加锁，导致事务进行中时读取到别的事务提交的数据</li>
+<li>REPEATABLE READ - 默认的隔离级别，第一次读时生成 snapshot，后续所有的 nonlocking select 都是读取到同一份数据，这部分是 MVCC 在起作用。而如果需要获取最新的数据，则需要 <code>SELECT ... FOR SHARE</code> 或者 <code>SELECT ... FOR UPDATE</code> 来读取，此时则是需要 Next-Key lock 来锁定一个范围，这样就能防止 Phantom Rows（幻读）出现。</li>
+</ul>
+<h3 id="Transaction"><a href="#Transaction" class="headerlink" title="Transaction"></a>Transaction</h3><h4 id="Isolation-Levels"><a href="#Isolation-Levels" class="headerlink" title="Isolation Levels"></a>Isolation Levels</h4><p>REPEATABLE READ，默认的隔离级别，MVCC 和 locking select 相互作用解决幻读问题。</p>
+<p>READ COMMITTED，每一次 nonlocking select 都是最新的数据，显式使用 locking select 也仅仅是 index lock 而不带 gap lock。</p>
+<p>READ UNCOMMITTED 则是性能最好的一个，但是几乎不可能在现实中用到，会出现脏读的现象。</p>
+<p>SERIALIZABLE 与 REPEATABLE READ 类似。如果 autocommit disabled 则每个 SELECT 都会隐式加上共享锁。如果 autocommit enabled 则每个 SELECT 是个单独的事务，在该隔离等级下，所有事务都是串行执行。</p>
+<h4 id="Autocommit-Commit-and-Rollback"><a href="#Autocommit-Commit-and-Rollback" class="headerlink" title="Autocommit, Commit and Rollback"></a>Autocommit, Commit and Rollback</h4><p>默认情况下，autocommit enabled。没有明确 <code>START TRANSACTION</code> 或者 <code>BEGIN</code> 语句则会自动提交每一个语句。在事务中如果使用 <code>COMMIT</code> 则会将当前改动落盘，即对别的事务可见，即 autocommit disabled 的话，则 locking read 是无效的。</p>
+<h4 id="Consistent-Nonlocking-Reads"><a href="#Consistent-Nonlocking-Reads" class="headerlink" title="Consistent Nonlocking Reads"></a>Consistent Nonlocking Reads</h4><blockquote>
+<p>A consistent read means that InnoDB uses multi-versioning to present to a query a snapshot of the database at a point in time. The query sees the changes made by transactions that committed before that point of time, and no changes made by later or uncommitted transactions.</p>
+</blockquote>
+<p>在 RR 的隔离等级下，每一次查询相同的数据都是第一次请求时的 snapshot，如果需要查看最新的数据，则需要先 commit 当前的数据或者使用 blocking select。</p>
+<h3 id="Deadlocks"><a href="#Deadlocks" class="headerlink" title="Deadlocks"></a>Deadlocks</h3><blockquote>
+<p>A deadlock is a situation where different transactions are unable to proceed because each holds a lock that the other needs. Because both transactions are waiting for a resource to become available, neither ever release the locks it holds.</p>
+</blockquote>
+<p>文中提到的例子</p>
+<table>
+<thead>
+<tr>
+<th>transaction</th>
+<th>A</th>
+<th>B</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><code>SELECT * FROM t WHERE i = 1 FOR SHARE</code></td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td><code>DELETE FROM t WHERE i = 1</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>DELETE FROM t WHERE i = 1</code></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>因为事务 A 在 i = 1 上有共享锁，B 申请互斥锁时需要等，之后 A 再申请互斥锁时则形成死锁。当死锁检测开启之后，会尝试回滚或者终止影响行数较小的事务。</p>
+<p>避免死锁的方法</p>
+<ul>
+<li>需要记住，死锁不是问题，程序应该支持重试事务</li>
+<li>尽量减少事务大小</li>
+<li>如果业务逻辑上需要很多 <code>SELECT ... FOR UPDATE</code> 或者 <code>SELECT ... FOR SHARE</code>，也可以考虑 READ COMMITTED 的隔离等级</li>
+</ul>
+<h2 id="Replication"><a href="#Replication" class="headerlink" title="Replication"></a>Replication</h2><blockquote>
+<p>Transactions that fail on the source do not affect replication. MySQL replication is based on the binary log where MySQL writes SQL statements that modify data</p>
+</blockquote>
+<p>这里有一个有意思的地方，replica 可以使用 MyISAM 来做引擎，这样一来像外键就没办法生效。如果你有一个表配置了外键的级联删除 <code>DELETE CASCADE</code> 则该表就不会删除关联的数据。不管是 statement-based 还是 row-based 复制也只是能够处理显式更新，而级联删除这种是引擎内部处理就没办法同步了。</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>其余的如数据压缩，I/O，参数配置等一些章节就选择性跳过了，目前更多地使用像 AWS 的 RDS 也很少接触实际的数据库配置了。个人感觉最有用的是锁和事务相关的介绍，数据写入磁盘的考虑也是很精彩。</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://draveness.me/whys-the-design-mysql-auto-increment/">https://draveness.me/whys-the-design-mysql-auto-increment/</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/11/13/mysql-innodb/" data-id="ckv3iop7x005fesc8ccx147li" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/database/" rel="tag">database</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/innodb/" rel="tag">innodb</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/10/23/oauth-introduction/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          OAuth Introduction
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/09/14/cloud-design-patterns/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Cloud Design Patterns</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/annotation/" rel="tag">annotation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/architecture/" rel="tag">architecture</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ci/" rel="tag">ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/concurrency/" rel="tag">concurrency</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/container/" rel="tag">container</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/context/" rel="tag">context</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/database/" rel="tag">database</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/debug/" rel="tag">debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/encoding/" rel="tag">encoding</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/engineering/" rel="tag">engineering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/error/" rel="tag">error</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/eval/" rel="tag">eval</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/generic/" rel="tag">generic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/" rel="tag">https</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/influxdb/" rel="tag">influxdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/innodb/" rel="tag">innodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jenkins/" rel="tag">jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lambda/" rel="tag">lambda</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/metaclass/" rel="tag">metaclass</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/metrics/" rel="tag">metrics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/microservice/" rel="tag">microservice</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mock/" rel="tag">mock</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/" rel="tag">network</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/" rel="tag">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/partitions/" rel="tag">partitions</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/patch/" rel="tag">patch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pipeline/" rel="tag">pipeline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/protocol/" rel="tag">protocol</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/" rel="tag">proxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react/" rel="tag">react</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/" rel="tag">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/security/" rel="tag">security</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/" rel="tag">ssl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sync/" rel="tag">sync</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/" rel="tag">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thread/" rel="tag">thread</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/timezone/" rel="tag">timezone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tls/" rel="tag">tls</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/traefik/" rel="tag">traefik</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/unittest/" rel="tag">unittest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/virtualenv/" rel="tag">virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/virtualenvwrapper/" rel="tag">virtualenvwrapper</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/annotation/" style="font-size: 10px;">annotation</a> <a href="/tags/architecture/" style="font-size: 10px;">architecture</a> <a href="/tags/blog/" style="font-size: 10px;">blog</a> <a href="/tags/ci/" style="font-size: 10px;">ci</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/container/" style="font-size: 10px;">container</a> <a href="/tags/context/" style="font-size: 10px;">context</a> <a href="/tags/database/" style="font-size: 10px;">database</a> <a href="/tags/debug/" style="font-size: 10px;">debug</a> <a href="/tags/docker/" style="font-size: 17.5px;">docker</a> <a href="/tags/encoding/" style="font-size: 12.5px;">encoding</a> <a href="/tags/engineering/" style="font-size: 10px;">engineering</a> <a href="/tags/error/" style="font-size: 10px;">error</a> <a href="/tags/eval/" style="font-size: 10px;">eval</a> <a href="/tags/generic/" style="font-size: 10px;">generic</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/influxdb/" style="font-size: 10px;">influxdb</a> <a href="/tags/innodb/" style="font-size: 10px;">innodb</a> <a href="/tags/java/" style="font-size: 17.5px;">java</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/tags/metaclass/" style="font-size: 10px;">metaclass</a> <a href="/tags/metrics/" style="font-size: 10px;">metrics</a> <a href="/tags/microservice/" style="font-size: 10px;">microservice</a> <a href="/tags/mock/" style="font-size: 10px;">mock</a> <a href="/tags/mysql/" style="font-size: 12.5px;">mysql</a> <a href="/tags/network/" style="font-size: 10px;">network</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/partitions/" style="font-size: 10px;">partitions</a> <a href="/tags/patch/" style="font-size: 10px;">patch</a> <a href="/tags/pipeline/" style="font-size: 10px;">pipeline</a> <a href="/tags/protocol/" style="font-size: 10px;">protocol</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/react/" style="font-size: 10px;">react</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/security/" style="font-size: 12.5px;">security</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/sync/" style="font-size: 10px;">sync</a> <a href="/tags/tcp/" style="font-size: 10px;">tcp</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/timezone/" style="font-size: 10px;">timezone</a> <a href="/tags/tls/" style="font-size: 10px;">tls</a> <a href="/tags/traefik/" style="font-size: 10px;">traefik</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/unittest/" style="font-size: 10px;">unittest</a> <a href="/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/tags/virtualenvwrapper/" style="font-size: 10px;">virtualenvwrapper</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/10/23/oauth-introduction/">OAuth Introduction</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/13/mysql-innodb/">MySQL InnoDB Introduction</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/14/cloud-design-patterns/">Cloud Design Patterns</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/21/about-ssl-tls/">About SSL And TLS</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/07/nginx-stream-debug/">Nginx stream debug</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Shing<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

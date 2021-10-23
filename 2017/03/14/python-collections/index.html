@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Python collections 库解析 | Shing&#39;s logs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本文会简单介绍以下 python 标准库 collections 的相关使用。collections 在基础数据结构的基础上进一步封装了更高级的数据结构。 以下代码的环境为 python3.5.2 defaultdictdefaultdict 是 dict 的子类，基本用法与 dict 一样，在 key 不存在是，添加了 default_facetory 提供的默认值的功能。 定义如下 1coll">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python collections 库解析">
+<meta property="og:url" content="http://yoursite.com/2017/03/14/python-collections/index.html">
+<meta property="og:site_name" content="Shing&#39;s logs">
+<meta property="og:description" content="本文会简单介绍以下 python 标准库 collections 的相关使用。collections 在基础数据结构的基础上进一步封装了更高级的数据结构。 以下代码的环境为 python3.5.2 defaultdictdefaultdict 是 dict 的子类，基本用法与 dict 一样，在 key 不存在是，添加了 default_facetory 提供的默认值的功能。 定义如下 1coll">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-03-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-10-23T06:49:34.223Z">
+<meta property="article:author" content="Shing">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Shing&#39;s logs" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Shing&#39;s logs</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-python-collections" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/14/python-collections/" class="article-date">
+  <time datetime="2017-03-13T16:00:00.000Z" itemprop="datePublished">2017-03-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Python collections 库解析
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文会简单介绍以下 python 标准库 collections 的相关使用。collections 在基础数据结构的基础上进一步封装了更高级的数据结构。</p>
+<p>以下代码的环境为 python3.5.2</p>
+<h2 id="defaultdict"><a href="#defaultdict" class="headerlink" title="defaultdict"></a>defaultdict</h2><p>defaultdict 是 dict 的子类，基本用法与 dict 一样，在 key 不存在是，添加了 <code>default_facetory</code> 提供的默认值的功能。</p>
+<p>定义如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">collections.defaultdict([default_factory[, ...]])</span><br></pre></td></tr></table></figure>
+
+<p>样例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">d = collections.defaultdict(<span class="built_in">int</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    d[i % <span class="number">3</span>] += <span class="number">1</span></span><br><span class="line"><span class="built_in">print</span>(d)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实际上，上述的代码类似于</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">D</span>(<span class="params">collections.defaultdict</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__missing__</span>(<span class="params">self, key</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.default_factory(key)</span><br><span class="line">d = D(<span class="built_in">int</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更简单的 lambda</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">constant_factory</span>(<span class="params">value</span>):</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">lambda</span>: value</span><br><span class="line">d = collections.defaultdict(constant_factory(<span class="number">0</span>))</span><br></pre></td></tr></table></figure>
+
+<p>最后，需要注意的是，defaultdict 生效只在 <code>obj[key]</code> 这种调用的模式下，如果使用 <code>obj.get</code> 则不会触发。</p>
+<h2 id="OrderedDict"><a href="#OrderedDict" class="headerlink" title="OrderedDict"></a>OrderedDict</h2><p>基本用法也和 dict 一样，但是会记住 key 插入的顺序。它有两个额外的方法</p>
+<ul>
+<li><code>popitem(last=True)</code>: 弹出一个键值对，last=False的话则弹出第一个</li>
+<li><code>move_to_end(key, last=True)</code>: 移动某个 key 到最后（该 key 必须存在），last=False 则移动到第一</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">od = collections.OrderedDict</span><br><span class="line">d = od.fromkeys(<span class="string">&quot;abcde&quot;</span>)</span><br><span class="line">d.move_to_end(<span class="string">&quot;b&quot;</span>, <span class="literal">False</span>)</span><br><span class="line"><span class="keyword">for</span> key, val <span class="keyword">in</span> d.items():</span><br><span class="line">    <span class="built_in">print</span>(key) <span class="comment"># b a c d e</span></span><br></pre></td></tr></table></figure>
+
+<p>下面是一些有趣的例子</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LastUpdatedOrderedDict</span>(<span class="params">collections.OrderedDict</span>):</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27; 每一个 key 新增或者修改操作都将其置于最后，可用于实现类似 LRU 的算法</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__setitem__</span>(<span class="params">self, key, value</span>):</span></span><br><span class="line">        <span class="keyword">if</span> key <span class="keyword">in</span> self:</span><br><span class="line">            <span class="keyword">del</span> self[key]</span><br><span class="line">        <span class="built_in">super</span>().__setitem__(key, value)</span><br><span class="line">        </span><br><span class="line"><span class="comment"># 在初始化时指定 key 的排序依据</span></span><br><span class="line">d = &#123;<span class="string">&#x27;banana&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;apple&#x27;</span>: <span class="number">4</span>, <span class="string">&#x27;pear&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;orange&#x27;</span>: <span class="number">2</span>&#125;</span><br><span class="line">collections.OrderedDict(<span class="built_in">sorted</span>(d.items(), key=<span class="keyword">lambda</span> t: t[<span class="number">0</span>])) <span class="comment"># sort by key</span></span><br><span class="line">collections.OrderedDict(<span class="built_in">sorted</span>(d.items(), key=<span class="keyword">lambda</span> t: t[<span class="number">1</span>])) <span class="comment"># sort by value</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Counter"><a href="#Counter" class="headerlink" title="Counter"></a>Counter</h2><p>同样是 dict 的子类，但是用于统计某个 key 的数量。它提供一些额外方法</p>
+<ol>
+<li><code>elements</code>: 返回所有大于 1 的 key，如果是 key 的数量大于 1 则会输出多次，同理，小于 0 则不输出</li>
+<li><code>most_common([n])</code>: 返回 key 和其对应的 count，默认输出全部数据，n=1 则返回 count 最大的</li>
+<li><code>subtract([iterable-or-mapping])</code>: 对应的 count 的相减</li>
+<li><code>fromkeys(iterable)</code>: 不可用，使用构造函数</li>
+<li><code>update([iterable-or-mapping])</code>: 已存在的 key 则 count 增加</li>
+</ol>
+<p>常见的用法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">c = collections.Counter() <span class="comment"># a new, empty counter</span></span><br><span class="line">c = collections.Counter(&#123;<span class="string">&#x27;red&#x27;</span>: <span class="number">4</span>, <span class="string">&#x27;blue&#x27;</span>: <span class="number">2</span>&#125;) <span class="comment"># from a mapping</span></span><br><span class="line">c = collections.Counter(cats=<span class="number">4</span>, dogs=<span class="number">8</span>) <span class="comment"># from keyword args</span></span><br><span class="line"></span><br><span class="line">c = collections.Counter(<span class="string">&#x27;hello&#x27;</span>) <span class="comment"># from an iterable</span></span><br><span class="line"><span class="built_in">print</span>(c[<span class="string">&#x27;l&#x27;</span>]) <span class="comment"># 2</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sum</span>(c.values())                 <span class="comment"># total of all counts</span></span><br><span class="line">c.clear()                       <span class="comment"># reset all counts</span></span><br><span class="line"><span class="built_in">list</span>(c)                         <span class="comment"># list unique elements</span></span><br><span class="line"><span class="built_in">set</span>(c)                          <span class="comment"># convert to a set</span></span><br><span class="line"><span class="built_in">dict</span>(c)                         <span class="comment"># convert to a regular dictionary</span></span><br><span class="line">c.items()                       <span class="comment"># convert to a list of (elem, cnt) pairs</span></span><br><span class="line">collections.Counter(<span class="built_in">dict</span>(list_of_pairs))</span><br><span class="line">c.most_common()[:-n-<span class="number">1</span>:-<span class="number">1</span>]       <span class="comment"># n least common elements</span></span><br><span class="line"></span><br><span class="line">b + c                           <span class="comment"># 对应的 count 相加（相减）</span></span><br><span class="line">b | c                           <span class="comment"># 并集，相同取最大的 count</span></span><br><span class="line">b &amp; c                           <span class="comment"># 交集，相同取最小的 count</span></span><br><span class="line"></span><br><span class="line">+c <span class="comment"># 相当于一个空的 counter 相加（或相减），但只保留整数 count 的 key</span></span><br><span class="line">-c <span class="comment"># 同上</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="deque"><a href="#deque" class="headerlink" title="deque"></a>deque</h2><p><a target="_blank" rel="noopener" href="https://docs.python.org/3/library/collections.html#deque-objects">deque</a> 是双端队列，首尾都可以进行插入和删除，同时也可以对某个位置进行插入。</p>
+<p>需要注意的是，在初始化的时候指定了 maxlen，则在相应的更新操作则会造成已有的元素的移动</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">d = collections.deque(maxlen=<span class="number">3</span>)</span><br><span class="line">d.extend(<span class="built_in">range</span>(<span class="number">3</span>)) <span class="comment"># deque([0, 1, 2], maxlen=3)</span></span><br><span class="line">d.append(<span class="number">4</span>) <span class="comment"># deque([1, 2, 4], maxlen=3)</span></span><br><span class="line">d.insert(<span class="number">0</span>, -<span class="number">1</span>) <span class="comment"># IndexError: deque already at its maximum size</span></span><br><span class="line"></span><br><span class="line">d.pop()</span><br><span class="line">d.insert(<span class="number">0</span>, -<span class="number">1</span>) <span class="comment"># deque([-1, 1, 2], maxlen=3)</span></span><br></pre></td></tr></table></figure>
+
+<p>一些样例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">tail</span>(<span class="params">filename, n=<span class="number">10</span></span>):</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27; Return the last n lines of a file</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(filename) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="keyword">return</span> deque(f, n)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">delete_nth</span>(<span class="params">d, n</span>):</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27; 删除第 n 个元素</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    d.rotate(-n)</span><br><span class="line">    d.popleft()</span><br><span class="line">    d.rotate(n)</span><br></pre></td></tr></table></figure>
+
+<h2 id="nametuple"><a href="#nametuple" class="headerlink" title="nametuple"></a>nametuple</h2><p><a target="_blank" rel="noopener" href="https://docs.python.org/3/library/collections.html#collections.namedtuple">nametuple</a> 是种用于强化 tuple 的可用性的数据结构。将 tuple 的 index 对应到 key，增强代码的可读性。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Point = collections.namedtuple(<span class="string">&#x27;Point&#x27;</span>, [<span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;y&#x27;</span>])</span><br><span class="line"><span class="comment"># Point = collections.namedtuple(&#x27;Point&#x27;, &#x27;x y&#x27;) # 也是可以的</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 增加的文档</span></span><br><span class="line">Point.__doc__ += <span class="string">&quot;Point with (x, y)&quot;</span></span><br><span class="line"></span><br><span class="line">p = Point._make((<span class="number">1</span>, <span class="number">2</span>))</span><br><span class="line"><span class="built_in">print</span>(p.x == p[<span class="number">0</span>]) <span class="comment"># True</span></span><br><span class="line"><span class="built_in">isinstance</span>(p, <span class="built_in">tuple</span>) <span class="comment"># True</span></span><br><span class="line"><span class="built_in">isinstance</span>(p, Point) <span class="comment"># True</span></span><br><span class="line"></span><br><span class="line">p.x = <span class="number">1</span> <span class="comment"># AttributeError: can&#x27;t set attribute</span></span><br><span class="line">p = p._replace(x=<span class="number">2</span>) <span class="comment"># 新对象，x=2,y=2</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span>(<span class="params">collections.namedtuple(<span class="params"><span class="string">&#x27;Point&#x27;</span>, <span class="string">&#x27;x y&#x27;</span></span>)</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot; 这样则可以定义相应的方法</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    下方 __slots__ = () 的设置则是为了不让对象生成 __dict__</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    __slots__ = ()</span><br></pre></td></tr></table></figure>
+
+<p>上述的代码可见，nametuple 同时具备类对象的属性引用和 tuple 的不可变性，实际上，你可以当做一个不可变属性的类对象来使用。</p>
+<h2 id="ChainMap"><a href="#ChainMap" class="headerlink" title="ChainMap"></a>ChainMap</h2><p>用于管理多个映射的数据结构。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">d1 = &#123;<span class="number">1</span>: <span class="number">2</span>, <span class="number">3</span>: <span class="number">4</span>, <span class="number">5</span>: <span class="number">6</span>&#125;</span><br><span class="line">d2 = &#123;<span class="number">1</span>: <span class="number">1</span>, <span class="number">6</span>: <span class="number">7</span>&#125;</span><br><span class="line"></span><br><span class="line">cm = collections.ChainMap(d1, d2)</span><br><span class="line">cm.get(<span class="number">1</span>) <span class="comment"># 2</span></span><br><span class="line"></span><br><span class="line">cm = collections.ChainMap(d2, d1)</span><br><span class="line">cm.get(<span class="number">1</span>) <span class="comment"># 1</span></span><br><span class="line"></span><br><span class="line">scm = cm.new_child() <span class="comment"># ChainMap(&#123;&#125;, &#123;1: 2, 3: 4, 5: 6&#125;, &#123;1: 1, 6: 7&#125;)</span></span><br><span class="line">pcm = cm.parents <span class="comment"># ChainMap(&#123;1: 1, 6: 7&#125;)</span></span><br></pre></td></tr></table></figure>
+
+<p>在上述代码中，可以看到对于同样的 key，会根据初始化时的顺序来定优先级，可以在数据级别实现类似于作用域的查找关系。</p>
+<p>ChainMap 把状态存储在 <code>maps</code> 这个 list 中，用户是可以编辑的，可以随意修改其中的顺序和值。 <code>new_child(m=None)</code> 则是可以根据当前的数据新建一个 ChainMap 但是在 list 的最前方插入一个参数中指定的 m，如果没有则是一个空的字典。<code>parents</code> 则返回去掉第一个 map 的 ChainMap。</p>
+<p>一些有趣的例子</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># python 变量查找顺序的模拟</span></span><br><span class="line"><span class="keyword">import</span> builtins</span><br><span class="line">pylookup = collections.ChainMap(<span class="built_in">locals</span>(), <span class="built_in">globals</span>(), <span class="built_in">vars</span>(builtins))</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DeepChainMap</span>(<span class="params">collections.ChainMap</span>):</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27; 实现层级更新和删除</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__setitem__</span>(<span class="params">self, key, value</span>):</span></span><br><span class="line">        <span class="keyword">for</span> mapping <span class="keyword">in</span> self.maps:</span><br><span class="line">            <span class="keyword">if</span> key <span class="keyword">in</span> mapping:</span><br><span class="line">                mapping[key] = value</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">        self.maps[<span class="number">0</span>][key] = value</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__delitem__</span>(<span class="params">self, key</span>):</span></span><br><span class="line">        <span class="keyword">for</span> mapping <span class="keyword">in</span> self.maps:</span><br><span class="line">            <span class="keyword">if</span> key <span class="keyword">in</span> mapping:</span><br><span class="line">                <span class="keyword">del</span> mapping[key]</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">        <span class="keyword">raise</span> KeyError(key)</span><br></pre></td></tr></table></figure>
+
+<h2 id="UserDict-UserList-UserString"><a href="#UserDict-UserList-UserString" class="headerlink" title="UserDict, UserList, UserString"></a>UserDict, UserList, UserString</h2><p>比直接继承 dict, list, str 的区别就是，你可以直接使用 <code>self.data</code> 去获取数据。在里面就以 dict, list, str 来保存数据，相应的接口来操纵这个数据。</p>
+<p>在查找相关资料的时候，我没有发现使用这几个类去集成和去继承相应的 str, dict 有什么具体的优势。相关信息可参考 <a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/7148419/subclass-dict-userdict-dict-or-abc">这里</a>。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://hg.python.org/cpython/file/tip/Modules/_collectionsmodule.c">collections 模块源码</a></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/03/14/python-collections/" data-id="ckv3iop6n000yesc8c4m1b27n" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/03/26/python-encoding/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Python 编码问题
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/01/10/http-notes/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">HTTP 协议笔记</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/annotation/" rel="tag">annotation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/architecture/" rel="tag">architecture</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ci/" rel="tag">ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/concurrency/" rel="tag">concurrency</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/container/" rel="tag">container</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/context/" rel="tag">context</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/database/" rel="tag">database</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/debug/" rel="tag">debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/encoding/" rel="tag">encoding</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/engineering/" rel="tag">engineering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/error/" rel="tag">error</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/eval/" rel="tag">eval</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/generic/" rel="tag">generic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/" rel="tag">https</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/influxdb/" rel="tag">influxdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/innodb/" rel="tag">innodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jenkins/" rel="tag">jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lambda/" rel="tag">lambda</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/metaclass/" rel="tag">metaclass</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/metrics/" rel="tag">metrics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/microservice/" rel="tag">microservice</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mock/" rel="tag">mock</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/" rel="tag">network</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/" rel="tag">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/partitions/" rel="tag">partitions</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/patch/" rel="tag">patch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pipeline/" rel="tag">pipeline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/protocol/" rel="tag">protocol</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/" rel="tag">proxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react/" rel="tag">react</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/" rel="tag">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/security/" rel="tag">security</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/" rel="tag">ssl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sync/" rel="tag">sync</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/" rel="tag">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thread/" rel="tag">thread</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/timezone/" rel="tag">timezone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tls/" rel="tag">tls</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/traefik/" rel="tag">traefik</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/unittest/" rel="tag">unittest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/virtualenv/" rel="tag">virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/virtualenvwrapper/" rel="tag">virtualenvwrapper</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/annotation/" style="font-size: 10px;">annotation</a> <a href="/tags/architecture/" style="font-size: 10px;">architecture</a> <a href="/tags/blog/" style="font-size: 10px;">blog</a> <a href="/tags/ci/" style="font-size: 10px;">ci</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/container/" style="font-size: 10px;">container</a> <a href="/tags/context/" style="font-size: 10px;">context</a> <a href="/tags/database/" style="font-size: 10px;">database</a> <a href="/tags/debug/" style="font-size: 10px;">debug</a> <a href="/tags/docker/" style="font-size: 17.5px;">docker</a> <a href="/tags/encoding/" style="font-size: 12.5px;">encoding</a> <a href="/tags/engineering/" style="font-size: 10px;">engineering</a> <a href="/tags/error/" style="font-size: 10px;">error</a> <a href="/tags/eval/" style="font-size: 10px;">eval</a> <a href="/tags/generic/" style="font-size: 10px;">generic</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/influxdb/" style="font-size: 10px;">influxdb</a> <a href="/tags/innodb/" style="font-size: 10px;">innodb</a> <a href="/tags/java/" style="font-size: 17.5px;">java</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/tags/metaclass/" style="font-size: 10px;">metaclass</a> <a href="/tags/metrics/" style="font-size: 10px;">metrics</a> <a href="/tags/microservice/" style="font-size: 10px;">microservice</a> <a href="/tags/mock/" style="font-size: 10px;">mock</a> <a href="/tags/mysql/" style="font-size: 12.5px;">mysql</a> <a href="/tags/network/" style="font-size: 10px;">network</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/partitions/" style="font-size: 10px;">partitions</a> <a href="/tags/patch/" style="font-size: 10px;">patch</a> <a href="/tags/pipeline/" style="font-size: 10px;">pipeline</a> <a href="/tags/protocol/" style="font-size: 10px;">protocol</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/react/" style="font-size: 10px;">react</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/security/" style="font-size: 12.5px;">security</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/sync/" style="font-size: 10px;">sync</a> <a href="/tags/tcp/" style="font-size: 10px;">tcp</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/timezone/" style="font-size: 10px;">timezone</a> <a href="/tags/tls/" style="font-size: 10px;">tls</a> <a href="/tags/traefik/" style="font-size: 10px;">traefik</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/unittest/" style="font-size: 10px;">unittest</a> <a href="/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/tags/virtualenvwrapper/" style="font-size: 10px;">virtualenvwrapper</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/10/23/oauth-introduction/">OAuth Introduction</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/13/mysql-innodb/">MySQL InnoDB Introduction</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/14/cloud-design-patterns/">Cloud Design Patterns</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/21/about-ssl-tls/">About SSL And TLS</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/07/nginx-stream-debug/">Nginx stream debug</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Shing<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
