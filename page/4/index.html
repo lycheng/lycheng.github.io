@@ -65,6 +65,80 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-docker-simple-note" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/16/docker-simple-note/" class="article-date">
+  <time datetime="2016-07-15T16:00:00.000Z" itemprop="datePublished">2016-07-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/16/docker-simple-note/">Docker 简要记录</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>docker 目前在 ubuntu apt 上面的版本官方并不维护，需要手动添加它的源才比较好。详细的官方文档可见 <a target="_blank" rel="noopener" href="https://docs.docker.com/engine/installation/linux/ubuntulinux/">这里</a>。</p>
+<p>因为国外的 docker registry 太慢，所以可以选择国内的服务 <a target="_blank" rel="noopener" href="https://get.daocloud.io/">daocloud</a> 来进行加速。常用的镜像都能很快的下载。当然有能力的可以选择自己搭建私有的 registry。</p>
+<p>安装之后可以看 docker 是否已经启动</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl status docker</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装镜像"><a href="#安装镜像" class="headerlink" title="安装镜像"></a>安装镜像</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo docker pull hello-world</span><br><span class="line"># OR</span><br><span class="line">dao pull hello-world</span><br></pre></td></tr></table></figure>
+
+<p>上面两者是等效的，默认的 tag 都是 latest。安装之后可以列出 images 来查看</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker images</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="镜像操作"><a href="#镜像操作" class="headerlink" title="镜像操作"></a>镜像操作</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 删除镜像</span><br><span class="line"># 前提是没有正在运行的相关容器</span><br><span class="line">sudo docker rmi &lt;image&gt;:&lt;tag&gt;</span><br></pre></td></tr></table></figure>
+
+<p>在镜像安装的时候可以看到这样的东西</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Pulling repository library/redis:2.8</span><br><span class="line"></span><br><span class="line">128182e1e85d: Download complete</span><br><span class="line">7f1aa6a73799: Download complete</span><br><span class="line">1a9852d2edd3: Download complete</span><br><span class="line">a3ed95caeb02: Download complete</span><br><span class="line">fbe8a4f1aa87: Download complete</span><br><span class="line">b94de088b6d8: Download complete</span><br><span class="line">6c8ccd839b1d: Download complete</span><br><span class="line">0fded1c9651d: Download complete</span><br><span class="line">51f5c6a04d83: Download complete</span><br></pre></td></tr></table></figure>
+
+<p>上面的的每一行代表镜像的每一层（layer），仅可读，表示镜像那时候的文件系统的不同。在创建新的容器的时候，则在最新的层上面创建一层可读可写的容器层。如果把做了的修改保存下来，则就是新的层，这个 image 就更新了。</p>
+<h3 id="容器操作"><a href="#容器操作" class="headerlink" title="容器操作"></a>容器操作</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 加载镜像到容器中</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 每执行以此就有一个新的容器</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 有一大堆参数指定各种例如网络，存储的信息</span></span><br><span class="line">sudo docker run &lt;image&gt;:&lt;tag&gt;</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> daemon 的形式来跑服务</span></span><br><span class="line">sudo docker run -d &lt;image&gt;:&lt;tag&gt;</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 列出容器信息</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> -a 表示所有的容器，如果去掉则仅仅是正在运行的容器</span></span><br><span class="line">sudo docker ps -a</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除容器</span></span><br><span class="line">sudo docker rm &lt;id&gt;</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除已经退出的容器</span></span><br><span class="line">sudo docker rm `sudo docker ps -aq -f status=exited`</span><br></pre></td></tr></table></figure>
+
+<h3 id="docker-compose"><a href="#docker-compose" class="headerlink" title="docker-compose"></a>docker-compose</h3><p>docker-compose 是 docker 用来管理多个容器的工具。通过配置文件定义容器的参数，相应容器的依赖，对外的端口等等。</p>
+<p>它的配置文件大概会长这样</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">redash:</span></span><br><span class="line">  <span class="attr">image:</span> <span class="string">redash/redash:latest</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">&quot;5000:5000&quot;</span></span><br><span class="line">  <span class="attr">links:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">redis</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">postgres</span></span><br><span class="line">  <span class="attr">environment:</span></span><br><span class="line">    <span class="attr">REDASH_STATIC_ASSETS_PATH:</span> <span class="string">&quot;../rd_ui/dist/&quot;</span></span><br><span class="line">    <span class="attr">REDASH_LOG_LEVEL:</span> <span class="string">&quot;INFO&quot;</span></span><br><span class="line">    <span class="attr">REDASH_REDIS_URL:</span> <span class="string">&quot;redis://redis:6379/0&quot;</span></span><br><span class="line">    <span class="attr">REDASH_DATABASE_URL:</span> <span class="string">&quot;postgresql://postgres@postgres/postgres&quot;</span></span><br><span class="line">    <span class="attr">REDASH_COOKIE_SECRET:</span> <span class="string">veryverysecret</span></span><br><span class="line"><span class="attr">redis:</span></span><br><span class="line">  <span class="attr">image:</span> <span class="string">redis:2.8</span></span><br><span class="line"><span class="attr">postgres:</span></span><br><span class="line">  <span class="attr">image:</span> <span class="string">postgres:9.3</span></span><br><span class="line">  <span class="attr">volumes:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">/opt/postgres-data:/var/lib/postgresql/data</span></span><br><span class="line"><span class="attr">redash-nginx:</span></span><br><span class="line">  <span class="attr">image:</span> <span class="string">redash/nginx:latest</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">&quot;80:80&quot;</span></span><br><span class="line">  <span class="attr">links:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">redash</span></span><br></pre></td></tr></table></figure>
+
+<p>之后保存配置文件 <code>docker-compose.yml</code> 然后在当前的目录</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo docker-compose up</span><br><span class="line"></span><br><span class="line"><span class="comment"># 单独启用其中某个服务</span></span><br><span class="line">sudo docker-compose up postgres</span><br></pre></td></tr></table></figure>
+
+<h2 id="root"><a href="#root" class="headerlink" title="root"></a>root</h2><p>容器内部的用户是 root，跟宿主的 root 是不同的。默认的情况下，run 参数 <code>--privileged=false</code>，同是 root 用户，但却不是所有的权限。可以基本不用担心安全问题。</p>
+<p>到如果设置为 true 的话，问题就大了</p>
+<blockquote>
+<p>由于 Docker 容器与宿主机处于共享同一个内核操作系统的状态，因此，Docker 容器将完全拥有内核的管理权限</p>
+</blockquote>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://docs.docker.com/engine/understanding-docker/">官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.docker.com/engine/userguide/storagedriver/imagesandcontainers/">docker 的存储的相关概念</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.docker.com/compose/overview/">docker compose</a></li>
+<li><a target="_blank" rel="noopener" href="http://docs.daocloud.io/allen-docker/docker-root">docker root 安全问题</a></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/07/16/docker-simple-note/" data-id="ckx7kmlc0000jrzc88xx65psr" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/" rel="tag">docker</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-golang-learning-4" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/07/09/golang-learning-4/" class="article-date">
@@ -137,7 +211,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/07/09/golang-learning-4/" data-id="ckv3iop6f000jesc84zrfco4d" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/07/09/golang-learning-4/" data-id="ckx7kmlbz000grzc8dj069r2c" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/" rel="tag">golang</a></li></ul>
@@ -215,7 +289,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/07/04/golang-learning-3/" data-id="ckv3iop6e000gesc8gn70cl1r" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/07/04/golang-learning-3/" data-id="ckx7kmlc4000qrzc8a6ifel23" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/" rel="tag">golang</a></li></ul>
@@ -310,7 +384,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/06/25/golang-learning-2/" data-id="ckv3iop6d000eesc8522ahv2m" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/06/25/golang-learning-2/" data-id="ckx7kmlby000erzc85nopbrqo" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/" rel="tag">golang</a></li></ul>
@@ -401,7 +475,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/06/07/golang-learning-1/" data-id="ckv3iop6c000cesc8cghv4vg5" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/06/07/golang-learning-1/" data-id="ckx7kmlbx000crzc89uyt7gpk" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/" rel="tag">golang</a></li></ul>
@@ -490,7 +564,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/05/29/golang-at-ubuntu-16.04/" data-id="ckv3iop6b000besc85fzre7eu" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/05/29/golang-at-ubuntu-16.04/" data-id="ckx7kmlbv0009rzc8c4ux4l3h" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a></li></ul>
@@ -550,7 +624,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/03/12/virtualenvwrapper/" data-id="ckv3iop6a0009esc84gbo1k5q" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/03/12/virtualenvwrapper/" data-id="ckx7kmlbw000brzc87ov846iy" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/virtualenv/" rel="tag">virtualenv</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/virtualenvwrapper/" rel="tag">virtualenvwrapper</a></li></ul>
@@ -629,7 +703,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/20/javascript-oo/" data-id="ckv3iop690008esc81dyla837" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/20/javascript-oo/" data-id="ckx7kmlbu0008rzc89kyegaq7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li></ul>
@@ -694,7 +768,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/06/about-react/" data-id="ckv3iop670005esc8a7t6brrh" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/06/about-react/" data-id="ckx7kmlbs0005rzc89hq63dll" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/react/" rel="tag">react</a></li></ul>
@@ -839,88 +913,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/03/about-python-reading-notes/" data-id="ckv3iop660004esc88ph593s1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/03/about-python-reading-notes/" data-id="ckx7kmlbs0004rzc86ndscim4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-about-git" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/10/07/about-git/" class="article-date">
-  <time datetime="2015-10-06T16:00:00.000Z" itemprop="datePublished">2015-10-07</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/07/about-git/">关于 git 的一些东西</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>用了很久的 git 了，但更多的是用基本的东西，也没有深究过是不是合适。长假过来重新总结一下。</p>
-<h2 id="git-flow"><a href="#git-flow" class="headerlink" title="git flow"></a>git flow</h2><p>主分支有两个，master 和 develop。</p>
-<p>develop 是当前的主要开发分支，当足够稳定可以进行发布版本的话就可以把代码 <code>merge</code> 到 master。</p>
-<p>其余的称为辅助分支，如下：</p>
-<ul>
-<li>feature，可能从 develop 派生出来，但最后一定合并到 develop<ul>
-<li>feature 可以只留在本地 </li>
-</ul>
-</li>
-<li>release, 用于准备进行发布的版本，允许针对部署环境的小修改，bug 的修改<ul>
-<li>bug 修改以及一些其它的修复在之后需要合并回 develop 和 master</li>
-<li>合并到 master 之后记得加上 tag</li>
-</ul>
-</li>
-<li>hotfix, 从 master 派生出来，进行发布时意料之外的 bug 的修复<ul>
-<li>修复之后进行版本号的更新 </li>
-<li>最后也需要合并代码到 develop</li>
-</ul>
-</li>
-</ul>
-<p>需要注意的是，在这里合并分支使用的是 <code>git merge --no-ff &lt;branch&gt;</code> 来进行合并。这样合并后会新增一个节点，这样子保证了版本演进的清晰。</p>
-<h2 id="有用的东西"><a href="#有用的东西" class="headerlink" title="有用的东西"></a>有用的东西</h2><h3 id="rebase"><a href="#rebase" class="headerlink" title="rebase"></a>rebase</h3><p><code>rebase</code> 试用于不想保留分支信息的情况，你 <code>checkout</code> 了一个新分支出来，修改了提交了几个 <code>commit</code> 之后，如果之前的分支也有别人的提交，你进行合并的时候就造成了分支的交叉。如果你不想合并就使用 <code>git rebase &lt;origin&gt;</code> ，这样子就会把你在当前的分支的提交取消，把你的修改更新到原来的分支去。</p>
-<p><code>rebase</code> 适合在本地只修改几个文件，新建的分支也不需要发布到远端。</p>
-<h3 id="日志查找"><a href="#日志查找" class="headerlink" title="日志查找"></a>日志查找</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 查找最近五个小时的提交</span><br><span class="line">git log --since=&quot;5 hours&quot;</span><br><span class="line"></span><br><span class="line"># 查找五个小时之前的提交</span><br><span class="line">git log --before=&quot;5 hours&quot;</span><br><span class="line"></span><br><span class="line"># 按精确的 commit 范围提交 [beg, end) 7 位 hash 码</span><br><span class="line">git log &lt;beg&gt;...&lt;end&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="修改提交"><a href="#修改提交" class="headerlink" title="修改提交"></a>修改提交</h3><h4 id="增补提交"><a href="#增补提交" class="headerlink" title="增补提交"></a>增补提交</h4><p>在已经提交之后，修改某个文件，然后使用下方命令即可直接复用刚才的提交</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -C HEAD -a --amend</span><br></pre></td></tr></table></figure>
-
-<h4 id="反转提交"><a href="#反转提交" class="headerlink" title="反转提交"></a>反转提交</h4><p>如果代码没有提交，可以简单使用 <code>git reset</code>。</p>
-<p>如果提交了的话，则可以使用 <code>git revert -n HEAD</code> 撤销提交，添加了 <code>-n</code> 参数之后，撤销的改动不会马上提交，撤销了提交，之后修改后再重新提交。</p>
-<h3 id="压缩版本库"><a href="#压缩版本库" class="headerlink" title="压缩版本库"></a>压缩版本库</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git gc</span><br></pre></td></tr></table></figure>
-
-<h3 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 指定查找指定版本库的信息</span><br><span class="line">git grep xmmap v1.5.0</span><br></pre></td></tr></table></figure>
-
-<h2 id="最后的最后"><a href="#最后的最后" class="headerlink" title="最后的最后"></a>最后的最后</h2><p>目前在用的时候可能回用到的就是上面这些了，还是历史版本的修改，二分查找一类的高级功能尚未涉及。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a target="_blank" rel="noopener" href="http://nvie.com/posts/a-successful-git-branching-model/">http://nvie.com/posts/a-successful-git-branching-model/</a></li>
-<li><a target="_blank" rel="noopener" href="http://gitbook.liuhui998.com/4_2.html">http://gitbook.liuhui998.com/4_2.html</a></li>
-<li><a target="_blank" rel="noopener" href="https://git-scm.com/docs">https://git-scm.com/docs</a></li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/07/about-git/" data-id="ckv3iop650003esc86j0kbwnn" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/" rel="tag">git</a></li></ul>
 
     </footer>
   </div>
@@ -957,7 +953,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/annotation/" style="font-size: 10px;">annotation</a> <a href="/tags/architecture/" style="font-size: 10px;">architecture</a> <a href="/tags/blog/" style="font-size: 10px;">blog</a> <a href="/tags/ci/" style="font-size: 10px;">ci</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/container/" style="font-size: 10px;">container</a> <a href="/tags/context/" style="font-size: 10px;">context</a> <a href="/tags/database/" style="font-size: 10px;">database</a> <a href="/tags/debug/" style="font-size: 10px;">debug</a> <a href="/tags/docker/" style="font-size: 17.5px;">docker</a> <a href="/tags/encoding/" style="font-size: 12.5px;">encoding</a> <a href="/tags/engineering/" style="font-size: 10px;">engineering</a> <a href="/tags/error/" style="font-size: 10px;">error</a> <a href="/tags/eval/" style="font-size: 10px;">eval</a> <a href="/tags/generic/" style="font-size: 10px;">generic</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/influxdb/" style="font-size: 10px;">influxdb</a> <a href="/tags/innodb/" style="font-size: 10px;">innodb</a> <a href="/tags/java/" style="font-size: 17.5px;">java</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/tags/metaclass/" style="font-size: 10px;">metaclass</a> <a href="/tags/metrics/" style="font-size: 10px;">metrics</a> <a href="/tags/microservice/" style="font-size: 10px;">microservice</a> <a href="/tags/mock/" style="font-size: 10px;">mock</a> <a href="/tags/mysql/" style="font-size: 12.5px;">mysql</a> <a href="/tags/network/" style="font-size: 10px;">network</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/partitions/" style="font-size: 10px;">partitions</a> <a href="/tags/patch/" style="font-size: 10px;">patch</a> <a href="/tags/pipeline/" style="font-size: 10px;">pipeline</a> <a href="/tags/protocol/" style="font-size: 10px;">protocol</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/react/" style="font-size: 10px;">react</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/security/" style="font-size: 12.5px;">security</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/sync/" style="font-size: 10px;">sync</a> <a href="/tags/tcp/" style="font-size: 10px;">tcp</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/timezone/" style="font-size: 10px;">timezone</a> <a href="/tags/tls/" style="font-size: 10px;">tls</a> <a href="/tags/traefik/" style="font-size: 10px;">traefik</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/unittest/" style="font-size: 10px;">unittest</a> <a href="/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/tags/virtualenvwrapper/" style="font-size: 10px;">virtualenvwrapper</a>
+      <a href="/tags/annotation/" style="font-size: 10px;">annotation</a> <a href="/tags/architecture/" style="font-size: 10px;">architecture</a> <a href="/tags/blog/" style="font-size: 10px;">blog</a> <a href="/tags/ci/" style="font-size: 10px;">ci</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/container/" style="font-size: 10px;">container</a> <a href="/tags/context/" style="font-size: 10px;">context</a> <a href="/tags/database/" style="font-size: 10px;">database</a> <a href="/tags/debug/" style="font-size: 10px;">debug</a> <a href="/tags/docker/" style="font-size: 17.5px;">docker</a> <a href="/tags/encoding/" style="font-size: 12.5px;">encoding</a> <a href="/tags/engineering/" style="font-size: 10px;">engineering</a> <a href="/tags/error/" style="font-size: 10px;">error</a> <a href="/tags/eval/" style="font-size: 10px;">eval</a> <a href="/tags/generic/" style="font-size: 10px;">generic</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/influxdb/" style="font-size: 10px;">influxdb</a> <a href="/tags/innodb/" style="font-size: 10px;">innodb</a> <a href="/tags/java/" style="font-size: 17.5px;">java</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/tags/metaclass/" style="font-size: 10px;">metaclass</a> <a href="/tags/metrics/" style="font-size: 10px;">metrics</a> <a href="/tags/microservice/" style="font-size: 10px;">microservice</a> <a href="/tags/mock/" style="font-size: 10px;">mock</a> <a href="/tags/mysql/" style="font-size: 12.5px;">mysql</a> <a href="/tags/network/" style="font-size: 12.5px;">network</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/partitions/" style="font-size: 10px;">partitions</a> <a href="/tags/patch/" style="font-size: 10px;">patch</a> <a href="/tags/pipeline/" style="font-size: 10px;">pipeline</a> <a href="/tags/protocol/" style="font-size: 12.5px;">protocol</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/react/" style="font-size: 10px;">react</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/security/" style="font-size: 15px;">security</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/sync/" style="font-size: 10px;">sync</a> <a href="/tags/tcp/" style="font-size: 10px;">tcp</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/timezone/" style="font-size: 10px;">timezone</a> <a href="/tags/tls/" style="font-size: 10px;">tls</a> <a href="/tags/traefik/" style="font-size: 10px;">traefik</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/unittest/" style="font-size: 10px;">unittest</a> <a href="/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/tags/virtualenvwrapper/" style="font-size: 10px;">virtualenvwrapper</a>
     </div>
   </div>
 
@@ -966,7 +962,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a></li></ul>
     </div>
   </div>
 
@@ -977,6 +973,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2021/12/15/designing-data-intensive-applications-note/">Designing Data-Intensive Applications Notes</a>
+          </li>
         
           <li>
             <a href="/2021/10/23/oauth-introduction/">OAuth Introduction</a>
@@ -992,10 +992,6 @@
         
           <li>
             <a href="/2020/08/21/about-ssl-tls/">About SSL And TLS</a>
-          </li>
-        
-          <li>
-            <a href="/2020/06/07/nginx-stream-debug/">Nginx stream debug</a>
           </li>
         
       </ul>

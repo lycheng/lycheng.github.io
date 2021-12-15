@@ -65,6 +65,84 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-about-git" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/10/07/about-git/" class="article-date">
+  <time datetime="2015-10-06T16:00:00.000Z" itemprop="datePublished">2015-10-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/10/07/about-git/">关于 git 的一些东西</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>用了很久的 git 了，但更多的是用基本的东西，也没有深究过是不是合适。长假过来重新总结一下。</p>
+<h2 id="git-flow"><a href="#git-flow" class="headerlink" title="git flow"></a>git flow</h2><p>主分支有两个，master 和 develop。</p>
+<p>develop 是当前的主要开发分支，当足够稳定可以进行发布版本的话就可以把代码 <code>merge</code> 到 master。</p>
+<p>其余的称为辅助分支，如下：</p>
+<ul>
+<li>feature，可能从 develop 派生出来，但最后一定合并到 develop<ul>
+<li>feature 可以只留在本地 </li>
+</ul>
+</li>
+<li>release, 用于准备进行发布的版本，允许针对部署环境的小修改，bug 的修改<ul>
+<li>bug 修改以及一些其它的修复在之后需要合并回 develop 和 master</li>
+<li>合并到 master 之后记得加上 tag</li>
+</ul>
+</li>
+<li>hotfix, 从 master 派生出来，进行发布时意料之外的 bug 的修复<ul>
+<li>修复之后进行版本号的更新 </li>
+<li>最后也需要合并代码到 develop</li>
+</ul>
+</li>
+</ul>
+<p>需要注意的是，在这里合并分支使用的是 <code>git merge --no-ff &lt;branch&gt;</code> 来进行合并。这样合并后会新增一个节点，这样子保证了版本演进的清晰。</p>
+<h2 id="有用的东西"><a href="#有用的东西" class="headerlink" title="有用的东西"></a>有用的东西</h2><h3 id="rebase"><a href="#rebase" class="headerlink" title="rebase"></a>rebase</h3><p><code>rebase</code> 试用于不想保留分支信息的情况，你 <code>checkout</code> 了一个新分支出来，修改了提交了几个 <code>commit</code> 之后，如果之前的分支也有别人的提交，你进行合并的时候就造成了分支的交叉。如果你不想合并就使用 <code>git rebase &lt;origin&gt;</code> ，这样子就会把你在当前的分支的提交取消，把你的修改更新到原来的分支去。</p>
+<p><code>rebase</code> 适合在本地只修改几个文件，新建的分支也不需要发布到远端。</p>
+<h3 id="日志查找"><a href="#日志查找" class="headerlink" title="日志查找"></a>日志查找</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 查找最近五个小时的提交</span><br><span class="line">git log --since=&quot;5 hours&quot;</span><br><span class="line"></span><br><span class="line"># 查找五个小时之前的提交</span><br><span class="line">git log --before=&quot;5 hours&quot;</span><br><span class="line"></span><br><span class="line"># 按精确的 commit 范围提交 [beg, end) 7 位 hash 码</span><br><span class="line">git log &lt;beg&gt;...&lt;end&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改提交"><a href="#修改提交" class="headerlink" title="修改提交"></a>修改提交</h3><h4 id="增补提交"><a href="#增补提交" class="headerlink" title="增补提交"></a>增补提交</h4><p>在已经提交之后，修改某个文件，然后使用下方命令即可直接复用刚才的提交</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -C HEAD -a --amend</span><br></pre></td></tr></table></figure>
+
+<h4 id="反转提交"><a href="#反转提交" class="headerlink" title="反转提交"></a>反转提交</h4><p>如果代码没有提交，可以简单使用 <code>git reset</code>。</p>
+<p>如果提交了的话，则可以使用 <code>git revert -n HEAD</code> 撤销提交，添加了 <code>-n</code> 参数之后，撤销的改动不会马上提交，撤销了提交，之后修改后再重新提交。</p>
+<h3 id="压缩版本库"><a href="#压缩版本库" class="headerlink" title="压缩版本库"></a>压缩版本库</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git gc</span><br></pre></td></tr></table></figure>
+
+<h3 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 指定查找指定版本库的信息</span><br><span class="line">git grep xmmap v1.5.0</span><br></pre></td></tr></table></figure>
+
+<h2 id="最后的最后"><a href="#最后的最后" class="headerlink" title="最后的最后"></a>最后的最后</h2><p>目前在用的时候可能回用到的就是上面这些了，还是历史版本的修改，二分查找一类的高级功能尚未涉及。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://nvie.com/posts/a-successful-git-branching-model/">http://nvie.com/posts/a-successful-git-branching-model/</a></li>
+<li><a target="_blank" rel="noopener" href="http://gitbook.liuhui998.com/4_2.html">http://gitbook.liuhui998.com/4_2.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://git-scm.com/docs">https://git-scm.com/docs</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/10/07/about-git/" data-id="ckx7kmlbr0003rzc8e18f7mlt" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/" rel="tag">git</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-travis-cli" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/08/30/travis-cli/" class="article-date">
@@ -105,7 +183,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/08/30/travis-cli/" data-id="ckv3iop630001esc8hy3i3ohx" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/08/30/travis-cli/" data-id="ckx7kmlbo0001rzc8aooigj93" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ci/" rel="tag">ci</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
@@ -148,7 +226,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/08/23/Jekyll-Github-Pages/" data-id="ckv3iop5z0000esc8cv8z18ys" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/08/23/Jekyll-Github-Pages/" data-id="ckx7kmlbl0000rzc85zb9gt1s" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/blog/" rel="tag">blog</a></li></ul>
@@ -188,7 +266,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/annotation/" style="font-size: 10px;">annotation</a> <a href="/tags/architecture/" style="font-size: 10px;">architecture</a> <a href="/tags/blog/" style="font-size: 10px;">blog</a> <a href="/tags/ci/" style="font-size: 10px;">ci</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/container/" style="font-size: 10px;">container</a> <a href="/tags/context/" style="font-size: 10px;">context</a> <a href="/tags/database/" style="font-size: 10px;">database</a> <a href="/tags/debug/" style="font-size: 10px;">debug</a> <a href="/tags/docker/" style="font-size: 17.5px;">docker</a> <a href="/tags/encoding/" style="font-size: 12.5px;">encoding</a> <a href="/tags/engineering/" style="font-size: 10px;">engineering</a> <a href="/tags/error/" style="font-size: 10px;">error</a> <a href="/tags/eval/" style="font-size: 10px;">eval</a> <a href="/tags/generic/" style="font-size: 10px;">generic</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/influxdb/" style="font-size: 10px;">influxdb</a> <a href="/tags/innodb/" style="font-size: 10px;">innodb</a> <a href="/tags/java/" style="font-size: 17.5px;">java</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/tags/metaclass/" style="font-size: 10px;">metaclass</a> <a href="/tags/metrics/" style="font-size: 10px;">metrics</a> <a href="/tags/microservice/" style="font-size: 10px;">microservice</a> <a href="/tags/mock/" style="font-size: 10px;">mock</a> <a href="/tags/mysql/" style="font-size: 12.5px;">mysql</a> <a href="/tags/network/" style="font-size: 10px;">network</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/partitions/" style="font-size: 10px;">partitions</a> <a href="/tags/patch/" style="font-size: 10px;">patch</a> <a href="/tags/pipeline/" style="font-size: 10px;">pipeline</a> <a href="/tags/protocol/" style="font-size: 10px;">protocol</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/react/" style="font-size: 10px;">react</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/security/" style="font-size: 12.5px;">security</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/sync/" style="font-size: 10px;">sync</a> <a href="/tags/tcp/" style="font-size: 10px;">tcp</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/timezone/" style="font-size: 10px;">timezone</a> <a href="/tags/tls/" style="font-size: 10px;">tls</a> <a href="/tags/traefik/" style="font-size: 10px;">traefik</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/unittest/" style="font-size: 10px;">unittest</a> <a href="/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/tags/virtualenvwrapper/" style="font-size: 10px;">virtualenvwrapper</a>
+      <a href="/tags/annotation/" style="font-size: 10px;">annotation</a> <a href="/tags/architecture/" style="font-size: 10px;">architecture</a> <a href="/tags/blog/" style="font-size: 10px;">blog</a> <a href="/tags/ci/" style="font-size: 10px;">ci</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/container/" style="font-size: 10px;">container</a> <a href="/tags/context/" style="font-size: 10px;">context</a> <a href="/tags/database/" style="font-size: 10px;">database</a> <a href="/tags/debug/" style="font-size: 10px;">debug</a> <a href="/tags/docker/" style="font-size: 17.5px;">docker</a> <a href="/tags/encoding/" style="font-size: 12.5px;">encoding</a> <a href="/tags/engineering/" style="font-size: 10px;">engineering</a> <a href="/tags/error/" style="font-size: 10px;">error</a> <a href="/tags/eval/" style="font-size: 10px;">eval</a> <a href="/tags/generic/" style="font-size: 10px;">generic</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/influxdb/" style="font-size: 10px;">influxdb</a> <a href="/tags/innodb/" style="font-size: 10px;">innodb</a> <a href="/tags/java/" style="font-size: 17.5px;">java</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/tags/metaclass/" style="font-size: 10px;">metaclass</a> <a href="/tags/metrics/" style="font-size: 10px;">metrics</a> <a href="/tags/microservice/" style="font-size: 10px;">microservice</a> <a href="/tags/mock/" style="font-size: 10px;">mock</a> <a href="/tags/mysql/" style="font-size: 12.5px;">mysql</a> <a href="/tags/network/" style="font-size: 12.5px;">network</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/partitions/" style="font-size: 10px;">partitions</a> <a href="/tags/patch/" style="font-size: 10px;">patch</a> <a href="/tags/pipeline/" style="font-size: 10px;">pipeline</a> <a href="/tags/protocol/" style="font-size: 12.5px;">protocol</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/react/" style="font-size: 10px;">react</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/security/" style="font-size: 15px;">security</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/sync/" style="font-size: 10px;">sync</a> <a href="/tags/tcp/" style="font-size: 10px;">tcp</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/timezone/" style="font-size: 10px;">timezone</a> <a href="/tags/tls/" style="font-size: 10px;">tls</a> <a href="/tags/traefik/" style="font-size: 10px;">traefik</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/unittest/" style="font-size: 10px;">unittest</a> <a href="/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/tags/virtualenvwrapper/" style="font-size: 10px;">virtualenvwrapper</a>
     </div>
   </div>
 
@@ -197,7 +275,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a></li></ul>
     </div>
   </div>
 
@@ -208,6 +286,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2021/12/15/designing-data-intensive-applications-note/">Designing Data-Intensive Applications Notes</a>
+          </li>
         
           <li>
             <a href="/2021/10/23/oauth-introduction/">OAuth Introduction</a>
@@ -223,10 +305,6 @@
         
           <li>
             <a href="/2020/08/21/about-ssl-tls/">About SSL And TLS</a>
-          </li>
-        
-          <li>
-            <a href="/2020/06/07/nginx-stream-debug/">Nginx stream debug</a>
           </li>
         
       </ul>

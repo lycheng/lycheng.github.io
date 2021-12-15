@@ -65,6 +65,70 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-docker-alpine-image-timezone" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/11/docker-alpine-image-timezone/" class="article-date">
+  <time datetime="2018-12-10T16:00:00.000Z" itemprop="datePublished">2018-12-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/11/docker-alpine-image-timezone/">Docker 容器时区设置</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>使用 Docker 部署 Java 程序时发现时区有问题，这里记录下这期间折腾的记录。</p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>基础镜像为 <code>openjdk:8-jre-alpine</code>，复制打包后生成的 jar 文件进去运行程序。</p>
+<p>这个镜像默认的配置如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ docker run -it --rm openjdk:8-jre-alpine /bin/sh</span><br><span class="line">/ # date</span><br><span class="line">Tue Dec 11 01:41:09 UTC 2018</span><br><span class="line">/ # cat /etc/localtime</span><br><span class="line">TZif2UTCTZif2UTC</span><br><span class="line">UTC0</span><br></pre></td></tr></table></figure>
+
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>以下是用来测试的 Dockerfile</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">FROM openjdk:8-jre-alpine</span><br><span class="line"></span><br><span class="line"># RUN apk add --no-cache tzdata &amp;&amp; cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &amp;&amp; echo &quot;Asia/Shanghai&quot; &gt; /etc/timezone</span><br><span class="line"></span><br><span class="line"># ENV TZ Asia/Shanghai</span><br><span class="line"></span><br><span class="line">COPY ./target/tz-1.0-SNAPSHOT.jar main.jar</span><br><span class="line">CMD /usr/bin/java -jar main.jar</span><br></pre></td></tr></table></figure>
+
+<p>测试用的 Java 程序</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.lycheng.tz;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.time.Instant;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"><span class="keyword">import</span> java.util.TimeZone;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Instant instant = Instant.now();</span><br><span class="line">        System.out.println(instant);</span><br><span class="line"></span><br><span class="line">        TimeZone tz = TimeZone.getDefault();</span><br><span class="line">        System.out.println(tz.getDisplayName());</span><br><span class="line">        Date date = <span class="keyword">new</span> Date();</span><br><span class="line">        System.out.println(date);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述两行注释都是可用的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt; docker run --rm -it $(docker build -q .)</span><br><span class="line"></span><br><span class="line">2018-12-11T03:39:17.927Z</span><br><span class="line">China Standard Time</span><br><span class="line">Tue Dec 11 11:39:18 CST 2018</span><br></pre></td></tr></table></figure>
+
+<p>以上就是 <a target="_blank" rel="noopener" href="https://github.com/gliderlabs/docker-alpine/issues/136">alpine issue</a> 中提及的方法，原因是 alpine 这个基础镜像是很精简的，原镜像不包含时区信息，需要额外安装。</p>
+<p>此外，你也可以在代码中设置时区</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TimeZone.setDefault(TimeZone.getTimeZone(<span class="string">&quot;Asia/Shanghai&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<p>在搜索的时候也发现另外的好玩的方法，就是使用宿主机本身的 /etc/localtime</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -v /etc/localtime:/etc/localtime:ro -v /etc/timezone:/etc/timezone:ro -it --rm openjdk:8-jre-alpine /bin/sh</span><br></pre></td></tr></table></figure>
+
+<p>这样子能减少 image 的大小，又不需要另外设置时区信息。而 ubuntu 的镜像除了设置环境变量 TZ 外还需要别的配置才行，详见 <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/40234847/docker-timezone-in-ubuntu-16-04-image">这里</a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/gliderlabs/docker-alpine/issues/136">alpine issue</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/40234847/docker-timezone-in-ubuntu-16-04-image">docker-timezone-in-ubuntu-16-04-image</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/12/11/docker-alpine-image-timezone/" data-id="ckx7kmlcp0022rzc87slxa7p8" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/timezone/" rel="tag">timezone</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-k8s-introduction" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/12/01/k8s-introduction/" class="article-date">
@@ -267,7 +331,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/01/k8s-introduction/" data-id="ckv3iop6x001lesc87cwghde1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/01/k8s-introduction/" data-id="ckx7kmlci001mrzc8fd6m8dz7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/container/" rel="tag">container</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/microservice/" rel="tag">microservice</a></li></ul>
@@ -327,7 +391,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/31/use-python-mock/" data-id="ckv3iop6x001jesc8fi3r70yk" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/31/use-python-mock/" data-id="ckx7kmlci001krzc8duju4ak4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mock/" rel="tag">mock</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/patch/" rel="tag">patch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/unittest/" rel="tag">unittest</a></li></ul>
@@ -393,7 +457,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/15/use-python-metaclass/" data-id="ckv3iop6v001hesc86r9x9lii" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/09/15/use-python-metaclass/" data-id="ckx7kmlch001hrzc8aewd244c" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/metaclass/" rel="tag">metaclass</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
@@ -516,7 +580,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/27/get-started-in-java-03/" data-id="ckv3iop6v001fesc888ct7b5u" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/27/get-started-in-java-03/" data-id="ckx7kmlcg001frzc80rdi86b0" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/concurrency/" rel="tag">concurrency</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/thread/" rel="tag">thread</a></li></ul>
@@ -702,7 +766,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/27/get-started-in-java-02/" data-id="ckv3iop7r004wesc8d6nj9df1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/27/get-started-in-java-02/" data-id="ckx7kmlde004zrzc87p0dfetw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/annotation/" rel="tag">annotation</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/generic/" rel="tag">generic</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lambda/" rel="tag">lambda</a></li></ul>
@@ -888,7 +952,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/13/get-started-in-java-01/" data-id="ckv3iop6u001cesc8249z12a9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/13/get-started-in-java-01/" data-id="ckx7kmlcf001drzc815z5fago" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li></ul>
@@ -1027,7 +1091,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/01/influxdb-intro/" data-id="ckv3iop6t001aesc8clzc7p9u" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/01/influxdb-intro/" data-id="ckx7kmlce001brzc8fgwr427x" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/influxdb/" rel="tag">influxdb</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/metrics/" rel="tag">metrics</a></li></ul>
@@ -1101,7 +1165,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/10/04/python-yield/" data-id="ckv3iop6r0018esc8art90jjz" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/10/04/python-yield/" data-id="ckx7kmlca0014rzc8hk9a9195" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
@@ -1201,74 +1265,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/08/26/mysql-partitions/" data-id="ckv3iop6q0015esc8cvnr995i" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/08/26/mysql-partitions/" data-id="ckx7kmlcb0016rzc86qq35p2c" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/partitions/" rel="tag">partitions</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-python-abstact-class" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/06/17/python-abstact-class/" class="article-date">
-  <time datetime="2017-06-16T16:00:00.000Z" itemprop="datePublished">2017-06-17</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/17/python-abstact-class/">Python 中的虚拟基类</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Python 这类动态类型语言，Duck Typing 是一个比较突出的优点。属性，方法的惰性计算，给代码的编写带来了高度的灵活性。当然有利有弊，Duck Typing 这东西在 Python 中更多是一种规范，而不是强制约束。如果我们需要约束这些接口，需要做些什么呢？</p>
-<h2 id="运行时检查"><a href="#运行时检查" class="headerlink" title="运行时检查"></a>运行时检查</h2><p>下面看一下简单的例子，这是个比较常见的场景，通过基类定义了一系列的接口，然后继承的子类根据自己特定的需求实现具体的接口。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">action</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">raise</span> NotImplementedError()</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bird</span>(<span class="params">Animal</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">action</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;fly&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span>(<span class="params">Animal</span>):</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">bird = Bird()</span><br><span class="line">dog = Dog()</span><br><span class="line"></span><br><span class="line">animals = [Bird(), Dog()]</span><br><span class="line"><span class="keyword">for</span> animal <span class="keyword">in</span> animals:</span><br><span class="line">    <span class="built_in">print</span>(animal.action())</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出如下：</span></span><br><span class="line"><span class="comment"># fly</span></span><br><span class="line"><span class="comment"># Traceback (most recent call last):</span></span><br><span class="line"><span class="comment">#  File &quot;test.py&quot;, line 22, in &lt;module&gt;</span></span><br><span class="line"><span class="comment">#    print(animal.action())</span></span><br><span class="line"><span class="comment">#  File &quot;test.py&quot;, line 4, in action</span></span><br><span class="line"><span class="comment">#    raise NotImplementedError()</span></span><br><span class="line"><span class="comment"># NotImplementedError</span></span><br></pre></td></tr></table></figure>
-
-<p>我们可以看到，Animal 的 action 的确是会抛出异常，但如果子类实现了该方法，则相应的方法查找则会屏蔽掉基类的该方法而使用自己当前的版本。</p>
-<p>这的确是能实现简单的抽象方法的概念，但是，该错误直到运行时才能暴露出来。极端点的情况，你可能还要去判断这个 name 是否可以调用，调用的参数对不对。</p>
-<h2 id="抽象基类"><a href="#抽象基类" class="headerlink" title="抽象基类"></a>抽象基类</h2><p>Python 本身是支持抽象基类的，最常用的是 collections 里面提供的一些抽象类。如常见的用于判断类型</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> collections</span><br><span class="line"><span class="built_in">isinstance</span>([], collections.MutableSequence) <span class="comment"># True</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 还有数类型</span></span><br><span class="line"><span class="keyword">import</span> numbers</span><br><span class="line"><span class="built_in">isinstance</span>(<span class="number">12313.123</span>, numbers.Number) <span class="comment"># True</span></span><br></pre></td></tr></table></figure>
-
-<p>如果我们用来实现序列，那就更简单了</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> collections</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sequence</span>(<span class="params">collections.MutableSequence</span>):</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">seq = <span class="type">Sequence</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Traceback (most recent call last):</span></span><br><span class="line"><span class="comment">#   File &quot;test.py&quot;, line 8, in &lt;module&gt;</span></span><br><span class="line"><span class="comment">#     seq = Sequence()</span></span><br><span class="line"><span class="comment"># TypeError: Can&#x27;t instantiate abstract class Sequence with abstract methods # __delitem__, __getitem__, __len__, __setitem__, insert</span></span><br></pre></td></tr></table></figure>
-
-<p>跟之前的代码相比，这个是在实例化的时候进行检查的，你继承了某些抽象类之后，在实例化的时候，会去检查是否有实现具体的方法。collections 中还有其它的基础类型的抽象类，如果要实现相应协议的话，可以去看看。</p>
-<h2 id="自定义抽象类"><a href="#自定义抽象类" class="headerlink" title="自定义抽象类"></a>自定义抽象类</h2><p>同样的，我们也可以实现自己的抽象基类，然后通过具体的子类去定义具体的行为</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> abc</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span>(<span class="params">abc.ABC</span>):</span></span><br><span class="line"><span class="meta">    @abc.abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">name</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27; just docs</span></span><br><span class="line"><span class="string">        &#x27;&#x27;&#x27;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Base&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>(<span class="params">Base</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">name</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.__class__.__name__</span><br><span class="line"></span><br><span class="line">a = A()</span><br><span class="line"><span class="built_in">print</span>(a.name())</span><br></pre></td></tr></table></figure>
-
-<p>上述代码中，如果类 A 不定义 name 的方法，则会抛出 TypeError 的异常。但实际上，如果我们去修改 Base 中 name 的函数签名，例如加个参数什么的，上述代码依旧是能正常运行的。这样子的话，其实 Python 本身支持的抽象方法只是检验是否有这个可调用的类成员。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>(<span class="params">Base</span>):</span></span><br><span class="line">    name = <span class="built_in">print</span></span><br><span class="line">    <span class="comment"># name = 1</span></span><br><span class="line">    <span class="comment"># TypeError: &#x27;int&#x27; object is not callable</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="再看鸭子类型"><a href="#再看鸭子类型" class="headerlink" title="再看鸭子类型"></a>再看鸭子类型</h2><p>最开始接触 Python 的时候，觉得这一特性很好用啊，例如我要处理一大串对象，只要里面的对象实现了这个方法，就可以都扔到同一个队列里面进行处理，但这个东西很容易滥用。如果你在处理之后需要相应的回调，这又必须跑去实现回调函数，但因为函数调用的检查是在处理该对象的时候，如果忘了某些对象的相应方法，可能最后上线才能发现问题。</p>
-<p>接触了一阵子的 golang，使用 interface 之后简直如沐春风，运行时的错误在编译阶段就能避免了，减少了很多查 bug 的时间。在这一点上，如果需要使用类似的特性，python 对程序员的能力要求反而更高了。</p>
-<p>我个人比较推崇先去判断这个对象是什么类型，如判断它是不是可以迭代的，可调用的，这样子，你就知道了该对象支持什么样的方法。如果不行再去判断是否实现了具体的方法。当然，运行时去判断这些东西是有消耗的，具体的需要就要看业务场景了。</p>
-<p>灵活是抛弃了一些约束的结果，没有了约束效率就会低下，哪样较好没有绝对的定论。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
-<li><a target="_blank" rel="noopener" href="https://docs.python.org/3/library/abc.html">Python abc 库的文档</a></li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/06/17/python-abstact-class/" data-id="ckv3iop6p0014esc85cva5z7j" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
 
     </footer>
   </div>
@@ -1305,7 +1305,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/annotation/" style="font-size: 10px;">annotation</a> <a href="/tags/architecture/" style="font-size: 10px;">architecture</a> <a href="/tags/blog/" style="font-size: 10px;">blog</a> <a href="/tags/ci/" style="font-size: 10px;">ci</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/container/" style="font-size: 10px;">container</a> <a href="/tags/context/" style="font-size: 10px;">context</a> <a href="/tags/database/" style="font-size: 10px;">database</a> <a href="/tags/debug/" style="font-size: 10px;">debug</a> <a href="/tags/docker/" style="font-size: 17.5px;">docker</a> <a href="/tags/encoding/" style="font-size: 12.5px;">encoding</a> <a href="/tags/engineering/" style="font-size: 10px;">engineering</a> <a href="/tags/error/" style="font-size: 10px;">error</a> <a href="/tags/eval/" style="font-size: 10px;">eval</a> <a href="/tags/generic/" style="font-size: 10px;">generic</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/influxdb/" style="font-size: 10px;">influxdb</a> <a href="/tags/innodb/" style="font-size: 10px;">innodb</a> <a href="/tags/java/" style="font-size: 17.5px;">java</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/tags/metaclass/" style="font-size: 10px;">metaclass</a> <a href="/tags/metrics/" style="font-size: 10px;">metrics</a> <a href="/tags/microservice/" style="font-size: 10px;">microservice</a> <a href="/tags/mock/" style="font-size: 10px;">mock</a> <a href="/tags/mysql/" style="font-size: 12.5px;">mysql</a> <a href="/tags/network/" style="font-size: 10px;">network</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/partitions/" style="font-size: 10px;">partitions</a> <a href="/tags/patch/" style="font-size: 10px;">patch</a> <a href="/tags/pipeline/" style="font-size: 10px;">pipeline</a> <a href="/tags/protocol/" style="font-size: 10px;">protocol</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/react/" style="font-size: 10px;">react</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/security/" style="font-size: 12.5px;">security</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/sync/" style="font-size: 10px;">sync</a> <a href="/tags/tcp/" style="font-size: 10px;">tcp</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/timezone/" style="font-size: 10px;">timezone</a> <a href="/tags/tls/" style="font-size: 10px;">tls</a> <a href="/tags/traefik/" style="font-size: 10px;">traefik</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/unittest/" style="font-size: 10px;">unittest</a> <a href="/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/tags/virtualenvwrapper/" style="font-size: 10px;">virtualenvwrapper</a>
+      <a href="/tags/annotation/" style="font-size: 10px;">annotation</a> <a href="/tags/architecture/" style="font-size: 10px;">architecture</a> <a href="/tags/blog/" style="font-size: 10px;">blog</a> <a href="/tags/ci/" style="font-size: 10px;">ci</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/container/" style="font-size: 10px;">container</a> <a href="/tags/context/" style="font-size: 10px;">context</a> <a href="/tags/database/" style="font-size: 10px;">database</a> <a href="/tags/debug/" style="font-size: 10px;">debug</a> <a href="/tags/docker/" style="font-size: 17.5px;">docker</a> <a href="/tags/encoding/" style="font-size: 12.5px;">encoding</a> <a href="/tags/engineering/" style="font-size: 10px;">engineering</a> <a href="/tags/error/" style="font-size: 10px;">error</a> <a href="/tags/eval/" style="font-size: 10px;">eval</a> <a href="/tags/generic/" style="font-size: 10px;">generic</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/influxdb/" style="font-size: 10px;">influxdb</a> <a href="/tags/innodb/" style="font-size: 10px;">innodb</a> <a href="/tags/java/" style="font-size: 17.5px;">java</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/tags/metaclass/" style="font-size: 10px;">metaclass</a> <a href="/tags/metrics/" style="font-size: 10px;">metrics</a> <a href="/tags/microservice/" style="font-size: 10px;">microservice</a> <a href="/tags/mock/" style="font-size: 10px;">mock</a> <a href="/tags/mysql/" style="font-size: 12.5px;">mysql</a> <a href="/tags/network/" style="font-size: 12.5px;">network</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/partitions/" style="font-size: 10px;">partitions</a> <a href="/tags/patch/" style="font-size: 10px;">patch</a> <a href="/tags/pipeline/" style="font-size: 10px;">pipeline</a> <a href="/tags/protocol/" style="font-size: 12.5px;">protocol</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/react/" style="font-size: 10px;">react</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/security/" style="font-size: 15px;">security</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/sync/" style="font-size: 10px;">sync</a> <a href="/tags/tcp/" style="font-size: 10px;">tcp</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/timezone/" style="font-size: 10px;">timezone</a> <a href="/tags/tls/" style="font-size: 10px;">tls</a> <a href="/tags/traefik/" style="font-size: 10px;">traefik</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/unittest/" style="font-size: 10px;">unittest</a> <a href="/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/tags/virtualenvwrapper/" style="font-size: 10px;">virtualenvwrapper</a>
     </div>
   </div>
 
@@ -1314,7 +1314,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a></li></ul>
     </div>
   </div>
 
@@ -1325,6 +1325,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2021/12/15/designing-data-intensive-applications-note/">Designing Data-Intensive Applications Notes</a>
+          </li>
         
           <li>
             <a href="/2021/10/23/oauth-introduction/">OAuth Introduction</a>
@@ -1340,10 +1344,6 @@
         
           <li>
             <a href="/2020/08/21/about-ssl-tls/">About SSL And TLS</a>
-          </li>
-        
-          <li>
-            <a href="/2020/06/07/nginx-stream-debug/">Nginx stream debug</a>
           </li>
         
       </ul>

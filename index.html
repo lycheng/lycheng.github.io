@@ -65,6 +65,428 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-designing-data-intensive-applications-note" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/12/15/designing-data-intensive-applications-note/" class="article-date">
+  <time datetime="2021-12-14T16:00:00.000Z" itemprop="datePublished">2021-12-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/12/15/designing-data-intensive-applications-note/">Designing Data-Intensive Applications Notes</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Chapter-1-可靠系统"><a href="#Chapter-1-可靠系统" class="headerlink" title="Chapter 1 - 可靠系统"></a>Chapter 1 - 可靠系统</h1><ul>
+<li>以最小出错的方式来设计系统，减少人为出错</li>
+<li>想办法分离出最容易出错的地方和容易引发故障的接口</li>
+<li>充分的测试</li>
+<li>快速的恢复机制以尽量减少故障影响</li>
+<li>详细而清晰的监控子系统</li>
+<li>流程化</li>
+</ul>
+<h1 id="Chapter-2-数据模型和查询语言"><a href="#Chapter-2-数据模型和查询语言" class="headerlink" title="Chapter 2 - 数据模型和查询语言"></a>Chapter 2 - 数据模型和查询语言</h1><p>关系型和文档型数据库现状</p>
+<ul>
+<li>文档型：读时模式，读取的时候才去解析具体的字段</li>
+<li>RDS：写时模式，已有的关系经由表结构来确定</li>
+</ul>
+<p>关注存储的局部性</p>
+<p>SQL 是声明式查询语言，隐藏了数据库引擎的实现细节。如果交由命令式语言，则语句间有顺序关系，无法并行</p>
+<h1 id="Chapter-3-数据存储和检索"><a href="#Chapter-3-数据存储和检索" class="headerlink" title="Chapter 3 - 数据存储和检索"></a>Chapter 3 - 数据存储和检索</h1><p>SSTables 基本结构和 LSM-Tree</p>
+<ul>
+<li>每个日志结构的存储段都是一组 key-value 的序列</li>
+<li>每个段中的 key 只能出现一次，且按 key 的值进行排序</li>
+<li>Log-Structured Merge-Tree</li>
+</ul>
+<p>优缺点</p>
+<ul>
+<li>合并段可以使用类似归并排序的做法</li>
+<li>每个段都是按照 key 进行排序，则可知道每个段的取值范围，有利于查找 key</li>
+<li>写入较快，读取较慢</li>
+</ul>
+<p>B-trees</p>
+<ul>
+<li>将数据库分解成可变大小的段，并始终按顺序写入，这种设计更靠近底层硬件</li>
+<li>预写日志 WAL</li>
+</ul>
+<p>事务处理</p>
+<ul>
+<li>OLTP</li>
+<li>OLAP</li>
+</ul>
+<p>数据仓库</p>
+<ul>
+<li>可能包含 OLTP 数据库的只读副本</li>
+<li>从 OLTP 数据库中提取（Extract）然后转换（Transform）数据，加载（Load）到数据仓库中，成为 ETL 的过程</li>
+</ul>
+<p>列式存储</p>
+<ul>
+<li>将每列中的所有值存储在一起</li>
+<li>列压缩，对于同一列来说，可能的值范围会小于等于数据量</li>
+</ul>
+<h1 id="Chapter-4-数据编码与演化"><a href="#Chapter-4-数据编码与演化" class="headerlink" title="Chapter 4 - 数据编码与演化"></a>Chapter 4 - 数据编码与演化</h1><p>数据格式和模式变更</p>
+<ul>
+<li>服务端升级</li>
+<li>客户端升级并且很长一段时间存在新旧版本</li>
+<li>向前兼容和向后兼容</li>
+</ul>
+<p>数据表示形式</p>
+<ul>
+<li>内存中，程序的数据结构<ul>
+<li>不同的语言并不兼容，如 Python pickle 和 Java 的 io.Serializable</li>
+<li>并没有考虑版本和向前向后的兼容性</li>
+</ul>
+</li>
+<li>文件或者网络中的字节序列</li>
+</ul>
+<p>编码格式</p>
+<ul>
+<li>JSON，XML 和 CSV，对人类更友好</li>
+<li>二进制格式，对机器更友好</li>
+<li>对不同组织使用同一数据编码格式的难度更高</li>
+</ul>
+<p>Thrift 和 Protobuf</p>
+<ul>
+<li>都是通过格式描述文件生成对应语言的编码解码用的代码</li>
+<li>最终用于传输是二进制编码数据</li>
+<li>对于 schema 的变化也都只能对新增字段更好的支持</li>
+</ul>
+<p>Avro</p>
+<ul>
+<li>通过 IDL 来确定传输数据的 schema</li>
+<li>区分 reader 和 writer 的 schema</li>
+<li>可用 union 和 null 来规避数据变更问题</li>
+<li>可以提供一个可查的版本数据库来获知当前的 schema</li>
+</ul>
+<h1 id="Chapter-5-数据复制"><a href="#Chapter-5-数据复制" class="headerlink" title="Chapter 5 - 数据复制"></a>Chapter 5 - 数据复制</h1><p>主节点和从节点</p>
+<ul>
+<li>主节点接收写入请求，从节点在主节点写入后获取其变更日志，保持顺序写入</li>
+<li>主从节点都能接收读请求</li>
+</ul>
+<p>同步复制和异步复制</p>
+<ul>
+<li>都是关系到主节点的写更新如何复制到从节点中</li>
+<li>同步复制则保证了主从节点的同步</li>
+<li>异步复制则有可能导致数据丢失，但相应的吞吐量更高</li>
+</ul>
+<p>节点失效，追赶式恢复</p>
+<p>主节点失效</p>
+<ul>
+<li>采用了异步复制，新的主节点出现数据丢失</li>
+<li>例如使用自增主键，那如果外部的数据系统缓存了某些 id，但恢复时新的主节点计数器落后</li>
+</ul>
+<p>复制日志</p>
+<ul>
+<li>基于语句复制，并不能保证唯一性，如包含 <code>NOW()</code> 语句，或者带自增 ID，多个语句执行顺序不一致</li>
+<li>基于 WAL（Write Ahead Log） 传输，WAL 的描述偏向底层，如果出现版本升级导致存储格式变化，则会出现恢复失败</li>
+<li>基于行的逻辑日志复制，如 binlog，表示的是存储引擎层面的改动</li>
+</ul>
+<p>复制滞后问题</p>
+<ul>
+<li><strong>读自己写</strong>，写入到了主节点，但还没同步到从节点，这就违反了读写一致性<ul>
+<li>考虑数据中心的位置也不一定在附近</li>
+<li>记录时间戳（逻辑时钟，如版本或者实际时钟），请求时带上用以获取最新的数据</li>
+<li>一个账号的多设备</li>
+</ul>
+</li>
+<li><strong>单调读</strong><ul>
+<li>不同的请求落到了同步情况不同的从节点上</li>
+<li>可以通过 id hash 到同一个从节点上</li>
+</ul>
+</li>
+<li><strong>前缀一致性读</strong><ul>
+<li>多个关联的数据写入实际上物理存储是隔离的，写入时并不按照顺序来</li>
+</ul>
+</li>
+</ul>
+<p>复制滞后的解决方案</p>
+<ul>
+<li>多主节点复制<ul>
+<li>离线客户端操作，会出现断线好久之后重新同步的情况，类同于多主</li>
+<li>协作编辑，本地数据同步到服务器和别的正在编辑的用户，需要解决写冲突</li>
+<li>冲突解决策略，最终收敛的策略</li>
+</ul>
+</li>
+<li>无主节点复制<ul>
+<li>客户端一次发送多个请求到后端写入</li>
+<li>读取时带版本信息，用以确认其最新值</li>
+<li>quorum &amp;&amp; happen-before?</li>
+</ul>
+</li>
+</ul>
+<h1 id="Chapter-6-数据分区"><a href="#Chapter-6-数据分区" class="headerlink" title="Chapter 6 - 数据分区"></a>Chapter 6 - 数据分区</h1><p>每一条数据只属于一个分区，分区的主要目的是为了将数据和查询均匀分布在所有的节点上。</p>
+<p>基于哈希分区无法应对如社交媒体名人或者热点信息带来的高度倾斜的负载，只能通过应用层去来减轻不平衡的程度</p>
+<ul>
+<li>在关键字头或者尾添加随机数将写操作重新分区，但带来读操作需要应用层进行合并</li>
+</ul>
+<p>二级索引</p>
+<ul>
+<li>二级索引往往不能准确标识一条数据</li>
+<li>基于文档的二级索引，不同的数据分区有不同的索引，查询需要查多个并合并</li>
+<li>基于词条的二级索引，全局索引，索引自身也分区方便快速查询，写入速度一般，二级索引更新可以异步</li>
+</ul>
+<p>分区再平衡</p>
+<ul>
+<li>直接取模，任何新节点的引入或者节点的删除都会导致所有数据迁移</li>
+<li>固定分区，分区数小于节点数，每个节点负责某一些分区，分区数需要创建时就确定好</li>
+<li>动态分区，根据当前实际数据量创建或者删除分区</li>
+<li>节点比例分区</li>
+</ul>
+<p>请求路由</p>
+<ul>
+<li>典型的服务发现问题，使用如 ZooKeeper 来存放对应关系</li>
+<li>P2P 的模式同步集群状态</li>
+</ul>
+<p>一致性哈希？</p>
+<h1 id="Chapter-7-事务"><a href="#Chapter-7-事务" class="headerlink" title="Chapter 7 - 事务"></a>Chapter 7 - 事务</h1><p>磁盘和 SSD 都各有好处，如</p>
+<ul>
+<li>磁盘的坏道率很低，但是整盘完全失效的情况却会概率高点</li>
+<li>SSD 对温度的要求会更高</li>
+</ul>
+<p>除了硬件上的各种优劣，软件上的问题也会导致数据的丢失</p>
+<h2 id="弱隔离级别"><a href="#弱隔离级别" class="headerlink" title="弱隔离级别"></a>弱隔离级别</h2><p>这里的弱是相对串行化来的</p>
+<p>读提交，read-committed</p>
+<ul>
+<li>防止脏读，snapshot</li>
+<li>防止脏写，通常采用行级锁</li>
+</ul>
+<p>其会导致读倾斜，即不可重复读，需要 MVCC，即快照级别的隔离</p>
+<p>防止更新丢失，如需要执行 +1 操作，可</p>
+<ul>
+<li>update set value = value + 1，但这种操作可能在 ORM 层面丢失了，回退回原来的两次操作</li>
+<li>显式加锁</li>
+<li>数据库可能提供隐式支持，如 PostgreSQL 的可重复读</li>
+</ul>
+<p>有些不支持事务的数据库，可能支持原子的 CAS（Compare And Swap）</p>
+<p>写倾斜</p>
+<ul>
+<li>对多个对象的约束，并行的事务无法检测合法性，如排班和会议室的预订</li>
+<li>可使用显式的加锁</li>
+<li>可额外加入可暴露出冲突的锁条件，如会议室和时间的所有组合</li>
+</ul>
+<h2 id="可串行化"><a href="#可串行化" class="headerlink" title="可串行化"></a>可串行化</h2><p>适用串行化的理由</p>
+<ul>
+<li>不同的隔离级别，各家数据库实现不同</li>
+<li>应用层代码无法判断是否安全</li>
+<li>OLTP 事务执行很快，只有少量的读写操作，而长时间的分析操作一般是只读</li>
+<li>内存越来越便宜，可加载全部的数据到内存中</li>
+</ul>
+<p><strong>存储过程</strong></p>
+<p>采用单线程串行执行的系统往往不支持交互式的多语句事务，相对而言对网络和 IO 的要求更低，但实际上</p>
+<ul>
+<li>存储过程不好管理，版本管理，调试都相对麻烦</li>
+<li>现代的也有像 Redis 采用 Lua 来实现存储过程</li>
+</ul>
+<p>需要注意的是，这里需要存储过程和内存数据库才能再单线程上执行所有事务变得可能。</p>
+<p>而分区问题，又需要组织好数据集来使得单个线程能在单个分区内执行事务。而跨分区的事务就又需要额外的资源来进行协调。 </p>
+<p><strong>两阶段加锁</strong></p>
+<p>two-phase locking, 2PL，现阶段唯一的串行化算法。</p>
+<p>多个事务可以同时读取同一对象，但只要出现任何写操作，则必须加锁来进行独占访问。实际实现中，则以共享锁和互斥锁来实现，如 MySQL 中的 Share Lock 和 Exclusive Lock，都需要在 SQL 显式使用，否则就是使用 MVCC 来处理多事务问题。</p>
+<p><strong>谓词锁</strong></p>
+<p>并不属于某一个对象，而是属于符合某些特定查询条件的所有对象，就是为了防止出现上面说过的会议室预定问题。在实际实现中，则以索引区间锁作为简化和近似。</p>
+<h1 id="Chapter-8-分布式系统的挑战"><a href="#Chapter-8-分布式系统的挑战" class="headerlink" title="Chapter 8 - 分布式系统的挑战"></a>Chapter 8 - 分布式系统的挑战</h1><p>故障和部分失效</p>
+<p>不可靠网络</p>
+<ul>
+<li>硬件不可靠</li>
+<li>IP 协议本身也不可靠</li>
+<li>人为配置错误</li>
+</ul>
+<p>需要故障检测，如下线失败节点，重试机制。</p>
+<p><strong>不可靠的时钟</strong></p>
+<ul>
+<li>墙上时钟，即根据某个日历返回当前时间和日期，如编程语言中的 get current time</li>
+<li>单调时钟，如 Java 中的 <code>System.nanoTIme()</code> ，用于单机上的差值比较，从而为应用层提供单调递增计时，不同节点上的单调时钟没有任何意义</li>
+<li>墙上时钟需要 NTP 来进行同步，但同步就会遇到如网络问题，服务器故障一类导致收到的结果不可用</li>
+<li>移动设备用户可调墙上时钟</li>
+<li>在分布式系统中采用墙上时要严格保证节点的时间同步，如果需要进行排序，最好采用递增计数器</li>
+<li>线程暂停（gc，线程切换）之前如果进行时间的比较，有可能出现错误的结果，哪怕是单调时钟，最好依赖如信号量等线程同步工具</li>
+</ul>
+<p>知识，真相和谎言</p>
+<ul>
+<li>节点可能已经被认为失效，但其仍可能认为自身没问题</li>
+<li>用 fencing 令牌来检测无意的误操作，已经过时的节点拒绝请求</li>
+<li>拜占庭故障，指的是存在可能破环系统的节点，如航天中辐射之后的 CPU 寄存器的不可预测的行为，还有软件的 bug</li>
+</ul>
+<h1 id="Chapter-9-一致性与共识"><a href="#Chapter-9-一致性与共识" class="headerlink" title="Chapter 9 - 一致性与共识"></a>Chapter 9 - 一致性与共识</h1><p>为了构建容错系统，最好先建立一套通用的抽象机制和与之对应的技术保证。</p>
+<p>事务隔离主要是为了处理并发执行事务时的各种临界条件，而分布式一致性则主要针对延迟和故障等问题来协调副本之间的状态。</p>
+<h2 id="可线性化"><a href="#可线性化" class="headerlink" title="可线性化"></a>可线性化</h2><p>可串行化强调的是事务执行的结果是与串行执行一致的，可线性化强调的是对单个对象的读写最新值的保证。</p>
+<p>依赖条件</p>
+<ul>
+<li>加锁和主节点选举</li>
+<li>约束和唯一性保证</li>
+<li>跨通道的时间依赖<ul>
+<li>如同时存在队列和 RPC 调用，两者到达顺序不同导致出现不一致的情况</li>
+</ul>
+</li>
+</ul>
+<h2 id="线性化的代价"><a href="#线性化的代价" class="headerlink" title="线性化的代价"></a>线性化的代价</h2><p>CAP 理论，可用性和分区容错性，系统只能支持其中两个。但实际上网络分区是一定存在的，一旦发生网络故障要么选择线性，要么选择可用性。</p>
+<p>CAP 理论有争议，实际上节点延迟和其它相对网络分区更弱的情况没有考虑进去，并且在多核环境下，也很难考虑线性化。</p>
+<h2 id="顺序保证"><a href="#顺序保证" class="headerlink" title="顺序保证 *"></a>顺序保证 *</h2><p>概念</p>
+<ul>
+<li><strong>全序</strong>是指，集合中的任两个元素之间都可以比较的关系。 比如实数中的任两个数都可以比较大小，那么“大小”就是实数集的一个<strong>全序</strong>关系</li>
+<li><strong>偏序</strong>是指，集合中只有部分元素之间可以比较的关系。 比如复数集中并不是所有的数都可以比较大小，那么“大小”就是复数集的一个<strong>偏序</strong>关系。</li>
+<li>在一个可线性化的系统中，存在全序操作关系。</li>
+<li>因果关系至少可以定义为偏序</li>
+</ul>
+<p>因果关系对所发生的事件施加了某种排序，某件事应该发生在某件事之前。我们称之为因果一致性。如</p>
+<ul>
+<li>Git 基于数字签名的上下文关系</li>
+</ul>
+<p>可线性化是全序操作关系，系统的行为像是只有一个数据副本。而对因果关系而言，如果两个操作没有 happens-before 的关系，则它们就是并发关系，并发的关系无法排序，这表明因果关系是可定义为偏序。同时，并发就意味着分支和合并。</p>
+<p>因果关系可以认为是一种可以容忍网络延迟，又能对网络故障提供容错的最强一致性模型。看似需要线性化的系统，实际上是需要因果一致性。</p>
+<h3 id="序列号排序"><a href="#序列号排序" class="headerlink" title="序列号排序"></a>序列号排序</h3><p>在存在唯一主节点的系统里面，主节点可生成单调递增的 id 来为每个操作复制。这样结果一定满足因果一致性。而不存在主节点的分布式系统，则需要外部手段来生成唯一自增 ID，如</p>
+<ul>
+<li>不同节点奇偶 id</li>
+<li>不同节点负责不同区间</li>
+<li>通过墙上时钟</li>
+</ul>
+<p>Lamport 时间戳</p>
+<ul>
+<li>每个节点都有一个唯一的标识符</li>
+<li>每个节点都有一个计数器</li>
+<li>每个节点都追踪迄今为止看到的最大计数器值，如果发现比自己维护的要大，则修改成该值</li>
+</ul>
+<p>实际上，处理时还是需要去收集到所有的请求信息才能去构造请求顺序。所以，还是主从复制的做法更直接有效。为了解决主节点的限制，以及故障时的节点切换，需要全序关系广播和原子广播。</p>
+<blockquote>
+<p>顺序保证的范围是作用在分区之上，如果需要跨分区则需要非常多的工作（如 Kafka）</p>
+</blockquote>
+<p>全序广播通常是指节点间交换信息的协议，要满足以下的基本安全属性</p>
+<ul>
+<li>可靠发送，如果发送到了一个节点，也必须发送到其它所有节点</li>
+<li>发送到每个节点的顺序相同</li>
+</ul>
+<p>可以将其视为日志，如复制日志，事务日志和预写日志，传递信息则是通过追加日志的形式更新。全序关系模型是基于异步的模型，保证顺序可以发送，但不保证发送成功，而可线性化则强调就近性，读取时保证可以看到最新的输入。</p>
+<h2 id="分布式事务和共识"><a href="#分布式事务和共识" class="headerlink" title="分布式事务和共识"></a>分布式事务和共识</h2><p>集群节点一致</p>
+<ul>
+<li>主节点选举</li>
+<li>原子事务提</li>
+</ul>
+<h3 id="两阶段提交-2PC"><a href="#两阶段提交-2PC" class="headerlink" title="两阶段提交 2PC"></a>两阶段提交 2PC</h3><p>引入中间的协调者，其通常实现为共享库，运行在相同的进程中</p>
+<ul>
+<li>阶段 1，协调者询问所有的参与者（多个数据节点）是否可以提交请求</li>
+<li>阶段 2，提交请求</li>
+</ul>
+<p>如果 1 中有任何的节点拒绝，则协调者在 2 中会向所有的节点发送放弃的请求。 而参与者确定了可以提交之后后续不会有放弃的选择，除非协调者确定不提交。对于单点系统而言，两个步骤是合二为一的，即写入事务日志即提交。如果协调者已经确定了阶段 1，则如果在阶段 2 之前失败，则参与者也不会单方面进行放弃。没有协调者的消息，参与者无法知道下一步的行动。协调者本身也应该拥有事务日志，在恢复后来决定是否需要继续未完成的事务。  </p>
+<h3 id="XA-交易"><a href="#XA-交易" class="headerlink" title="XA 交易"></a>XA 交易</h3><p>异构系统下如何实施两阶段提交的一个工业标准。</p>
+<ul>
+<li>停顿时仍持有锁</li>
+<li>启发式决策，参与节点在紧急情况下单方面做出决定，放弃或者继续那些停顿的事务</li>
+</ul>
+<p>如果协调者是应用服务器的一部分时，则其日志也变成了可靠系统的重要组成部分，要求与数据库本身一样重要。此时，已经不是无状态的系统了。</p>
+<h3 id="支持容错的共识"><a href="#支持容错的共识" class="headerlink" title="支持容错的共识"></a>支持容错的共识</h3><p>共识算法的基本性质</p>
+<ul>
+<li>协商一致性（Uniform agreement），所有的节点都接受相同的决议</li>
+<li>诚实性（Integrity），不能反悔，即不能对一项决议有两次决定</li>
+<li>合法性（Validity），如果决定了值 v，则一定是由某个节点提议的</li>
+<li>可终止性（Termination），节点如果不崩溃，则最终一定可以达成某项协议</li>
+</ul>
+<p>容错体现在可终止性上，强调一个共识算法不能空转，必须取得实质性的进展。此处，前提是发生崩溃和不可用的节点数必须小于半数。常见算法有</p>
+<ul>
+<li>VSR</li>
+<li>Paxos</li>
+<li>Raft</li>
+<li>Zab</li>
+</ul>
+<p><strong>Epoch 和 Quorum</strong></p>
+<p>协议定义了一个世代编号，在每个世代里面，主节点是唯一确定的。如果主节点挂掉，则其余节点进行新一轮的选举，选举会赋予一个单调递增的 epoch 号。如果出现两个不同的 epoch 号则更高的获胜。</p>
+<p>主节点如果想要做出决定，则须将提议发给其它所有节点，如果没有更高的 epoch 主节点存在时，在对当前提议进行投票。</p>
+<p>算上之前的主节点投票，这里会有两轮投票，其中参与投票的节点必须至少有一个参与了最近一次主节点选举。换言之，如果在针对提议的投票中没有出现更高 epoch 号码，则可以认为当前的主节点没有替换。</p>
+<h1 id="Chapter-10-批处理系统"><a href="#Chapter-10-批处理系统" class="headerlink" title="Chapter 10 - 批处理系统"></a>Chapter 10 - 批处理系统</h1><p>最简单的批处理就是使用如 awk 等工具进行日志分析。其特点</p>
+<ul>
+<li>将字节序列视为 ASCII 文本</li>
+<li>如果需要功能的组合则通过管道进行连接</li>
+<li>避免使用严格的格式或者二进制</li>
+<li>避免交互式输入</li>
+</ul>
+<p>最大的局限性就是其只能在一台机器上运行。而 MapReduce 就是一个类似于分布式的 UNIX 工具，其进行输入和输出依赖于像 HDFS 这样的分布式文件系统。</p>
+<h1 id="Chapter-11-流处理系统"><a href="#Chapter-11-流处理系统" class="headerlink" title="Chapter 11 - 流处理系统"></a>Chapter 11 - 流处理系统</h1><p>流处理系统即把时间流视为一种数据管理机制：一种无界的，持续增量处理的方式。在批处理系统中，通过文件名来标识一组相关的数据，流系统中，则被视为主题或者流。</p>
+<h2 id="消息系统"><a href="#消息系统" class="headerlink" title="消息系统"></a>消息系统</h2><p>对于不同的消息系统，会有两个问题</p>
+<ul>
+<li>如果生产者发送消息的速度比消费者快，会发生什么？<ul>
+<li>TCP 和 UNIX 管道会有个固定的缓冲区，如果填满了，发送者会堵塞</li>
+</ul>
+</li>
+<li>如果节点崩溃或者暂时离线，是否有消息丢失？<ul>
+<li>持久性和吞吐量并不能同时满足</li>
+</ul>
+</li>
+</ul>
+<p>如果不通过消息系统，则可以考虑</p>
+<ul>
+<li>UDP 组播，适用于低延迟的场景</li>
+<li>无代理的消息库（如 ZeroMQ）</li>
+<li>HTTP 或者 RPC 请求</li>
+</ul>
+<p>这些方法都需要一个在应用层失效的重传机制，还需要生产者和消费者都是一直在线的。</p>
+<p>消息代理，即消息队列，允许一个第三方服务来缓存需要传递的消息。具体体现在 JMS 和 AMQP 的标准上，常见的实现有 RabbitMQ，ActiveMQ。对于已经确认过的消息就会从代理中删除，就无法再接收该消息了。引入了像数据库的持久化存储的日志思想，就有了基于日志的消息存储。常见就是 Kafka。</p>
+<h2 id="数据库与流"><a href="#数据库与流" class="headerlink" title="数据库与流"></a>数据库与流</h2><p>在使用数据库的过程中，难免会因为缓慢增添外部的缓存，这样就容易出现不一致的情况。</p>
+<p>Change Data Capture，CDC，即变更数据捕获。记录了写入数据库的所有变更，并可以复制到其它系统的实行来提取数据。数据库的复制日志解析可以从数据源处拿 CDC。有了这些日志，就可以进行数据的重放。在需要重建索引或者外部缓存时，也可以通过从偏移量为 0 处开始，扫描日志中的所有消息，这也是一个数据库内容的完整副本。相关的日志压缩也是通过扫描指定的 key 获取其最新值来压缩合并。</p>
+<p>事件溯源，也可以将涉及到的所有对应用程序状态的变保存为事件的日志。不同的是，事件存储仅支持追加，不鼓励更新和删除。事件通常用来表达用户行为的意图，而不是一种对行为结果进行相应状态更新的机制。用户会发出一个命令，当命令检查完成（合法性校验）之后就变成了一个事件，这是命令和事件的区分。</p>
+<h2 id="状态，流和不可变性"><a href="#状态，流和不可变性" class="headerlink" title="状态，流和不可变性"></a>状态，流和不可变性</h2><p>通过不可变事件的追加日志，判断问题和恢复也会很方便。除此以外，还会捕获很多的信息，如顾客的意图而不只是购买的最终订单。</p>
+<p>通过相同的事件日志可以派生出多个视图，如 Druid 和 Pistachio 都使用 Kafka 作为输入源，通过从事件日志到数据库的转换，能得到基于不同 key 的数据库。这种将数据写入和读取形式分开，并允许不同的读取视图的想法被称为命令查询职责分离（Command Query Responsibility Segregation，CQRS），与此相对的，传统数据库和模式设计的方法是基于数据查询和数据写入的形式相同。</p>
+<p>这种模式最大的问题是，事件的捕获和变更日志的捕获通常是异步的，需要处理 “读自己写的” 这种问题。</p>
+<ul>
+<li>同步执行读取视图的更新，这写入一个事务将写操作合并到一个原子处理中，所以要么是事件日志和读取视图都在同一个存储系统，要不跨不同系统的分布式事务，或者是全序广播</li>
+<li>从事件日志中导出当前状态<ul>
+<li>对多对象事务的大部分需求源自单个用户需要在不同地方修改数据的操作</li>
+<li>通过事件溯源可以设计一个事件使其成为用户操作的独立描述，将其追加到日志中，这样原子化就会很容易</li>
+<li>如果以相同的方式对日志和应用程序进行分区（分区 3 的用户需要更新应用程序分区 3），则简单的单线程消费者不需要对写操作进行并发控制</li>
+</ul>
+</li>
+</ul>
+<h2 id="流处理"><a href="#流处理" class="headerlink" title="流处理"></a>流处理</h2><p>和批处理作业最大的不同是，流处理是不会结束的，因此排序无意义，也不能使用排序合并 join，容错机制也必须改变，从头开始运行运作了几年的流处理作业，几乎是不可能的。</p>
+<p>长期以来流处理都被用于监控目的，则需要长期对特定事件进行分析，如信用卡消费，交易系统的价格变化。</p>
+<p>复杂事件处理（Complex Event Processing）与正则表达式在字符串中搜索特定的字符模式类似，CEP 允许指定规则在流中搜索特定模式的事件。CEP 的查询是长久存储的，来自输入流的事件不断流过他们以匹配事件模式。实现有类似 Samza 这种支持声明式的 SQL 查询。</p>
+<p>与 CEP 相对的则是流分析，CEP 专注特定的事件序列，而流分析更多关注大量时间累积的效果和统计指标，如</p>
+<ul>
+<li>速率</li>
+<li>在时间窗口的平均值</li>
+<li>趋势的变化</li>
+</ul>
+<p>有时也使用概率算法，如布隆过滤器，常见的实现为 Flink 和 Kafka Streams。</p>
+<h2 id="流的事件问题"><a href="#流的事件问题" class="headerlink" title="流的事件问题"></a>流的事件问题</h2><p>需要关注的是事件时间和处理时间，如果使用的是处理节点上的本地系统时钟来确定窗口，在节点出现排队，网络故障或性能下降导致节点重启去处理过去的事件，就会出现事件事件和处理时间上延迟会非常明显。</p>
+<p>为了调整不正确的设备时钟，需要记录三个时间戳</p>
+<ul>
+<li>事件发生的事件</li>
+<li>事件发送到服务器的时间</li>
+<li>服务器收到事件的时间</li>
+</ul>
+<p>第三个时间戳减去第二个则可以估计出设备时钟和服务器时钟的偏移量（还要考虑到网络延迟），将偏移量应用于第一个时间即可估计出一个事件实际发生的真实时间。</p>
+<h3 id="窗口类型"><a href="#窗口类型" class="headerlink" title="窗口类型"></a>窗口类型</h3><p>定义用于作事件统计的一个事件范围</p>
+<ul>
+<li>轮转窗口，即一个固定的时间范围，如下午 2 点到 3 点，晚上 7 点 30 分到 7 点 31 分</li>
+<li>跳跃窗口，有固定的长度，但是允许平滑过渡，如一个五分钟的窗口，之前在统计 10:30 到 10:35 内的事件，设定 hop 是 1 分钟，那下一个窗口则可以是 10:31 到 10:36</li>
+<li>滑动窗口，包含在彼此的某个间隔内发生的所有事件，然后在事件过期之后从缓冲区中删除</li>
+<li>会话窗口，将同一用户相关的事件都分组在一起，一旦一个用户一段时间没有活动，则窗口结束</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>花了大半年时间看了两遍，看下来的总体感觉是我知道了一些东西，以及我还是有很多东西不懂。</p>
+<p>特别是第 8 章和第 9 章，分布式的事务和共识的一些知识，属于都了解，但在应用层做开发很少会接触，知道其存在，但有时会不知道其为何要如此设计。整本书算是一个后端开发整体技术的一个总览，并且在很多地方也有较为深入的介绍。是一本好书，希望 2 3 年后再看一遍，希望那时能看懂更多。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2021/12/15/designing-data-intensive-applications-note/" data-id="ckx7kmldk005jrzc8exdy2t37" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/network/" rel="tag">network</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/protocol/" rel="tag">protocol</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/security/" rel="tag">security</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-oauth-introduction" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2021/10/23/oauth-introduction/" class="article-date">
@@ -211,7 +633,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2021/10/23/oauth-introduction/" data-id="ckv3iop7q004vesc862sb41jk" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2021/10/23/oauth-introduction/" data-id="ckx7kmlcq0023rzc86mqcg5r2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/network/" rel="tag">network</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/protocol/" rel="tag">protocol</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/security/" rel="tag">security</a></li></ul>
@@ -478,7 +900,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/11/13/mysql-innodb/" data-id="ckv3iop7x005fesc8ccx147li" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/11/13/mysql-innodb/" data-id="ckx7kmldg0052rzc83powe8dy" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/database/" rel="tag">database</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/innodb/" rel="tag">innodb</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li></ul>
@@ -753,7 +1175,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/09/14/cloud-design-patterns/" data-id="ckv3iop7s004yesc80mn6g1mk" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/09/14/cloud-design-patterns/" data-id="ckx7kmldf0050rzc85wx0dlp9" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/architecture/" rel="tag">architecture</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/engineering/" rel="tag">engineering</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nginx/" rel="tag">nginx</a></li></ul>
@@ -847,7 +1269,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/08/21/about-ssl-tls/" data-id="ckv3iop740021esc87rkkh5a3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/08/21/about-ssl-tls/" data-id="ckx7kmlco0020rzc821sxbvvy" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/https/" rel="tag">https</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nginx/" rel="tag">nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/security/" rel="tag">security</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ssl/" rel="tag">ssl</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tls/" rel="tag">tls</a></li></ul>
@@ -933,7 +1355,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/06/07/nginx-stream-debug/" data-id="ckv3iop73001yesc89tlvakrg" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/06/07/nginx-stream-debug/" data-id="ckx7kmlco001yrzc89l2z9jzs" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nginx/" rel="tag">nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/proxy/" rel="tag">proxy</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcp/" rel="tag">tcp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/traefik/" rel="tag">traefik</a></li></ul>
@@ -1007,7 +1429,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/06/03/jenkins-pipeline-thinking/" data-id="ckv3iop72001wesc86yfqaor0" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/06/03/jenkins-pipeline-thinking/" data-id="ckx7kmlcm001vrzc8bmsia9s1" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jenkins/" rel="tag">jenkins</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/pipeline/" rel="tag">pipeline</a></li></ul>
@@ -1071,7 +1493,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/10/11/golang-in-2019/" data-id="ckv3iop71001uesc87w3c72fz" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/10/11/golang-in-2019/" data-id="ckx7kmlcm001trzc8hthr6pys" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/" rel="tag">golang</a></li></ul>
@@ -1127,7 +1549,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/14/python-memory-leak-debug/" data-id="ckv3iop70001sesc83hftds5e" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/14/python-memory-leak-debug/" data-id="ckx7kmlck001rrzc86a1407dk" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/debug/" rel="tag">debug</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
@@ -1228,74 +1650,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/14/k8s-init-with-kubeadm/" data-id="ckv3iop6z001qesc8b538bj0a" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/14/k8s-init-with-kubeadm/" data-id="ckx7kmlck001przc8afb0gyrg" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-docker-alpine-image-timezone" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/12/11/docker-alpine-image-timezone/" class="article-date">
-  <time datetime="2018-12-10T16:00:00.000Z" itemprop="datePublished">2018-12-11</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/11/docker-alpine-image-timezone/">Docker 容器时区设置</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>使用 Docker 部署 Java 程序时发现时区有问题，这里记录下这期间折腾的记录。</p>
-<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>基础镜像为 <code>openjdk:8-jre-alpine</code>，复制打包后生成的 jar 文件进去运行程序。</p>
-<p>这个镜像默认的配置如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ docker run -it --rm openjdk:8-jre-alpine /bin/sh</span><br><span class="line">/ # date</span><br><span class="line">Tue Dec 11 01:41:09 UTC 2018</span><br><span class="line">/ # cat /etc/localtime</span><br><span class="line">TZif2UTCTZif2UTC</span><br><span class="line">UTC0</span><br></pre></td></tr></table></figure>
-
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>以下是用来测试的 Dockerfile</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">FROM openjdk:8-jre-alpine</span><br><span class="line"></span><br><span class="line"># RUN apk add --no-cache tzdata &amp;&amp; cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &amp;&amp; echo &quot;Asia/Shanghai&quot; &gt; /etc/timezone</span><br><span class="line"></span><br><span class="line"># ENV TZ Asia/Shanghai</span><br><span class="line"></span><br><span class="line">COPY ./target/tz-1.0-SNAPSHOT.jar main.jar</span><br><span class="line">CMD /usr/bin/java -jar main.jar</span><br></pre></td></tr></table></figure>
-
-<p>测试用的 Java 程序</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.lycheng.tz;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.time.Instant;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"><span class="keyword">import</span> java.util.TimeZone;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Instant instant = Instant.now();</span><br><span class="line">        System.out.println(instant);</span><br><span class="line"></span><br><span class="line">        TimeZone tz = TimeZone.getDefault();</span><br><span class="line">        System.out.println(tz.getDisplayName());</span><br><span class="line">        Date date = <span class="keyword">new</span> Date();</span><br><span class="line">        System.out.println(date);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>上述两行注释都是可用的</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt; docker run --rm -it $(docker build -q .)</span><br><span class="line"></span><br><span class="line">2018-12-11T03:39:17.927Z</span><br><span class="line">China Standard Time</span><br><span class="line">Tue Dec 11 11:39:18 CST 2018</span><br></pre></td></tr></table></figure>
-
-<p>以上就是 <a target="_blank" rel="noopener" href="https://github.com/gliderlabs/docker-alpine/issues/136">alpine issue</a> 中提及的方法，原因是 alpine 这个基础镜像是很精简的，原镜像不包含时区信息，需要额外安装。</p>
-<p>此外，你也可以在代码中设置时区</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TimeZone.setDefault(TimeZone.getTimeZone(<span class="string">&quot;Asia/Shanghai&quot;</span>));</span><br></pre></td></tr></table></figure>
-
-<p>在搜索的时候也发现另外的好玩的方法，就是使用宿主机本身的 /etc/localtime</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -v /etc/localtime:/etc/localtime:ro -v /etc/timezone:/etc/timezone:ro -it --rm openjdk:8-jre-alpine /bin/sh</span><br></pre></td></tr></table></figure>
-
-<p>这样子能减少 image 的大小，又不需要另外设置时区信息。而 ubuntu 的镜像除了设置环境变量 TZ 外还需要别的配置才行，详见 <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/40234847/docker-timezone-in-ubuntu-16-04-image">这里</a></p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://github.com/gliderlabs/docker-alpine/issues/136">alpine issue</a></li>
-<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/40234847/docker-timezone-in-ubuntu-16-04-image">docker-timezone-in-ubuntu-16-04-image</a></li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/11/docker-alpine-image-timezone/" data-id="ckv3iop6y001oesc86d1b1a50" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/timezone/" rel="tag">timezone</a></li></ul>
 
     </footer>
   </div>
@@ -1332,7 +1690,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/annotation/" style="font-size: 10px;">annotation</a> <a href="/tags/architecture/" style="font-size: 10px;">architecture</a> <a href="/tags/blog/" style="font-size: 10px;">blog</a> <a href="/tags/ci/" style="font-size: 10px;">ci</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/container/" style="font-size: 10px;">container</a> <a href="/tags/context/" style="font-size: 10px;">context</a> <a href="/tags/database/" style="font-size: 10px;">database</a> <a href="/tags/debug/" style="font-size: 10px;">debug</a> <a href="/tags/docker/" style="font-size: 17.5px;">docker</a> <a href="/tags/encoding/" style="font-size: 12.5px;">encoding</a> <a href="/tags/engineering/" style="font-size: 10px;">engineering</a> <a href="/tags/error/" style="font-size: 10px;">error</a> <a href="/tags/eval/" style="font-size: 10px;">eval</a> <a href="/tags/generic/" style="font-size: 10px;">generic</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/influxdb/" style="font-size: 10px;">influxdb</a> <a href="/tags/innodb/" style="font-size: 10px;">innodb</a> <a href="/tags/java/" style="font-size: 17.5px;">java</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/tags/metaclass/" style="font-size: 10px;">metaclass</a> <a href="/tags/metrics/" style="font-size: 10px;">metrics</a> <a href="/tags/microservice/" style="font-size: 10px;">microservice</a> <a href="/tags/mock/" style="font-size: 10px;">mock</a> <a href="/tags/mysql/" style="font-size: 12.5px;">mysql</a> <a href="/tags/network/" style="font-size: 10px;">network</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/partitions/" style="font-size: 10px;">partitions</a> <a href="/tags/patch/" style="font-size: 10px;">patch</a> <a href="/tags/pipeline/" style="font-size: 10px;">pipeline</a> <a href="/tags/protocol/" style="font-size: 10px;">protocol</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/react/" style="font-size: 10px;">react</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/security/" style="font-size: 12.5px;">security</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/sync/" style="font-size: 10px;">sync</a> <a href="/tags/tcp/" style="font-size: 10px;">tcp</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/timezone/" style="font-size: 10px;">timezone</a> <a href="/tags/tls/" style="font-size: 10px;">tls</a> <a href="/tags/traefik/" style="font-size: 10px;">traefik</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/unittest/" style="font-size: 10px;">unittest</a> <a href="/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/tags/virtualenvwrapper/" style="font-size: 10px;">virtualenvwrapper</a>
+      <a href="/tags/annotation/" style="font-size: 10px;">annotation</a> <a href="/tags/architecture/" style="font-size: 10px;">architecture</a> <a href="/tags/blog/" style="font-size: 10px;">blog</a> <a href="/tags/ci/" style="font-size: 10px;">ci</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/container/" style="font-size: 10px;">container</a> <a href="/tags/context/" style="font-size: 10px;">context</a> <a href="/tags/database/" style="font-size: 10px;">database</a> <a href="/tags/debug/" style="font-size: 10px;">debug</a> <a href="/tags/docker/" style="font-size: 17.5px;">docker</a> <a href="/tags/encoding/" style="font-size: 12.5px;">encoding</a> <a href="/tags/engineering/" style="font-size: 10px;">engineering</a> <a href="/tags/error/" style="font-size: 10px;">error</a> <a href="/tags/eval/" style="font-size: 10px;">eval</a> <a href="/tags/generic/" style="font-size: 10px;">generic</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/influxdb/" style="font-size: 10px;">influxdb</a> <a href="/tags/innodb/" style="font-size: 10px;">innodb</a> <a href="/tags/java/" style="font-size: 17.5px;">java</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/tags/metaclass/" style="font-size: 10px;">metaclass</a> <a href="/tags/metrics/" style="font-size: 10px;">metrics</a> <a href="/tags/microservice/" style="font-size: 10px;">microservice</a> <a href="/tags/mock/" style="font-size: 10px;">mock</a> <a href="/tags/mysql/" style="font-size: 12.5px;">mysql</a> <a href="/tags/network/" style="font-size: 12.5px;">network</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/partitions/" style="font-size: 10px;">partitions</a> <a href="/tags/patch/" style="font-size: 10px;">patch</a> <a href="/tags/pipeline/" style="font-size: 10px;">pipeline</a> <a href="/tags/protocol/" style="font-size: 12.5px;">protocol</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/react/" style="font-size: 10px;">react</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/security/" style="font-size: 15px;">security</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/sync/" style="font-size: 10px;">sync</a> <a href="/tags/tcp/" style="font-size: 10px;">tcp</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/timezone/" style="font-size: 10px;">timezone</a> <a href="/tags/tls/" style="font-size: 10px;">tls</a> <a href="/tags/traefik/" style="font-size: 10px;">traefik</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/unittest/" style="font-size: 10px;">unittest</a> <a href="/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/tags/virtualenvwrapper/" style="font-size: 10px;">virtualenvwrapper</a>
     </div>
   </div>
 
@@ -1341,7 +1699,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a></li></ul>
     </div>
   </div>
 
@@ -1352,6 +1710,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2021/12/15/designing-data-intensive-applications-note/">Designing Data-Intensive Applications Notes</a>
+          </li>
         
           <li>
             <a href="/2021/10/23/oauth-introduction/">OAuth Introduction</a>
@@ -1367,10 +1729,6 @@
         
           <li>
             <a href="/2020/08/21/about-ssl-tls/">About SSL And TLS</a>
-          </li>
-        
-          <li>
-            <a href="/2020/06/07/nginx-stream-debug/">Nginx stream debug</a>
           </li>
         
       </ul>
