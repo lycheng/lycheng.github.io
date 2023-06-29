@@ -1,1095 +1,762 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
 
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  <title>Shing&#39;s logs</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Shing">
+  <meta name="keywords" content="Golang, Python, Engineering">
+  
+    <meta property="og:type" content="website">
 <meta property="og:title" content="Shing&#39;s logs">
 <meta property="og:url" content="http://yoursite.com/page/3/index.html">
 <meta property="og:site_name" content="Shing&#39;s logs">
-<meta property="og:locale" content="zh_CN">
+<meta property="og:locale" content="en_US">
 <meta property="article:author" content="Shing">
-<meta property="article:tag" content="golang, python">
-<meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="Shing&#39;s logs" type="application/atom+xml">
+<meta property="article:tag" content="Golang, Python, Engineering">
+<meta name="twitter:card" content="summary_large_image">
   
   
-    <link rel="icon" href="/favicon.png">
   
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
+  <title>Shing&#39;s logs</title>
 
-<meta name="generator" content="Hexo 5.4.0"></head>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
 
 <body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Shing&#39;s logs</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 100vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Shing&#39;s Logs</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
         
-          <a class="main-nav-link" href="/">Home</a>
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
         
-          <a class="main-nav-link" href="/archives">Archives</a>
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
         
-      </nav>
-      <nav id="sub-nav">
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main">
-  
-    <article id="post-python-abstact-class" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/06/17/python-abstact-class/" class="article-date">
-  <time datetime="2017-06-16T16:00:00.000Z" itemprop="datePublished">2017-06-17</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/17/python-abstact-class/">Python 中的虚拟基类</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Python 这类动态类型语言，Duck Typing 是一个比较突出的优点。属性，方法的惰性计算，给代码的编写带来了高度的灵活性。当然有利有弊，Duck Typing 这东西在 Python 中更多是一种规范，而不是强制约束。如果我们需要约束这些接口，需要做些什么呢？</p>
-<h2 id="运行时检查"><a href="#运行时检查" class="headerlink" title="运行时检查"></a>运行时检查</h2><p>下面看一下简单的例子，这是个比较常见的场景，通过基类定义了一系列的接口，然后继承的子类根据自己特定的需求实现具体的接口。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">action</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">raise</span> NotImplementedError()</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bird</span>(<span class="params">Animal</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">action</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;fly&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span>(<span class="params">Animal</span>):</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">bird = Bird()</span><br><span class="line">dog = Dog()</span><br><span class="line"></span><br><span class="line">animals = [Bird(), Dog()]</span><br><span class="line"><span class="keyword">for</span> animal <span class="keyword">in</span> animals:</span><br><span class="line">    <span class="built_in">print</span>(animal.action())</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出如下：</span></span><br><span class="line"><span class="comment"># fly</span></span><br><span class="line"><span class="comment"># Traceback (most recent call last):</span></span><br><span class="line"><span class="comment">#  File &quot;test.py&quot;, line 22, in &lt;module&gt;</span></span><br><span class="line"><span class="comment">#    print(animal.action())</span></span><br><span class="line"><span class="comment">#  File &quot;test.py&quot;, line 4, in action</span></span><br><span class="line"><span class="comment">#    raise NotImplementedError()</span></span><br><span class="line"><span class="comment"># NotImplementedError</span></span><br></pre></td></tr></table></figure>
-
-<p>我们可以看到，Animal 的 action 的确是会抛出异常，但如果子类实现了该方法，则相应的方法查找则会屏蔽掉基类的该方法而使用自己当前的版本。</p>
-<p>这的确是能实现简单的抽象方法的概念，但是，该错误直到运行时才能暴露出来。极端点的情况，你可能还要去判断这个 name 是否可以调用，调用的参数对不对。</p>
-<h2 id="抽象基类"><a href="#抽象基类" class="headerlink" title="抽象基类"></a>抽象基类</h2><p>Python 本身是支持抽象基类的，最常用的是 collections 里面提供的一些抽象类。如常见的用于判断类型</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> collections</span><br><span class="line"><span class="built_in">isinstance</span>([], collections.MutableSequence) <span class="comment"># True</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 还有数类型</span></span><br><span class="line"><span class="keyword">import</span> numbers</span><br><span class="line"><span class="built_in">isinstance</span>(<span class="number">12313.123</span>, numbers.Number) <span class="comment"># True</span></span><br></pre></td></tr></table></figure>
-
-<p>如果我们用来实现序列，那就更简单了</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> collections</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sequence</span>(<span class="params">collections.MutableSequence</span>):</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">seq = <span class="type">Sequence</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Traceback (most recent call last):</span></span><br><span class="line"><span class="comment">#   File &quot;test.py&quot;, line 8, in &lt;module&gt;</span></span><br><span class="line"><span class="comment">#     seq = Sequence()</span></span><br><span class="line"><span class="comment"># TypeError: Can&#x27;t instantiate abstract class Sequence with abstract methods # __delitem__, __getitem__, __len__, __setitem__, insert</span></span><br></pre></td></tr></table></figure>
-
-<p>跟之前的代码相比，这个是在实例化的时候进行检查的，你继承了某些抽象类之后，在实例化的时候，会去检查是否有实现具体的方法。collections 中还有其它的基础类型的抽象类，如果要实现相应协议的话，可以去看看。</p>
-<h2 id="自定义抽象类"><a href="#自定义抽象类" class="headerlink" title="自定义抽象类"></a>自定义抽象类</h2><p>同样的，我们也可以实现自己的抽象基类，然后通过具体的子类去定义具体的行为</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> abc</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span>(<span class="params">abc.ABC</span>):</span></span><br><span class="line"><span class="meta">    @abc.abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">name</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27; just docs</span></span><br><span class="line"><span class="string">        &#x27;&#x27;&#x27;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Base&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>(<span class="params">Base</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">name</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.__class__.__name__</span><br><span class="line"></span><br><span class="line">a = A()</span><br><span class="line"><span class="built_in">print</span>(a.name())</span><br></pre></td></tr></table></figure>
-
-<p>上述代码中，如果类 A 不定义 name 的方法，则会抛出 TypeError 的异常。但实际上，如果我们去修改 Base 中 name 的函数签名，例如加个参数什么的，上述代码依旧是能正常运行的。这样子的话，其实 Python 本身支持的抽象方法只是检验是否有这个可调用的类成员。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>(<span class="params">Base</span>):</span></span><br><span class="line">    name = <span class="built_in">print</span></span><br><span class="line">    <span class="comment"># name = 1</span></span><br><span class="line">    <span class="comment"># TypeError: &#x27;int&#x27; object is not callable</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="再看鸭子类型"><a href="#再看鸭子类型" class="headerlink" title="再看鸭子类型"></a>再看鸭子类型</h2><p>最开始接触 Python 的时候，觉得这一特性很好用啊，例如我要处理一大串对象，只要里面的对象实现了这个方法，就可以都扔到同一个队列里面进行处理，但这个东西很容易滥用。如果你在处理之后需要相应的回调，这又必须跑去实现回调函数，但因为函数调用的检查是在处理该对象的时候，如果忘了某些对象的相应方法，可能最后上线才能发现问题。</p>
-<p>接触了一阵子的 golang，使用 interface 之后简直如沐春风，运行时的错误在编译阶段就能避免了，减少了很多查 bug 的时间。在这一点上，如果需要使用类似的特性，python 对程序员的能力要求反而更高了。</p>
-<p>我个人比较推崇先去判断这个对象是什么类型，如判断它是不是可以迭代的，可调用的，这样子，你就知道了该对象支持什么样的方法。如果不行再去判断是否实现了具体的方法。当然，运行时去判断这些东西是有消耗的，具体的需要就要看业务场景了。</p>
-<p>灵活是抛弃了一些约束的结果，没有了约束效率就会低下，哪样较好没有绝对的定论。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
-<li><a target="_blank" rel="noopener" href="https://docs.python.org/3/library/abc.html">Python abc 库的文档</a></li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/06/17/python-abstact-class/" data-id="ckx7kmlcb0018rzc8fontbw7j" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-python3-str-bytes" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/05/17/python3-str-bytes/" class="article-date">
-  <time datetime="2017-05-16T16:00:00.000Z" itemprop="datePublished">2017-05-17</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/17/python3-str-bytes/">Python3 字符串问题</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在写代码的时候遇到一个比较奇怪的问题，精简之后的代码如下</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">from</span> urllib.parse <span class="keyword">import</span> urlparse</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    <span class="keyword">from</span> urlparse <span class="keyword">import</span> urlparse</span><br><span class="line"></span><br><span class="line">key = <span class="string">&#x27;baidu&#x27;</span></span><br><span class="line">val = <span class="string">&#x27;http://www.baidu.com&#x27;</span></span><br><span class="line">schemes = [<span class="string">&#x27;http&#x27;</span>, <span class="string">&#x27;https&#x27;</span>, <span class="string">&#x27;socks&#x27;</span>]</span><br><span class="line"></span><br><span class="line">rdb = redis.StrictRedis(host=<span class="string">&#x27;localhost&#x27;</span>, port=<span class="number">6379</span>, db=<span class="number">0</span>)</span><br><span class="line">rdb.<span class="built_in">set</span>(<span class="string">&#x27;baidu&#x27;</span>, <span class="string">&#x27;http://www.baidu.com&#x27;</span>)</span><br><span class="line"></span><br><span class="line">url = rdb.get(<span class="string">&#x27;baidu&#x27;</span>)</span><br><span class="line"><span class="comment"># print(type(url))</span></span><br><span class="line">o = urlparse(url)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(o.scheme <span class="keyword">in</span> schemes)</span><br></pre></td></tr></table></figure>
-
-<p>上述代码初看之下没有问题，但是在 Python3 中跑的话与在 Python2 中跑的结果不一样。Python3 中输出 False，Python2 中输出 True。</p>
-<p>为什么呢？</p>
-<h2 id="字符串类型"><a href="#字符串类型" class="headerlink" title="字符串类型"></a>字符串类型</h2><p>上述问题是由 Python3 中 str 和 bytes 造成的。与 Python2 相比，Python3 的字符串类型改成了 str 和 bytes，其中 str 相当于 Python2 的 unicode，bytes 相当于 Python2 的 str。从 redis 中拿回的数据是 bytes 类型，bytes 类型的与 list 中的 str 去比较则是永远都是 False。</p>
-<p>在 Python2 中，unicode 和 str 的混合使用会有隐式的类型转换，Python3 中则是完全两种类型，不存在比较的可能性</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(u&#x27;&#x27; == &#x27;&#x27;) # Python2 -&gt; True</span><br><span class="line">print(b&#x27;&#x27; == &#x27;&#x27;) # Python3 -&gt; False</span><br></pre></td></tr></table></figure>
-
-<p>Python2 中的 unicode 和 str 实际上都继承于 basestring</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># python2</span></span><br><span class="line"><span class="built_in">isinstance</span>(<span class="string">&#x27;&#x27;</span>, basestring) <span class="comment"># True</span></span><br><span class="line"><span class="built_in">isinstance</span>(<span class="string">u&#x27;&#x27;</span>, basestring) <span class="comment"># True</span></span><br></pre></td></tr></table></figure>
-
-<p>在 Python2 中处理字符串编码问题的时候，经常会让人感到疑惑，我究竟是要调用 decode 方法还是 encode 方法呢？哪怕你混用 decode 方法和 encode 方法都是没有问题的，不会有异常抛出。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># python2</span></span><br><span class="line">s = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(s)) <span class="comment"># str</span></span><br><span class="line">s.encode(<span class="string">&#x27;utf-8&#x27;</span>) <span class="comment"># 错误调用，不会报错</span></span><br><span class="line">s.decode(<span class="string">&#x27;utf-8&#x27;</span>) <span class="comment"># 正确调用</span></span><br></pre></td></tr></table></figure>
-
-<p>但在 Python3 环境中，这两个类型就完全不同了。</p>
-<h2 id="Python3-中的正确用法"><a href="#Python3-中的正确用法" class="headerlink" title="Python3 中的正确用法"></a>Python3 中的正确用法</h2><p>你如果去查看 Python3 中的 str 和 bytes 对象的方法，你会看到他们方法其实是大部分相同的，如 split, startswith 等等一类字符串的处理的方法两者都是有的。最重要的不同就是，str 只有 encode 方法，而 bytes 只有 decode 方法</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># python3</span></span><br><span class="line">s = <span class="string">&#x27;&#x27;</span></span><br><span class="line">s.encode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">e.decode(<span class="string">&#x27;utf-8&#x27;</span>) <span class="comment"># AttributeError: &#x27;str&#x27; object has no attribute &#x27;decode&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 其对应的方法参数还是需要和原对象一致</span></span><br><span class="line">b = <span class="string">b&#x27;&#x27;</span></span><br><span class="line">b.startswith(<span class="string">&#x27;&#x27;</span>) <span class="comment"># TypeError: startswith first arg must be bytes or a tuple of bytes, not str</span></span><br></pre></td></tr></table></figure>
-
-<p>除此之外，在 Python2 中，很多时候为了类型转换，可能就直接通过 str(obj) 来进行操作，之前这样处理是没问题的，但现在这种处理方式不可行了</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># python3</span></span><br><span class="line">b = <span class="string">b&#x27;hello world&#x27;</span></span><br><span class="line"><span class="built_in">str</span>(b) <span class="comment"># b&#x27;hello world&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<p>上述代码可以看到，通过 str 之后，bytes 的确是变成了 str 类型，但是其多出了一个 b 的前缀。这里的正确姿势是</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># python3</span></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">isinstance</span>(b, <span class="built_in">bytes</span>):</span><br><span class="line">    b = b.decode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    b = <span class="built_in">str</span>(b)</span><br></pre></td></tr></table></figure>
-
-<p>除此以外，不少的标准库的函数接收的类型也限制了，例如 hashlib 中的方法只接收 bytes 类型，json.loads 只接收 str 类型等等。</p>
-<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>我个人是比较喜欢 Python3 的更新的，默认的 utf-8 编码解决了很多的问题。</p>
-<p>相比于 Python2，可能 Python3 的处理要繁琐一点，但安全性会好很多，一些很奇怪的问题可以及时发现。例如 decode 和 encode 方法的明确。同时，因为这些变化，我们需要在 bytes 可能出现的地方留心（一般是程序外部来的数据），进行类型转换，数据交互的层面统一使用 str 进行处理。</p>
-<p>与 Python2 相比，str 和 bytes 的命名其实也更贴近实际的情况。我是这样去记两者的关系的：str 是 unicode 的 code 的序列，可认为是该字符在世界的唯一标识（code point），而 bytes 则是 str 通过某种编码（utf-8）实际保存的二进制数据。unicode 是种协议，而 utf-8 是这种协议的某种实现方式。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
-<li><a target="_blank" rel="noopener" href="https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/">unicode</a></li>
-<li><a target="_blank" rel="noopener" href="https://docs.python.org/3/howto/unicode.html">Python3 Unicode HOWTO</a></li>
-<li><a target="_blank" rel="noopener" href="https://docs.python.org/2/howto/unicode.html">Python2 Unicode HOWTO</a></li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/05/17/python3-str-bytes/" data-id="ckx7kmlc90012rzc8dos6b2bi" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/encoding/" rel="tag">encoding</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-python-encoding" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/03/26/python-encoding/" class="article-date">
-  <time datetime="2017-03-25T16:00:00.000Z" itemprop="datePublished">2017-03-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/26/python-encoding/">Python 编码问题</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本文关注的是 python2 和 python3 在编码处理上的异同。所使用的python2 的版本为 2.7.12，python3 的版本为 3.5.2。</p>
-<h2 id="unicode"><a href="#unicode" class="headerlink" title="unicode"></a>unicode</h2><p>unicode 是为了解决不同的语言背景下的统一的文字编码问题，简单来说就是给全世界所有的语言的字符唯一的 ID 来进行识别。例如，使用 python2 来输出汉字 “你好”</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">u&#x27;你好&#x27;</span></span><br><span class="line"><span class="built_in">print</span>(s) <span class="comment"># u&#x27;\u4f60\u597d&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<p>上述的 \u 开头的代码即 unicode 对汉字的唯一代码。但实际上，在计算机中，并不直接存放该代码。在 unicode 之前，普遍使用的是 ASCII 的方式进行编码，在英文世界中，一个字节可表示的 128 个符号已经足够了。如果普遍使用 unicode 则相应的英文存储的空间要扩大一倍以上。</p>
-<p>所以就有了 utf-8 的出现。utf-8 是最普遍的 unicode 的实现方式，最主要的特点是可变长的编码形式。对于 ASCII 这种单字节的形式，第一个 bit 设置为 0，后面 7 位为有效位，即可完美兼容 ASCII。对于其他形式，则相应的位数有相应的规则，这里就不展开讨论了。</p>
-<p>最后，需要注意的是，utf-8 是变长的，由前缀的 bit 位的规则来决定字节数。之后来谈谈在 python 中的实现。</p>
-<h2 id="python2"><a href="#python2" class="headerlink" title="python2"></a>python2</h2><p>python2 的默认编码为 ASCII。在源代码文件中，如果用到非 ASCII 字符，需要在文件头部进行编码声明，当然，这并不影响实际程序的编码</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br></pre></td></tr></table></figure>
-
-<p>在 python2 中，与编码对应的有两种类型，str 和 unicode。简单来说，str 由 unicode 经过某种编码之后的字节组成。两者的关系如下</p>
-<ul>
-<li>都是 basestring 的子类</li>
-<li>相对来说，unicode 才是真正意义上的字符串，调用 len 方法统计的是有多少个“字”，而 str 则是有多少字节</li>
-<li>str  -&gt; decode(‘the_coding_of_str’) -&gt; unicode</li>
-<li>unicode -&gt; encode(‘the_coding_you_want’) -&gt; str</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line">u = <span class="string">u&#x27;你好&#x27;</span></span><br><span class="line">s = u.encode(<span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line"><span class="comment"># u.decode(&quot;utf-8&quot;)  # UnicodeEncodeError: &#x27;ascii&#x27; codec can&#x27;t encode ...</span></span><br><span class="line"></span><br><span class="line">u0 = s.decode(<span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line"><span class="comment"># s.encode(&quot;utf-8&quot;)  # UnicodeDecodeError: &#x27;ascii&#x27; codec can&#x27;t decode ...</span></span><br><span class="line"></span><br><span class="line">s = <span class="string">&#x27;你好&#x27;</span>  <span class="comment"># 如果不加源文件的 coding 声明，这里会报错</span></span><br><span class="line">u = s.decode(<span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line"><span class="comment">#  u.decode(&quot;utf-8&quot;)  # UnicodeEncodeError: &#x27;ascii&#x27; codec can&#x27;t encode</span></span><br><span class="line"></span><br><span class="line">s = u.encode(<span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line"><span class="comment">#  s.encode(&quot;utf-8&quot;)  # UnicodeDecodeError: &#x27;ascii&#x27; codec can&#x27;t decode</span></span><br><span class="line"></span><br><span class="line">u = <span class="string">u&#x27;abc&#x27;</span></span><br><span class="line">s = <span class="string">&#x27;abc&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(s + u)  <span class="comment"># abcabc</span></span><br><span class="line"><span class="built_in">print</span>(s == u)  <span class="comment"># True</span></span><br></pre></td></tr></table></figure>
-
-<p>上述代码可以看到，decode 和 encode 的调用需要明确，unicode 需要根据一定的编码规则解析成机器可识别的字节流 str，而一堆字节流我们需要知道它所用的编码规则来解析成 unicode。</p>
-<p>需要注意的是，如果是涉及 unicode 和 str 进行拼接和比较，则会有一次隐式转换，即先将 str 转成 unicode 再进行比较。如果 str 不是 ASCII 的话可能会出现转码错误。</p>
-<h3 id="建议"><a href="#建议" class="headerlink" title="建议"></a>建议</h3><ol>
-<li>python 源文件指定编码，一般推荐为 utf-8</li>
-<li>硬编码的字符，使用 unicode 进行声明，如 <code>s = u&#39;你好&#39;</code></li>
-<li>统一转成 unicode 来使用</li>
-<li>Decode early, Unicode everywhere, Encode later</li>
-</ol>
-<h2 id="python3"><a href="#python3" class="headerlink" title="python3"></a>python3</h2><p>python3 中，相关的类型为 unicode 和 byte。与 python2 相对应的是</p>
-<ul>
-<li>python2:str == python3:bytes</li>
-<li>python2:unicode = python3:str</li>
-</ul>
-<p>这样子更容易理解，str 存放的即是我想要的数据，bytes 存放的是实际的二进制数据。还有就是 python3 中将严格区分 str 和 bytes。str 类型只有 encode 方法，bytes 类型只有 decode 方法。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">&quot;你好&quot;</span></span><br><span class="line">b = s.encode(<span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(b)  <span class="comment"># b&#x27;\xe4\xbd\xa0\xe5\xa5\xbd&#x27;</span></span><br><span class="line">s0 = b.decode(<span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(s0)  <span class="comment"># 你好</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># str 和 bytes 被认为是两种类型，比较和连接并不会进行自动的类型转换</span></span><br><span class="line">s = <span class="string">&quot;abc&quot;</span></span><br><span class="line">b = <span class="string">b&quot;abc&quot;</span></span><br><span class="line"><span class="built_in">print</span>(s == b)  <span class="comment"># False</span></span><br><span class="line"><span class="built_in">print</span>(s + b)  <span class="comment"># TypeError: Can&#x27;t convert &#x27;bytes&#x27; object to str implicitly</span></span><br></pre></td></tr></table></figure>
-
-<p>对文件的操作也不同了，你通过 open 函数打开的文件返回的东西可能不同了。如果指定 <code>rb</code> 模式打开的文件，其内容为二进制流，即 bytes。如果是 <code>r</code> 模式，其内容为 str，这点需要额外注意。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fp = <span class="built_in">open</span>(<span class="string">&quot;./index.html&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(fp.read()))  <span class="comment"># &lt;class &#x27;str&#x27;&gt;</span></span><br><span class="line"></span><br><span class="line">fp = <span class="built_in">open</span>(<span class="string">&quot;./index.html&quot;</span>, <span class="string">&quot;rb&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(fp.read()))  <span class="comment"># &lt;class &#x27;bytes&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>python3 比 python2 在编码上更加严格了，默认的编码就是 utf-8，已经不再需要在原文件头声明编码。decode 和 encode 方法也不再是两个类型都能调用，这个我认为是比较重要的，这样在写代码的时候就不需要纠结要用哪个方法了，最后是推荐阅读参考的第一个文章，很好的讲解了 unicode 的出现背景。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
-<li><a target="_blank" rel="noopener" href="https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/">unicode 的出现背景和相关知识</a></li>
-<li><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html">阮一峰的关于 unicode 的笔记</a></li>
-<li><a target="_blank" rel="noopener" href="https://docs.python.org/2/howto/unicode.html">Unicode HOWTO python2</a></li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/03/26/python-encoding/" data-id="ckx7kmlc80010rzc83i2w271n" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/encoding/" rel="tag">encoding</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-python-collections" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/03/14/python-collections/" class="article-date">
-  <time datetime="2017-03-13T16:00:00.000Z" itemprop="datePublished">2017-03-14</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/14/python-collections/">Python collections 库解析</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本文会简单介绍以下 python 标准库 collections 的相关使用。collections 在基础数据结构的基础上进一步封装了更高级的数据结构。</p>
-<p>以下代码的环境为 python3.5.2</p>
-<h2 id="defaultdict"><a href="#defaultdict" class="headerlink" title="defaultdict"></a>defaultdict</h2><p>defaultdict 是 dict 的子类，基本用法与 dict 一样，在 key 不存在是，添加了 <code>default_facetory</code> 提供的默认值的功能。</p>
-<p>定义如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">collections.defaultdict([default_factory[, ...]])</span><br></pre></td></tr></table></figure>
-
-<p>样例</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">d = collections.defaultdict(<span class="built_in">int</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    d[i % <span class="number">3</span>] += <span class="number">1</span></span><br><span class="line"><span class="built_in">print</span>(d)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实际上，上述的代码类似于</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">D</span>(<span class="params">collections.defaultdict</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__missing__</span>(<span class="params">self, key</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.default_factory(key)</span><br><span class="line">d = D(<span class="built_in">int</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更简单的 lambda</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">constant_factory</span>(<span class="params">value</span>):</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">lambda</span>: value</span><br><span class="line">d = collections.defaultdict(constant_factory(<span class="number">0</span>))</span><br></pre></td></tr></table></figure>
-
-<p>最后，需要注意的是，defaultdict 生效只在 <code>obj[key]</code> 这种调用的模式下，如果使用 <code>obj.get</code> 则不会触发。</p>
-<h2 id="OrderedDict"><a href="#OrderedDict" class="headerlink" title="OrderedDict"></a>OrderedDict</h2><p>基本用法也和 dict 一样，但是会记住 key 插入的顺序。它有两个额外的方法</p>
-<ul>
-<li><code>popitem(last=True)</code>: 弹出一个键值对，last=False的话则弹出第一个</li>
-<li><code>move_to_end(key, last=True)</code>: 移动某个 key 到最后（该 key 必须存在），last=False 则移动到第一</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">od = collections.OrderedDict</span><br><span class="line">d = od.fromkeys(<span class="string">&quot;abcde&quot;</span>)</span><br><span class="line">d.move_to_end(<span class="string">&quot;b&quot;</span>, <span class="literal">False</span>)</span><br><span class="line"><span class="keyword">for</span> key, val <span class="keyword">in</span> d.items():</span><br><span class="line">    <span class="built_in">print</span>(key) <span class="comment"># b a c d e</span></span><br></pre></td></tr></table></figure>
-
-<p>下面是一些有趣的例子</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LastUpdatedOrderedDict</span>(<span class="params">collections.OrderedDict</span>):</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27; 每一个 key 新增或者修改操作都将其置于最后，可用于实现类似 LRU 的算法</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__setitem__</span>(<span class="params">self, key, value</span>):</span></span><br><span class="line">        <span class="keyword">if</span> key <span class="keyword">in</span> self:</span><br><span class="line">            <span class="keyword">del</span> self[key]</span><br><span class="line">        <span class="built_in">super</span>().__setitem__(key, value)</span><br><span class="line">        </span><br><span class="line"><span class="comment"># 在初始化时指定 key 的排序依据</span></span><br><span class="line">d = &#123;<span class="string">&#x27;banana&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;apple&#x27;</span>: <span class="number">4</span>, <span class="string">&#x27;pear&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;orange&#x27;</span>: <span class="number">2</span>&#125;</span><br><span class="line">collections.OrderedDict(<span class="built_in">sorted</span>(d.items(), key=<span class="keyword">lambda</span> t: t[<span class="number">0</span>])) <span class="comment"># sort by key</span></span><br><span class="line">collections.OrderedDict(<span class="built_in">sorted</span>(d.items(), key=<span class="keyword">lambda</span> t: t[<span class="number">1</span>])) <span class="comment"># sort by value</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="Counter"><a href="#Counter" class="headerlink" title="Counter"></a>Counter</h2><p>同样是 dict 的子类，但是用于统计某个 key 的数量。它提供一些额外方法</p>
-<ol>
-<li><code>elements</code>: 返回所有大于 1 的 key，如果是 key 的数量大于 1 则会输出多次，同理，小于 0 则不输出</li>
-<li><code>most_common([n])</code>: 返回 key 和其对应的 count，默认输出全部数据，n=1 则返回 count 最大的</li>
-<li><code>subtract([iterable-or-mapping])</code>: 对应的 count 的相减</li>
-<li><code>fromkeys(iterable)</code>: 不可用，使用构造函数</li>
-<li><code>update([iterable-or-mapping])</code>: 已存在的 key 则 count 增加</li>
-</ol>
-<p>常见的用法</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">c = collections.Counter() <span class="comment"># a new, empty counter</span></span><br><span class="line">c = collections.Counter(&#123;<span class="string">&#x27;red&#x27;</span>: <span class="number">4</span>, <span class="string">&#x27;blue&#x27;</span>: <span class="number">2</span>&#125;) <span class="comment"># from a mapping</span></span><br><span class="line">c = collections.Counter(cats=<span class="number">4</span>, dogs=<span class="number">8</span>) <span class="comment"># from keyword args</span></span><br><span class="line"></span><br><span class="line">c = collections.Counter(<span class="string">&#x27;hello&#x27;</span>) <span class="comment"># from an iterable</span></span><br><span class="line"><span class="built_in">print</span>(c[<span class="string">&#x27;l&#x27;</span>]) <span class="comment"># 2</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sum</span>(c.values())                 <span class="comment"># total of all counts</span></span><br><span class="line">c.clear()                       <span class="comment"># reset all counts</span></span><br><span class="line"><span class="built_in">list</span>(c)                         <span class="comment"># list unique elements</span></span><br><span class="line"><span class="built_in">set</span>(c)                          <span class="comment"># convert to a set</span></span><br><span class="line"><span class="built_in">dict</span>(c)                         <span class="comment"># convert to a regular dictionary</span></span><br><span class="line">c.items()                       <span class="comment"># convert to a list of (elem, cnt) pairs</span></span><br><span class="line">collections.Counter(<span class="built_in">dict</span>(list_of_pairs))</span><br><span class="line">c.most_common()[:-n-<span class="number">1</span>:-<span class="number">1</span>]       <span class="comment"># n least common elements</span></span><br><span class="line"></span><br><span class="line">b + c                           <span class="comment"># 对应的 count 相加（相减）</span></span><br><span class="line">b | c                           <span class="comment"># 并集，相同取最大的 count</span></span><br><span class="line">b &amp; c                           <span class="comment"># 交集，相同取最小的 count</span></span><br><span class="line"></span><br><span class="line">+c <span class="comment"># 相当于一个空的 counter 相加（或相减），但只保留整数 count 的 key</span></span><br><span class="line">-c <span class="comment"># 同上</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="deque"><a href="#deque" class="headerlink" title="deque"></a>deque</h2><p><a target="_blank" rel="noopener" href="https://docs.python.org/3/library/collections.html#deque-objects">deque</a> 是双端队列，首尾都可以进行插入和删除，同时也可以对某个位置进行插入。</p>
-<p>需要注意的是，在初始化的时候指定了 maxlen，则在相应的更新操作则会造成已有的元素的移动</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">d = collections.deque(maxlen=<span class="number">3</span>)</span><br><span class="line">d.extend(<span class="built_in">range</span>(<span class="number">3</span>)) <span class="comment"># deque([0, 1, 2], maxlen=3)</span></span><br><span class="line">d.append(<span class="number">4</span>) <span class="comment"># deque([1, 2, 4], maxlen=3)</span></span><br><span class="line">d.insert(<span class="number">0</span>, -<span class="number">1</span>) <span class="comment"># IndexError: deque already at its maximum size</span></span><br><span class="line"></span><br><span class="line">d.pop()</span><br><span class="line">d.insert(<span class="number">0</span>, -<span class="number">1</span>) <span class="comment"># deque([-1, 1, 2], maxlen=3)</span></span><br></pre></td></tr></table></figure>
-
-<p>一些样例</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">tail</span>(<span class="params">filename, n=<span class="number">10</span></span>):</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27; Return the last n lines of a file</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(filename) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="keyword">return</span> deque(f, n)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">delete_nth</span>(<span class="params">d, n</span>):</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27; 删除第 n 个元素</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    d.rotate(-n)</span><br><span class="line">    d.popleft()</span><br><span class="line">    d.rotate(n)</span><br></pre></td></tr></table></figure>
-
-<h2 id="nametuple"><a href="#nametuple" class="headerlink" title="nametuple"></a>nametuple</h2><p><a target="_blank" rel="noopener" href="https://docs.python.org/3/library/collections.html#collections.namedtuple">nametuple</a> 是种用于强化 tuple 的可用性的数据结构。将 tuple 的 index 对应到 key，增强代码的可读性。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Point = collections.namedtuple(<span class="string">&#x27;Point&#x27;</span>, [<span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;y&#x27;</span>])</span><br><span class="line"><span class="comment"># Point = collections.namedtuple(&#x27;Point&#x27;, &#x27;x y&#x27;) # 也是可以的</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 增加的文档</span></span><br><span class="line">Point.__doc__ += <span class="string">&quot;Point with (x, y)&quot;</span></span><br><span class="line"></span><br><span class="line">p = Point._make((<span class="number">1</span>, <span class="number">2</span>))</span><br><span class="line"><span class="built_in">print</span>(p.x == p[<span class="number">0</span>]) <span class="comment"># True</span></span><br><span class="line"><span class="built_in">isinstance</span>(p, <span class="built_in">tuple</span>) <span class="comment"># True</span></span><br><span class="line"><span class="built_in">isinstance</span>(p, Point) <span class="comment"># True</span></span><br><span class="line"></span><br><span class="line">p.x = <span class="number">1</span> <span class="comment"># AttributeError: can&#x27;t set attribute</span></span><br><span class="line">p = p._replace(x=<span class="number">2</span>) <span class="comment"># 新对象，x=2,y=2</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span>(<span class="params">collections.namedtuple(<span class="params"><span class="string">&#x27;Point&#x27;</span>, <span class="string">&#x27;x y&#x27;</span></span>)</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot; 这样则可以定义相应的方法</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    下方 __slots__ = () 的设置则是为了不让对象生成 __dict__</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    __slots__ = ()</span><br></pre></td></tr></table></figure>
-
-<p>上述的代码可见，nametuple 同时具备类对象的属性引用和 tuple 的不可变性，实际上，你可以当做一个不可变属性的类对象来使用。</p>
-<h2 id="ChainMap"><a href="#ChainMap" class="headerlink" title="ChainMap"></a>ChainMap</h2><p>用于管理多个映射的数据结构。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">d1 = &#123;<span class="number">1</span>: <span class="number">2</span>, <span class="number">3</span>: <span class="number">4</span>, <span class="number">5</span>: <span class="number">6</span>&#125;</span><br><span class="line">d2 = &#123;<span class="number">1</span>: <span class="number">1</span>, <span class="number">6</span>: <span class="number">7</span>&#125;</span><br><span class="line"></span><br><span class="line">cm = collections.ChainMap(d1, d2)</span><br><span class="line">cm.get(<span class="number">1</span>) <span class="comment"># 2</span></span><br><span class="line"></span><br><span class="line">cm = collections.ChainMap(d2, d1)</span><br><span class="line">cm.get(<span class="number">1</span>) <span class="comment"># 1</span></span><br><span class="line"></span><br><span class="line">scm = cm.new_child() <span class="comment"># ChainMap(&#123;&#125;, &#123;1: 2, 3: 4, 5: 6&#125;, &#123;1: 1, 6: 7&#125;)</span></span><br><span class="line">pcm = cm.parents <span class="comment"># ChainMap(&#123;1: 1, 6: 7&#125;)</span></span><br></pre></td></tr></table></figure>
-
-<p>在上述代码中，可以看到对于同样的 key，会根据初始化时的顺序来定优先级，可以在数据级别实现类似于作用域的查找关系。</p>
-<p>ChainMap 把状态存储在 <code>maps</code> 这个 list 中，用户是可以编辑的，可以随意修改其中的顺序和值。 <code>new_child(m=None)</code> 则是可以根据当前的数据新建一个 ChainMap 但是在 list 的最前方插入一个参数中指定的 m，如果没有则是一个空的字典。<code>parents</code> 则返回去掉第一个 map 的 ChainMap。</p>
-<p>一些有趣的例子</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># python 变量查找顺序的模拟</span></span><br><span class="line"><span class="keyword">import</span> builtins</span><br><span class="line">pylookup = collections.ChainMap(<span class="built_in">locals</span>(), <span class="built_in">globals</span>(), <span class="built_in">vars</span>(builtins))</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DeepChainMap</span>(<span class="params">collections.ChainMap</span>):</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27; 实现层级更新和删除</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__setitem__</span>(<span class="params">self, key, value</span>):</span></span><br><span class="line">        <span class="keyword">for</span> mapping <span class="keyword">in</span> self.maps:</span><br><span class="line">            <span class="keyword">if</span> key <span class="keyword">in</span> mapping:</span><br><span class="line">                mapping[key] = value</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">        self.maps[<span class="number">0</span>][key] = value</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__delitem__</span>(<span class="params">self, key</span>):</span></span><br><span class="line">        <span class="keyword">for</span> mapping <span class="keyword">in</span> self.maps:</span><br><span class="line">            <span class="keyword">if</span> key <span class="keyword">in</span> mapping:</span><br><span class="line">                <span class="keyword">del</span> mapping[key]</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">        <span class="keyword">raise</span> KeyError(key)</span><br></pre></td></tr></table></figure>
-
-<h2 id="UserDict-UserList-UserString"><a href="#UserDict-UserList-UserString" class="headerlink" title="UserDict, UserList, UserString"></a>UserDict, UserList, UserString</h2><p>比直接继承 dict, list, str 的区别就是，你可以直接使用 <code>self.data</code> 去获取数据。在里面就以 dict, list, str 来保存数据，相应的接口来操纵这个数据。</p>
-<p>在查找相关资料的时候，我没有发现使用这几个类去集成和去继承相应的 str, dict 有什么具体的优势。相关信息可参考 <a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/7148419/subclass-dict-userdict-dict-or-abc">这里</a>。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
-<li><a target="_blank" rel="noopener" href="https://hg.python.org/cpython/file/tip/Modules/_collectionsmodule.c">collections 模块源码</a></li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/03/14/python-collections/" data-id="ckx7kmlc7000yrzc8etin0rb9" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-http-notes" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/01/10/http-notes/" class="article-date">
-  <time datetime="2017-01-09T16:00:00.000Z" itemprop="datePublished">2017-01-10</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/10/http-notes/">HTTP 协议笔记</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在这里简单讲下 HTTP 协议相关的东西，包括方法，header，API 的设计等等。</p>
-<h2 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h2><p>以当前主流版本 <code>HTTP/1.1</code> 来稍微讲下一些比较重要的地方。</p>
-<h3 id="URI-和-URL"><a href="#URI-和-URL" class="headerlink" title="URI 和 URL"></a>URI 和 URL</h3><ul>
-<li>URI: Uniform Resource Identifier，统一资源标识符</li>
-<li>URL: Uniform Resource Locator，统一资源定位符</li>
-<li>URN: Uniform Resource Name，统一资源标识</li>
-</ul>
-<p>URL 是一种 URI，它标识一个互联网资源，并指定对其进行操作或获取该资源的方法。可能通过对主要访问手段的描述，也可能通过网络“位置”进行标识。</p>
-<p>URN 是基于某命名空间通过名称指定资源的 URI。人们可以通过 URN 来指出某个资源，而无需指出其位置和获得方式。</p>
-<blockquote>
-<p>URL 类似于住址，告诉你一种寻址方式。同样的，这也是一个 URI。URN 可以理解为某个人的名字（没有重名）。</p>
-</blockquote>
-<p>它们的关系</p>
-<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/URI_Euler_Diagram_no_lone_URIs.svg/800px-URI_Euler_Diagram_no_lone_URIs.svg.png" alt="URI, URL, URN"></p>
-<p>在日常开发中，很少需要区别 URL 和 URI。我们这里只讨论作为 <code>http</code> 或者 <code>https</code> 开头的各式各样的链接。每一条 URI，都是指向一个特定的资源。</p>
-<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><ul>
-<li>HEAD：与 GET 方法一样，都是向服务器发出指定资源的请求。只不过服务器将不传回资源的本文部分。它的好处在于，使用这个方法可以在不必传输全部内容的情况下，就可以获取其中“关于该资源的信息”（元信息或称元数据）。</li>
-<li>GET：向指定的资源发出“显示”请求。使用 GET 方法应该只用在读取数据，而不应当被用于产生“副作用”的操作中，例如在 Web Application 中。其中一个原因是 GET 可能会被网络蜘蛛等随意访问。参见安全方法</li>
-<li>POST：向指定资源提交数据，请求服务器进行处理（例如提交表单或者上传文件）。数据被包含在请求本文中。这个请求可能会创建新的资源或修改现有资源，或二者皆有。</li>
-<li>PUT：向指定资源位置上传其最新内容。</li>
-<li>DELETE：请求服务器删除 Request-URI 所标识的资源。</li>
-</ul>
-<p>更多方法可见 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%B6%85%E6%96%87%E6%9C%AC%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE#.E8.AF.B7.E6.B1.82.E6.96.B9.E6.B3.95">这里</a>。</p>
-<p>最常见的就是 <code>GET</code>，<code>HEAD</code> 和 <code>POST</code> 方法。其中，就 <code>GET</code> 和 <code>HEAD</code> 方法而言，他们是安全方法，即他们的操作不应该会修改，删除指定的资源。任何的修改应该以 <code>GET</code>，<code>POST</code>，<code>DELETE</code> 来实现。</p>
-<h3 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h3><p>通过指定的方法，对某个资源进行请求，服务器就会返回对应的状态码和数据。常见的状态码如下</p>
-<ul>
-<li>1xx 请求已经接受，接续处理</li>
-<li>2xx 请求已经成功处理</li>
-<li>3xx 重定向，需要在继续跟进返回的数据中指定的 URI</li>
-<li>4xx 请求错误<ul>
-<li>400 请求无法被服务器理解</li>
-<li>401 权限错误</li>
-<li>403 服务器理解该请求，但拒绝执行</li>
-<li>404 找不到对应的资源</li>
-<li>405 请求方法不对</li>
-</ul>
-</li>
-<li>5xx 该请求正确，但服务器处理的时候出现问题<ul>
-<li>500 未知错误</li>
-<li>501 该功能未实现</li>
-<li>502 网关或代理从上游服务器接到无效请求</li>
-<li>503 服务器当前无法处理该请求</li>
-<li>504 网关或者代理在指定时间内无法接收到上游请求，超时异常</li>
-</ul>
-</li>
-</ul>
-<p>上述的状态码和前面提到的方法，都是 HTTP 协议中定义的，但实际上服务器的行为是要通过代码实现，也就是说通过 <code>GET</code> 方法去更新，删除资源在逻辑上是没有问题的，但却是一种不推荐的行为。</p>
-<h3 id="Header"><a href="#Header" class="headerlink" title="Header"></a>Header</h3><p>以下来讲下一些比较关键的 <code>header</code> 字段</p>
-<h4 id="Content-Type"><a href="#Content-Type" class="headerlink" title="Content-Type"></a>Content-Type</h4><p>用于指定类型，如果未指定，则默认 <code>text/html</code>。API 返回的结果以 json 格式编码，则对应的 <code>Content-Type</code> 为 <code>application/json</code>。就表单而言，对应的则是 <code>multipart/form-data</code>。</p>
-<h4 id="Content-Length"><a href="#Content-Length" class="headerlink" title="Content-Length"></a>Content-Length</h4><p>返回的请求的 <code>body</code> 的大小，单位为 <code>bytes</code>。</p>
-<p>在非持久连接中，客户端以连接关闭来界定边界。但持久连接中，必须通过指定长度来表示内容的边界。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> BaseHTTPServer <span class="keyword">import</span> BaseHTTPRequestHandler,HTTPServer</span><br><span class="line"></span><br><span class="line">PORT_NUMBER = <span class="number">8080</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">myHandler</span>(<span class="params">BaseHTTPRequestHandler</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#  protocol_version = &quot;HTTP/1.1&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">do_GET</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.send_response(<span class="number">200</span>)</span><br><span class="line">        self.send_header(<span class="string">&#x27;Content-type&#x27;</span>,<span class="string">&#x27;text/html&#x27;</span>)</span><br><span class="line">        <span class="comment"># self.send_header(&#x27;Content-Length&#x27;, &#x27;5&#x27;)</span></span><br><span class="line">        self.end_headers()</span><br><span class="line">        self.wfile.write(<span class="string">&quot;Hello World !&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    server = HTTPServer((<span class="string">&#x27;&#x27;</span>, PORT_NUMBER), myHandler)</span><br><span class="line">    server.serve_forever()</span><br><span class="line"><span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">    server.socket.close()</span><br></pre></td></tr></table></figure>
-
-<p>上述 Python 实现的简单的简单服务器，默认是 HTTP/1.0 的协议。所以不需要指定 <code>Content-Length</code>，因为它的连接是非持久的。如果指定了 HTTP/1.1 的版本，则需要指定 <code>Content-Length</code> 不然客户端不知道连接什么时候结束，一直处于 <code>pengdingg</code> 状态。</p>
-<blockquote>
-<p>HTTP/1.1 则规定所有连接都必须是持久的，除非显式地在请求头部加上 <code>Connection: close</code></p>
-</blockquote>
-<h4 id="Transfer-Encoding"><a href="#Transfer-Encoding" class="headerlink" title="Transfer-Encoding"></a>Transfer-Encoding</h4><p>指的是 body 的编码形式。在 HTTP/1.1 中新增的 <code>Transfer-Encoding: chunked</code> 用于正文的分块传输。很多时候，如果每次请求都需要额外计算 body 的长度就会很耗资源，特别是动态的生成的消息。对于这种情况，可以用这种分块的形式进行传输，每个块以 CRLF 标记结束。</p>
-<p>同时，可以结合 <code>Content-Encoding: gzip</code> 对压缩后的正文进行分块传输。</p>
-<blockquote>
-<p>注意，这里的分块传输是指单次的响应消息的 body。</p>
-</blockquote>
-<h4 id="cookies"><a href="#cookies" class="headerlink" title="cookies"></a>cookies</h4><p>cookies 主要用于三个方面</p>
-<ul>
-<li>用户状态</li>
-<li>个性化设置</li>
-<li>行为追踪</li>
-</ul>
-<p>在首次请求的时候，客户端是不会携带任何信息的，如果有需要，服务端需要明确自己需要保留什么信息，并在响应信息里面通过 <code>Set-Cookie</code> 返回给客户端。一个响应信息可设置多个 cookie。</p>
-<p><code>Set-Cookie</code> 可以通过 <code>Domain</code> 和 <code>Path</code> 的指令进行设置它的作用域，通过 <code>Expires</code> 和 <code>Max-Age</code> 来设置具体的过期时间。</p>
-<p>如果不设置 <code>Domain</code>，该 cookie 可作用于当前的域名，但并不包括子域名。通过前置的 <code>.</code> 来包括所有的子域名。例如，<code>.baidu.com</code> 可作用域 <code>www.baidu.com</code> 和 <code>api.baidu.com</code>。而 <code>www.baidu.com</code> 的 <code>Domain</code> 设置则仅可以作用于自身。</p>
-<p><code>HttpOnly</code> 的选项则说明该 cookie 不能通过 JavaScript 来传输，可以一定限度的防止 <code>XSS</code>。<code>Secure</code> 的选项则说明该 cookie 只能通过 SSL 或者 HTTPS 来进行传输。</p>
-<h5 id="cookies-的使用"><a href="#cookies-的使用" class="headerlink" title="cookies 的使用"></a>cookies 的使用</h5><p>首先需要注意一点，任何来自用户的输入都是不可信的。因为当前用户标识是用 cookies 去做的，所以 cookies 的安全很重要。</p>
-<p>需要注意以下几点</p>
-<ol>
-<li>cookies 的过期时间设置尽量短，不要设置过长的时间</li>
-<li>用户修改密码之后，必须让其对应的 cookies 对应的 session 失效。</li>
-<li><code>HttpOnly</code> 和 <code>Secure</code> 的选项尽量用上</li>
-<li>如果可以的话，对 cookies 加入刷新机制</li>
-<li>不要使用 user side session</li>
-</ol>
-<h4 id="cache"><a href="#cache" class="headerlink" title="cache"></a>cache</h4><p>缓存控制包括几个常见的 headers 字段</p>
-<ul>
-<li>ETag 校验值，某个资源的版本标识（指纹），由服务器端自定义生成方式</li>
-<li>If-None-Match 包含在客户端的请求中</li>
-</ul>
-<p>两者的用法是，对于某个请求，服务端返回该资源的 <code>ETag</code> 信息。客户端如果需要再次请求，则需要带上该 <code>ETag</code> 并且包含另一个 <code>If-None-Math: &lt;ETag&gt;</code> header。如果服务器端未修改该资源，则返回 304 即可。</p>
-<ul>
-<li>Last-Modified 当前资源的最后修改时间，包含在响应信息中</li>
-<li>If-Modified-Since 客户端请求时将上次收到的 <code>Last-Modified</code> 发送到服务器进行校验</li>
-</ul>
-<p><code>Last-Modified</code> 只能精确到秒级别，如果和 <code>ETag</code> 一起使用，服务器优先校验 <code>ETag</code>，一致的情况下就会才会比对 <code>Last-Modified</code>。</p>
-<ul>
-<li>Expires 服务端响应信息中返回，告诉客户端该资源的有效期</li>
-<li>Cache-Control<ul>
-<li>no-cache</li>
-<li>no-store</li>
-<li>max-age 允许使用的最大时间，单位为秒</li>
-<li>public 无条件缓存，与其他缓存限制组合使用</li>
-<li>private 只允许用户浏览器等缓存，即该缓存只是私有，CDN 等中介不可缓存</li>
-</ul>
-</li>
-</ul>
-<p><code>no-cache</code> 表示需要与服务器校验该资源是否已经更新，即可配合 <code>ETag</code> 进行使用。相反 <code>no-store</code> 则不进行任何考虑，所有的资源必须重新下载。</p>
-<p><code>Cache-Control</code> 和 <code>Expires</code> 字段都用在服务器的响应信息中。</p>
-<blockquote>
-<p>POST 请求无法被缓存</p>
-</blockquote>
-<p>缓存的最佳实践</p>
-<p><img src="https://developers.google.cn/web/fundamentals/performance/optimizing-content-efficiency/images/http-cache-decision-tree.png" alt="URI, URL, URN"></p>
-<h4 id="自定义字段"><a href="#自定义字段" class="headerlink" title="自定义字段"></a>自定义字段</h4><p>HTTP 的 <code>header</code> 是允许自定义字段的，这些字段通常用于自定义的开发来标示特定的内容，如 Facebook 的 API 的返回数据中，有包含特定的版本信息的字段</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#x27;facebook-api-version&#x27;: &#x27;v2.8&#x27;&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="RESTful-API"><a href="#RESTful-API" class="headerlink" title="RESTful API"></a>RESTful API</h2><p>RESTful 的设计其实就是最大限度的使用 HTTP 协议本身已经定义好东西，包括各种方法作为动词，URI 做为操作的对象，不同的响应信息的返回值，状态码去表示操作的结果。</p>
-<h3 id="以-Facebook-Marketing-API-为例"><a href="#以-Facebook-Marketing-API-为例" class="headerlink" title="以 Facebook Marketing API 为例"></a>以 Facebook Marketing API 为例</h3><p>Facebook Marketing API 用于去创建在 Facebook 上投放的广告。它由四个主要部分组成。</p>
-<ul>
-<li>Ad Account 管理不同的广告账户</li>
-<li>Campaign 广告单元，从属于 Ad Account</li>
-<li>Adset 广告单元，从属于 Campaign，一个 Campaign 包含多个 Adset</li>
-<li>Ad 最小的广告单元，从属于 Adset，一个 Adset 可包含多个 Ad</li>
-</ul>
-<p>一些的 API URI 如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">https://graph.facebook.com/v2.8/&lt;ad_unit_id&gt;</span><br><span class="line">https://graph.facebook.com/v2.8/act_&lt;ad_account_id&gt;</span><br></pre></td></tr></table></figure>
-
-<p>在这里，我们可以看到，在 API 中有指定对应的版本 <code>v2.8</code>。因为 Facebook 的每一个广告单元都有独立的 id，所以上述第一条链接可以直接用于 Campaign 或者 Adset 的读取或者更新。这里，我们称 <code>/&lt;ad_unit_id&gt;</code> 或者 <code>/act_&lt;ad_account_id&gt;</code> 为 endpoint，即表示除了共同前缀的独立部分。</p>
-<p>下面以 Adset 的一系列操作为例</p>
-<ul>
-<li>创建，POST 方法，endpoint 为 <code>/act_&lt;ad_account_id&gt;/adsets</code></li>
-<li>读取，GET 方法，endpoint 为 <code>/&lt;id&gt;</code><ul>
-<li>获取实时的运营数据，GET 方法，endpoint 为 <code>/&lt;id&gt;/insights</code></li>
-<li>获取 Adset 其下的 Ad，GET 方法，endpoint 为 <code>/&lt;id&gt;/ads</code></li>
-</ul>
-</li>
-<li>更新，POST 方法，endpoint 为 <code>/&lt;id&gt;</code></li>
-<li>删除，POST 方法，endpoint 为 <code>/&lt;id&gt;</code>，在参数中指定 <code>status=DELETED</code></li>
-</ul>
-<p>大概总结下</p>
-<ul>
-<li>在 URI 中指定版本号</li>
-<li>操作对象本身以 id 指定，通过 URI 去访问</li>
-<li>对象的层级关系以 URI 中的 <code>/</code> 进行分隔</li>
-<li>读操作用 <code>GET</code>，写操作用 <code>POST</code></li>
-</ul>
-<p>这里跟别的 RESTful 的定义有区别，就是简化了方法，只用 <code>GET</code> 和 <code>POST</code> 来定义读写操作。</p>
-<p>API 的返回信息很简单，通过状态码标示该次操作是否成功，不同的状态码表示不同的错误。例如 400 表示参数错误，401 表示验证错误，404 表示该资源不存在。</p>
-<p>不管成功与否，API 调用的返回结果都会在 body 中以 json 的格式返回。如果是错误，则返回该次错误的原因。</p>
-<h2 id="协议演变"><a href="#协议演变" class="headerlink" title="协议演变"></a>协议演变</h2><h3 id="HTTP-0-9"><a href="#HTTP-0-9" class="headerlink" title="HTTP/0.9"></a>HTTP/0.9</h3><p>HTTP 最初的版本，仅支持 <code>GET</code> 方法，没有 headers，也仅能是 HTML 的内容。</p>
-<h3 id="HTTP-1-0"><a href="#HTTP-1-0" class="headerlink" title="HTTP/1.0"></a>HTTP/1.0</h3><p>加入了更多的方法，支持 headers 信息，支持状态码，支持更多的内容类型。</p>
-<p>主要的问题是 HTTP/1.0 没有支持连接复用，即每次请求之后连接就会关闭，这样子下一次请求必须重新连接，即重新进行 TCP 三次握手。</p>
-<p>后期的一些实现是通过 <code>Connection: keep-alive</code> 来复用连接，但并不是广泛地支持。</p>
-<h3 id="HTTP-1-1"><a href="#HTTP-1-1" class="headerlink" title="HTTP/1.1"></a>HTTP/1.1</h3><p>当前最主流的版本，连接默认是不会关闭的。需要在请求中加入 <code>Connection: close</code> 才会关闭连接。</p>
-<p><code>Host</code> 信息变成强制性，如果没有 <code>Host</code> 则会 400 错误。通过 <code>Host</code> 字段，我们可以在同一个服务器上部署不同的域名的网站。</p>
-<p><code>Pipelining</code> 的支持，在 HTTP/1.0 中，发送请求必须等待确认才行，在 HTTP/1.1 中，支持在同一个连接中发送多个请求而无需确认。这这种情况下，需要 <code>Content-Length</code> 或者分块消息 的支持来判断不同的响应消息是否结束。但即便是管道的支持，也没办法解决 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%98%9F%E5%A4%B4%E9%98%BB%E5%A1%9E">Head-of-line blocking 问题</a>。</p>
-<p>支持 <code>Range</code> 对于同一个资源，可下载指定的 range bytes。</p>
-<h3 id="HTTP-2"><a href="#HTTP-2" class="headerlink" title="HTTP/2"></a>HTTP/2</h3><p>在 HTTP/2 出现之前，Google 的 <code>SPDY</code> 协议也用于解决 HTTP/1.1 的问题。现在基本上已经整合到 HTTP/2 中了。</p>
-<p>HTTP/2 包括以下的特性</p>
-<ol>
-<li>二进制协议，HTTP/2 将由帧（Frames）和流（Streams）种数据组成。例如之前的 headers 和 body 将变成 <code>HEADERS</code> 和 <code>DATA</code> 帧。</li>
-<li>每一个帧都携带唯一的 stream ID 来标示，帧也有自己的 header 和 payload。</li>
-<li>多路复用，相对于 HTTP/1.1 的 pipelining，请求的发送不用依赖于顺序，可以做到异步处理，这些有赖于 stream ID 来标记不同的帧。同时，也可以支持优先级和流量控制。</li>
-<li>HPACK 头信息的压缩。</li>
-<li>服务器推送。</li>
-<li>安全性的提升。</li>
-</ol>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>我们可以看到，在 HTTP 的协议中，主要分 headers 和 body 两个部分。对于一次传输而言，前者定义了该请求的一些元信息，包括数据的长度，编码和类型等等，我们通过这些信息去解析对应的实际内容。</p>
-<p>但我们能限制实现的只能是服务端，客户端的是我们无法控制的，例如不同浏览器对不同的缓存的字段的实现不同，我们能做的就是认真考虑支持各种选项，并加强对客户端请求的校验。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a target="_blank" rel="noopener" href="http://kamranahmed.info/blog/2016/08/13/http-in-depth/">Journey to HTTP/2</a></li>
-<li><a target="_blank" rel="noopener" href="https://imququ.com/post/http2-resource.html">HTTP/2 资料汇总</a></li>
-<li><a target="_blank" rel="noopener" href="http://www.ra.ethz.ch/cdstore/www8/data/2136/pdf/pd1.pdf">Key differences between HTTP/1.0 and HTTP/1.1</a></li>
-<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/HTTP%E5%A4%B4%E5%AD%97%E6%AE%B5%E5%88%97%E8%A1%A8">HTTP headers 字段信息</a></li>
-<li><a target="_blank" rel="noopener" href="https://imququ.com/post/transfer-encoding-header-in-http.html">HTTP 协议中的 Transfer-Encoding</a></li>
-<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Cookies">cookies 详解</a></li>
-<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Set-Cookie">Set-Cookie 详解</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.v2ex.com/t/170974#reply49">关于静态资源使用不同的域名的讨论</a></li>
-<li><a target="_blank" rel="noopener" href="http://www.alloyteam.com/2012/03/web-cache-2-browser-cache/">Web 缓存机制</a></li>
-<li><a target="_blank" rel="noopener" href="https://developers.google.cn/web/fundamentals/performance/optimizing-content-efficiency/http-caching?hl=zh-cn">HTTP 缓存的实践</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/aisuhua/restful-api-design-references">RESTful API 的参考</a></li>
-<li><a target="_blank" rel="noopener" href="https://developers.facebook.com/docs/marketing-api/reference">Facebook Marketing API</a></li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/01/10/http-notes/" data-id="ckx7kmlc6000wrzc852b70fbk" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/" rel="tag">http</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-golang-error-handle" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/12/12/golang-error-handle/" class="article-date">
-  <time datetime="2016-12-11T16:00:00.000Z" itemprop="datePublished">2016-12-12</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/12/golang-error-handle/">Golang 错误处理</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Golang 中 error 的类型定义很简单，就是一个 <a target="_blank" rel="noopener" href="https://github.com/golang/go/blob/master/src/builtin/builtin.go#L254">interface</a></p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> error <span class="keyword">interface</span> &#123;</span><br><span class="line">	Error() <span class="keyword">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在标准库中，可以使用 <code>errors</code> 和 <code>fmt</code> 包来生成 error</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e1 := fmt.Errorf(<span class="string">&quot;%s&quot;</span>, <span class="string">&quot;error&quot;</span>)</span><br><span class="line">e2 := errors.New(<span class="string">&quot;error&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<h2 id="error-是变量，可用于比较"><a href="#error-是变量，可用于比较" class="headerlink" title="error 是变量，可用于比较"></a>error 是变量，可用于比较</h2><p>因为 error 是可比较的，我们可以通过比较来进行判断具体的错误。</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> (</span><br><span class="line">	error1 = fmt.Errorf(<span class="string">&quot;error1&quot;</span>)</span><br><span class="line">	error2 = fmt.Errorf(<span class="string">&quot;error2&quot;</span>)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">F</span><span class="params">()</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> error1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	err := F()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">switch</span> err &#123;</span><br><span class="line">		<span class="keyword">case</span> error1:</span><br><span class="line">			fmt.Println(error1)</span><br><span class="line">		<span class="keyword">case</span> error2:</span><br><span class="line">			fmt.Println(error2)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>例如，在 <a target="_blank" rel="noopener" href="https://github.com/go-pg/pg">go-pg</a> 这个开源项目中，也在代码中定义了相应的 error 供我们判断情况 <a target="_blank" rel="noopener" href="https://github.com/go-pg/pg/blob/v5/error.go">error.go</a>。下面的代码就是用来判断当做的错误是不是网络错误。</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">isNetworkError</span><span class="params">(err error)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> err == io.EOF &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">	&#125;</span><br><span class="line">	_, ok := err.(net.Error)</span><br><span class="line">	<span class="keyword">return</span> ok</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="压缩代码行数"><a href="#压缩代码行数" class="headerlink" title="压缩代码行数"></a>压缩代码行数</h2><p>在刚接触 Golang 的时候，我在每个返回 error 的函数中都进行了判断与返回，这样就导致了代码都长下面这样</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">d, err := F()</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	fmt.Println(err)</span><br><span class="line">	<span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">c, err := F1()</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	fmt.Println(err)</span><br><span class="line">	<span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>可以如下的写法，减少代码行数</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> d <span class="keyword">int</span></span><br><span class="line"><span class="keyword">if</span> d, err := F(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">	fmt.Println(err) <span class="comment">// some int</span></span><br><span class="line">	<span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br><span class="line">fmt.Println(d) <span class="comment">// 0</span></span><br></pre></td></tr></table></figure>
-
-<p>这种写法适合遇到 error 就直接返回上层函数的情况。</p>
-<p>不管是上面的代码，还是之前的代码，都有一个 <code>:=</code> 导致的作用域的小坑需要注意一下。如果 <code>:=</code> 左边的某个变量在外部的作用域已经定义，这里面的赋值会导致屏蔽掉外部的变量，创建一个新的变量在当前的作用域使用。如果需要对外部的变量进行变更的话，则需要赋值的 <code>=</code>。</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">wrapper</span><span class="params">()</span> <span class="params">(err error)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">		n, err := work(i)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="comment">// err is shadowed during return</span></span><br><span class="line">		&#125;</span><br><span class="line">		fmt.Println(n)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>上述的例子就是 err 被屏蔽了，会出现编译错误。</p>
-<h2 id="错误统一处理"><a href="#错误统一处理" class="headerlink" title="错误统一处理"></a>错误统一处理</h2><p>还有一种写法就是，通过一个 struct 内部的 error 变量来获知是否有错误发生。例如</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Controler <span class="keyword">struct</span> &#123;</span><br><span class="line">	err error</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *Controler)</span> <span class="title">Work</span><span class="params">(num <span class="keyword">int</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> num &gt; <span class="number">5</span> &#123;</span><br><span class="line">		c.err = fmt.Errorf(<span class="string">&quot;Number too big&quot;</span>)</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	fmt.Println(num)</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *Controler)</span> <span class="title">InError</span><span class="params">()</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> c.err != <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *Controler)</span> <span class="title">Error</span><span class="params">()</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> c.err</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	c := Controler&#123;&#125;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">		c.Work(i)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> c.InError() &#123;</span><br><span class="line">		fmt.Println(c.Error())</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在上述的代码中，我不关心哪个步骤出了问题，我关心的是整体是否出错。这种场景下就可以用这种方法进行错误处理。同时，缺点也是优点，我们就会不知道到底哪里出的问题。</p>
-<h2 id="错误还是异常"><a href="#错误还是异常" class="headerlink" title="错误还是异常"></a>错误还是异常</h2><p>Golang 中在语法层面区分了错误和异常，就是 <code>error</code> 和 <code>panic</code> 的区别。panic 函数实际上就是强制停止了函数，并返回上层函数，如果上层函数没有做 recover 检查的话（当然也可以在当前函数的 defer 处使用 recover），则整个程序就会停止。</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">div</span><span class="params">(x, y <span class="keyword">float64</span>)</span> <span class="title">float64</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> y == <span class="number">0</span> &#123;</span><br><span class="line">		<span class="built_in">panic</span>(<span class="string">&quot;zero&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> x / y</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">work</span><span class="params">(x, y <span class="keyword">float64</span>)</span> <span class="title">float64</span></span> &#123;</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="keyword">if</span> r := <span class="built_in">recover</span>(); r != <span class="literal">nil</span> &#123;</span><br><span class="line">			fmt.Println(<span class="string">&quot;Recovered in div&quot;</span>, r)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">return</span> div(x, y)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	x := <span class="number">1.0</span></span><br><span class="line">	y := <span class="number">0.0</span></span><br><span class="line">	fmt.Println(work(x, y))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在标准库中，<a target="_blank" rel="noopener" href="https://golang.org/src/encoding/json/decode.go#L151">json 的 decode.go</a> 中有使用 panic 的例子。在解析 json 格式的时候有多个递归，如果其中一个遇到错误，则调用 panic 函数，整个调用栈就会相继退出，然后在最上层的函数调用 recover 进行捕获。</p>
-<p>然而，不少的标准库其实也没有太多地使用 panic 这个功能，第三方库更多也是以 error 代替这个功能。<a target="_blank" rel="noopener" href="https://golang.org/doc/effective_go.html#panic">Effective Go</a> 中也推荐我们少用 panic 这个函数。</p>
-<p>异常处理在 Golang 中更多是通过比较 error 的值来进行，不同的 error 执行不同的函数，当然，这样就意味着我们必须在二值返回的时候认真处理 error，所以有时候代码真的不能太优雅。</p>
-<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>上述的所有基础来自 error 是可比较的，interface 的相等是双方都是类型相同，并且方法 Error 的返回值相同。也正因为它是 interface 所以可以用于与 nil 的比较。</p>
-<p>Golang 的错误处理我觉得很奇怪，我是习惯了 Python 那种使用 <code>try ... except</code> 代码块包含的方式去处理错误 / 异常，这里我必须每个函数调用都判断一次。</p>
-<p>例如在 <a target="_blank" rel="noopener" href="https://github.com/go-pg/pg#select">go-pg</a> 中，通过 id 查询一个 model 的使用，如果找不到该记录的话，他是会返回一个找不到记录的错误，如果当前数据库那边有问题，该错误就会表示数据库那边的问题。但如果你是通过条件去找一堆 <code>id</code> 的话</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ids []<span class="keyword">int</span></span><br><span class="line">err := db.Model(&amp;Book&#123;&#125;).ColumnExpr(<span class="string">&quot;array_agg(id)&quot;</span>).Select(pg.Array(&amp;ids))</span><br></pre></td></tr></table></figure>
-
-<p>如果找不到，这个 <code>err</code> 也还是 <code>nil</code>。这个处理逻辑的确是会让人迷惑。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
-<li><a target="_blank" rel="noopener" href="https://golang.org/ref/spec#Comparison_operators">Golang 中的比较</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.golang.org/defer-panic-and-recover">Defer, Panic and Recover</a></li>
-<li><a target="_blank" rel="noopener" href="http://www.infoq.com/cn/news/2012/11/go-error-handle">Golang 的错误处理机制的争议</a></li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/12/12/golang-error-handle/" data-id="ckx7kmlc5000urzc82vaa2jpi" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/error/" rel="tag">error</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/" rel="tag">golang</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-golang-sync-package" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/10/29/golang-sync-package/" class="article-date">
-  <time datetime="2016-10-28T16:00:00.000Z" itemprop="datePublished">2016-10-29</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/29/golang-sync-package/">Golang sync 相关使用</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文大概讲下 golang sync 包的相关用法。sync 用在较为底层的库的同步上面，别的情况是推荐使用 channel 来同步进程。</p>
-<h2 id="Mutex"><a href="#Mutex" class="headerlink" title="Mutex"></a>Mutex</h2><p>sync 包里面有两种互斥锁，分别是 <code>sync.Mutex</code> 和 <code>sync.RWMutex</code>。前者是基本的互斥锁，后者在前者的基础上实现的读写锁。</p>
-<p>在这里我有一个简单的 stack 的实现，这里仅列出 push 方法的实现，可以看到，线程安全的的 stack 的 push 方法仅仅是比普通的 push 多出一个加锁解锁的过程。</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Stack <span class="keyword">struct</span> &#123;</span><br><span class="line">	data  []<span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">	count <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> SafeStack <span class="keyword">struct</span> &#123;</span><br><span class="line">	stack *Stack</span><br><span class="line">	sync.RWMutex</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *Stack)</span> <span class="title">Push</span><span class="params">(item <span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(s.data) == s.count &#123;</span><br><span class="line">		s.data = <span class="built_in">append</span>(s.data, item)</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		s.data[s.count] = item</span><br><span class="line">	&#125;</span><br><span class="line">	s.count += <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *SafeStack)</span> <span class="title">Push</span><span class="params">(item <span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;</span><br><span class="line">	s.Lock()</span><br><span class="line">	<span class="keyword">defer</span> s.Unlock()</span><br><span class="line">	s.stack.Push(item)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这里有个简单的 benchmark，简单的加锁解锁之后的性能仅剩下之前的十分之一了。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">BenchmarkStack-4        30000000                38.4 ns/op</span><br><span class="line">BenchmarkSafeStack-4     3000000                403 ns/op</span><br></pre></td></tr></table></figure>
-
-<h2 id="Pool"><a href="#Pool" class="headerlink" title="Pool"></a>Pool</h2><p>临时变量池。值得注意的是，golang 在 GC 的时候会将所有的 Pool 的临时变量全部删除，所以并不适合用在需要持久化用的环境里面。</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> pool = sync.Pool&#123;</span><br><span class="line">	New: <span class="function"><span class="keyword">func</span><span class="params">()</span> <span class="title">interface</span></span>&#123;&#125; &#123;</span><br><span class="line">		b := <span class="built_in">make</span>([]<span class="keyword">int</span>, <span class="number">1</span>)</span><br><span class="line">		<span class="keyword">return</span> &amp;b</span><br><span class="line">	&#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	s := pool.Get().(*[]<span class="keyword">int</span>)</span><br><span class="line">	(*s)[<span class="number">0</span>] = <span class="number">99</span></span><br><span class="line">	pool.Put(s)</span><br><span class="line">	fmt.Println(s) <span class="comment">// &amp;[99]</span></span><br><span class="line"></span><br><span class="line">	d := pool.Get().(*[]<span class="keyword">int</span>)</span><br><span class="line">	fmt.Println(d) <span class="comment">// &amp;[99]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="WaitGroup"><a href="#WaitGroup" class="headerlink" title="WaitGroup"></a>WaitGroup</h2><p>WaitGroup 用在等待子 goroutine 的场景。主 routine 通过指定需要等待的 routine 的个数，然后子 routine 手动通知上层任务完成。</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 注意这里不可直接用 wg 变量，而是需要传地址</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">work</span><span class="params">(i <span class="keyword">int</span>, wg *sync.WaitGroup)</span></span> &#123;</span><br><span class="line">	<span class="keyword">defer</span> wg.Done()</span><br><span class="line">	fmt.Printf(<span class="string">&quot;Work %d\n&quot;</span>, i)</span><br><span class="line">	time.Sleep(time.Duration(<span class="number">1</span>) * time.Second)</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">		wg.Add(<span class="number">1</span>)</span><br><span class="line">		<span class="keyword">go</span> work(i, &amp;wg)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 如果 work 直接传值，这里就会死锁</span></span><br><span class="line">	<span class="comment">// fatal error: all goroutines are asleep - deadlock!</span></span><br><span class="line">	wg.Wait()</span><br><span class="line">	fmt.Println(<span class="string">&quot;done&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="Cond"><a href="#Cond" class="headerlink" title="Cond"></a>Cond</h2><p>条件变量，初始化时需要指定 locker。用于等待条件触发再去执行之后的操作。</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">work</span><span class="params">(c *sync.Cond)</span></span> &#123;</span><br><span class="line">	time.Sleep(time.Duration(<span class="number">1</span>) * time.Second)</span><br><span class="line">	fmt.Println(<span class="string">&quot;Notify main&quot;</span>)</span><br><span class="line">	c.Signal()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> (</span><br><span class="line">		locker = <span class="built_in">new</span>(sync.Mutex)</span><br><span class="line">		cond   = sync.NewCond(locker)</span><br><span class="line">	)</span><br><span class="line">	cond.L.Lock()</span><br><span class="line">	<span class="keyword">go</span> work(cond)</span><br><span class="line">	cond.Wait()</span><br><span class="line">	fmt.Println(<span class="string">&quot;Done&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>也可以广播</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">work</span><span class="params">(cond *sync.Cond, i <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	cond.L.Lock()</span><br><span class="line">	<span class="keyword">defer</span> cond.L.Unlock()</span><br><span class="line">	cond.Wait()</span><br><span class="line">	fmt.Println(<span class="string">&quot;work&quot;</span>, i)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> cond = sync.NewCond(<span class="built_in">new</span>(sync.Mutex))</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">		<span class="keyword">go</span> work(cond, i)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 下面的 sleep 很重要</span></span><br><span class="line">	time.Sleep(time.Duration(<span class="number">2</span>) * time.Second)</span><br><span class="line">	fmt.Println(<span class="string">&quot;Wake up&quot;</span>)</span><br><span class="line">	cond.Broadcast()</span><br><span class="line">	time.Sleep(time.Duration(<span class="number">20</span>) * time.Second)</span><br><span class="line">	fmt.Println(<span class="string">&quot;Done&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>上述的代码我调试的时候出现了诡异的不稳定状态，work 函数中一直没有输出，或者没有输出全部的信息。</p>
-<p>之前的代码中不包含上述的 sleep 两秒的代码，后来找了很久的原因无意中看到说有可能出现竞争。即 <code>cond.Broadcast()</code> 的执行优先于 work 的 <code>cond.L.Lock()</code>。因为广播是通知所有在 wait 的 routine。Golang 并不保证 routine 的执行顺序，所以应该有外部手段去控制相应的执行顺序。</p>
-<p>为了解决上述的问题，官方文档推荐</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">c.L.Lock()</span><br><span class="line"><span class="keyword">for</span> !condition() &#123;</span><br><span class="line">    c.Wait()</span><br><span class="line">&#125;</span><br><span class="line">... <span class="built_in">make</span> use of condition ...</span><br><span class="line">c.L.Unlock()</span><br></pre></td></tr></table></figure>
-
-<p>通过额外的变量 condition 去控制 wait 的时机，这个就是后话了。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>除了上述的数据结构，还有 <code>sync.Once</code> 等有用的东西，更多可参考官方文档。在我看来，互斥锁加上 channel 已经可以解决绝大部分的问题了。</p>
-<p>需要注意的是，所有 sync 包的提供的数据结构都不允许复制，如果需要函数传值，则必须使用传地址的方式。这里还有很多细节还没有详细写，也可以看看 <a target="_blank" rel="noopener" href="https://github.com/polaris1119/The-Golang-Standard-Library-by-Example/blob/master/chapter16/16.01.md">别人的</a> 的关于 sync 的使用。</p>
-<p>sync 库的应用场景更偏向与底层，更高层的进程间通信更应该使用 channel 来使用，两者应该是相辅相成的关系。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
-<li><a target="_blank" rel="noopener" href="https://medium.com/@deckarep/dancing-with-go-s-mutexes-92407ae927bf#.yflgzc611">Dancing with go’s mutexes</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/golang/go/wiki/MutexOrChannel">Mutex or channel</a></li>
-<li><a target="_blank" rel="noopener" href="https://golang.org/pkg/sync/">sync 官方文档</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/polaris1119/The-Golang-Standard-Library-by-Example/blob/master/chapter16/16.01.md">别人写得 sync 包的使用</a></li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/10/29/golang-sync-package/" data-id="ckx7kmlc5000trzc8e3awe9yc" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sync/" rel="tag">sync</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-golang-context" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/10/19/golang-context/" class="article-date">
-  <time datetime="2016-10-18T16:00:00.000Z" itemprop="datePublished">2016-10-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/19/golang-context/">Golang context</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在去使用 Golang context 之前，推荐先去看 Golang pipeline 的<a target="_blank" rel="noopener" href="https://blog.golang.org/pipelines">博文</a>，这里有讲到 Golang channel 的一些使用的技巧。</p>
-<blockquote>
-<p>1.6 的版本只能通过 <code>golang.org/x/net/context</code> 来使用， 1.7 之后才可以通过直接引用来使用</p>
-</blockquote>
-<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p>Golang 创建了 goroutine 之后，在外部很难进行干预（只能依靠一个 chan 的关闭来通知）或者一些需要处理超时的请求很不方便，特别是多个 goroutine 进行协同工作时，我们需要一种模式来协同工作。</p>
-<p>Golang 的 context 包就是解决这类问题的，它的基本结构如下</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Context <span class="keyword">interface</span> &#123;</span><br><span class="line">    Done() &lt;-<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line">    Err() error</span><br><span class="line">    Deadline() (deadline time.Time, ok <span class="keyword">bool</span>)</span><br><span class="line">    Value(key <span class="keyword">interface</span>&#123;&#125;) <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>下面以一些常见的例子来讲解下</p>
-<h3 id="超时处理"><a href="#超时处理" class="headerlink" title="超时处理"></a>超时处理</h3><p>Golang 官方 wiki 的超时处理是 <a target="_blank" rel="noopener" href="https://github.com/golang/go/wiki/Timeouts">这样的</a></p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">c := <span class="built_in">make</span>(<span class="keyword">chan</span> error, <span class="number">1</span>)</span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123; c &lt;- client.Call(<span class="string">&quot;Service.Method&quot;</span>, args, &amp;reply) &#125; ()</span><br><span class="line"><span class="keyword">select</span> &#123;</span><br><span class="line">  <span class="keyword">case</span> err := &lt;-c:</span><br><span class="line">    <span class="comment">// use err and reply</span></span><br><span class="line">  <span class="keyword">case</span> &lt;-time.After(timeoutNanoseconds):</span><br><span class="line">    <span class="comment">// call timed out</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>通过另外起 goroutine 来执行操作，本身则进行计时。当然简单的任务可以这样玩，但如果多个函数调用就非常囧了。我们假设有个函数如下</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">work</span><span class="params">(ctx context.Context)</span> <span class="params">(err error)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		<span class="keyword">select</span> &#123;</span><br><span class="line">		<span class="keyword">case</span> &lt;-ctx.Done():</span><br><span class="line">			<span class="keyword">return</span> ctx.Err()</span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			fmt.Println(<span class="string">&quot;working&quot;</span>)</span><br><span class="line">			time.Sleep(time.Duration(<span class="number">1</span>) * time.Second)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>则我们可以在 main 函数中这样用</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> (</span><br><span class="line">	ctx    context.Context</span><br><span class="line">	cancel context.CancelFunc</span><br><span class="line">)</span><br><span class="line">ctx, cancel = context.WithTimeout(context.Background(), time.Duration(<span class="number">2</span>)*time.Second)</span><br><span class="line"><span class="keyword">defer</span> cancel()</span><br><span class="line"></span><br><span class="line">c := <span class="built_in">make</span>(<span class="keyword">chan</span> error, <span class="number">1</span>)</span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123; c &lt;- work(ctx) &#125;()</span><br><span class="line"><span class="keyword">select</span> &#123;</span><br><span class="line"><span class="keyword">case</span> &lt;-ctx.Done():</span><br><span class="line">	fmt.Println(<span class="string">&quot;Timeout&quot;</span>)</span><br><span class="line">	fmt.Println(ctx.Err()) <span class="comment">// context deadline exceeded</span></span><br><span class="line"><span class="keyword">case</span> err := &lt;-c:</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Sprintf(<span class="string">&quot;Error occor %s\n&quot;</span>, err)</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;Prefect work&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这个例子其实跟之前 timeout 的做法类似，通过 goroutine 设置超时限制来达到控制函数超时的目的。那么我们多出来了什么？这里最明显的就是 <code>context.CancelFunc</code> 这个可以从外部控制的函数。除此之外，我们也可以通过参数 <code>ctx</code> 来通知子 context 外部的情况，如果外部取消或者超时了，我们可以进行诸如资源释放的操作，最后安全退出。</p>
-<h3 id="外部控制"><a href="#外部控制" class="headerlink" title="外部控制"></a>外部控制</h3><p>如果在 ctx 对应的函数执行的过程中，外部的情况发生了变化，例如手动取消了进程，则该 goroutine 下对应的子 goroutine 也应该取消之后的操作。</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> (</span><br><span class="line">	ctx    context.Context</span><br><span class="line">	cancel context.CancelFunc</span><br><span class="line">)</span><br><span class="line">ctx, cancel = context.WithCancel(context.Background())</span><br><span class="line"><span class="keyword">defer</span> cancel()</span><br><span class="line"></span><br><span class="line">c := <span class="built_in">make</span>(<span class="keyword">chan</span> error, <span class="number">1</span>)</span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123; c &lt;- work(ctx) &#125;()</span><br><span class="line"><span class="keyword">select</span> &#123;</span><br><span class="line"><span class="keyword">case</span> &lt;-time.After(time.Duration(<span class="number">1</span>) * time.Second):</span><br><span class="line">	cancel()</span><br><span class="line">	fmt.Println(ctx.Err()) <span class="comment">// context canceled</span></span><br><span class="line"><span class="keyword">case</span> err := &lt;-c:</span><br><span class="line">	fmt.Println(err)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这里是外部取消了 work 的后续操作。同样的，之前的 <code>WithCancel</code> 也返回 cancel 函数可供使用，两者是等效的。</p>
-<h2 id="with-函数"><a href="#with-函数" class="headerlink" title="with 函数"></a>with 函数</h2><p><code>context</code> 提供了几组 with 开头的方法，包括上面我们看到的 <code>WithCancel</code> 和 <code>WithTimeout</code>。它们的共同作用都是继承父级 context 来创建子 context，如果父级的 context 关闭了，其下的 context 也会关闭。</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> (</span><br><span class="line">	ctx0    context.Context</span><br><span class="line">	cancel0 context.CancelFunc</span><br><span class="line">	ctx1    context.Context</span><br><span class="line">	cancel1 context.CancelFunc</span><br><span class="line">)</span><br><span class="line">ctx0, cancel0 = context.WithTimeout(context.Background(), time.Duration(<span class="number">50</span>)*time.Second)</span><br><span class="line"><span class="keyword">defer</span> cancel0()</span><br><span class="line"></span><br><span class="line">ctx1, cancel1 = context.WithTimeout(ctx0, time.Duration(<span class="number">100</span>)*time.Second)</span><br><span class="line"><span class="keyword">defer</span> cancel1()</span><br><span class="line"></span><br><span class="line">c0 := <span class="built_in">make</span>(<span class="keyword">chan</span> error, <span class="number">1</span>)</span><br><span class="line">c1 := <span class="built_in">make</span>(<span class="keyword">chan</span> error, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123; c0 &lt;- work0(ctx0) &#125;()</span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123; c1 &lt;- work1(ctx1) &#125;()</span><br><span class="line">time.Sleep(time.Duration(<span class="number">3</span>) * time.Second)</span><br><span class="line">fmt.Println(<span class="string">&quot;cancel work0&quot;</span>)</span><br><span class="line">cancel0()</span><br><span class="line">time.Sleep(time.Duration(<span class="number">10</span>) * time.Second)</span><br></pre></td></tr></table></figure>
-
-<p>上述的 <code>work0</code> 和 <code>work1</code> 函数的实现和之前的 <code>work</code> 一样，只是输出不同，下面是这个函数的输出</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">work1 is working</span><br><span class="line">work0 is working</span><br><span class="line">work1 is working</span><br><span class="line">work0 is working</span><br><span class="line">work1 is working</span><br><span class="line">work0 is working</span><br><span class="line">cancel work0</span><br><span class="line">// wait 10s but nothing else</span><br></pre></td></tr></table></figure>
-
-<p>输出明确了 ctx0 和 ctx1 的关系。</p>
-<h2 id="补充说明"><a href="#补充说明" class="headerlink" title="补充说明"></a>补充说明</h2><p>在上述的代码中，都有用到 <code>context.Background()</code> 这个 context，这是最顶层的 context，伴随程序的生命周期。所有的 context 都从这里来，所以新建 context 的时候需要指定从这里派生出新的 context。</p>
-<p>除了之前提到的超时和取消的函数之外，context 还可以传递参数</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">WithValue</span><span class="params">(parent Context, key <span class="keyword">interface</span>&#123;&#125;, val <span class="keyword">interface</span>&#123;&#125;)</span> <span class="title">Context</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// for use</span></span><br><span class="line">value, ok := ctx.Value(key).(<span class="keyword">string</span>)</span><br></pre></td></tr></table></figure>
-
-<p>这个参数不是用来传递普通参数的，设计的初衷是用来传递 <code>request-scoped</code> 的参数，元数据。</p>
-<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
-<li>ctx 变量推荐作为函数的第一个参数传递使用，而不要放在结构体中</li>
-<li>ctx 变量可以多个 goroutine 一起使用，不必担心安全问题</li>
-<li>cancel 函数在声明之后应该直接跟着 <code>defer</code> 来使用</li>
-</ol>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
-<li><a target="_blank" rel="noopener" href="https://blog.golang.org/pipelines">Golang 使用 channel 实现 pipeline 模式</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.golang.org/context">Golang context 应用</a></li>
-<li><a target="_blank" rel="noopener" href="https://talks.golang.org/2014/gotham-context.slide#1">Golang context talk</a></li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/10/19/golang-context/" data-id="ckx7kmlc3000przc83pledq1j" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/context/" rel="tag">context</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/" rel="tag">golang</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-golang-expression" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/10/04/golang-expression/" class="article-date">
-  <time datetime="2016-10-03T16:00:00.000Z" itemprop="datePublished">2016-10-04</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/04/golang-expression/">Golang 算术表达式解析</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>项目中需要用到解析算术表达式的模块，简单来说，就是 <code>eval</code> 函数，但并没有相应的标准库有类似的实现，所以想使用栈实现一个简单的算术表达式解析的模块。</p>
-<p>首先，需要明确的是运算符优先级，这里只需要实现加减乘除，括号，and，or，不等号相关的符号即可。对应的优先级如下</p>
-<ol>
-<li>括号</li>
-<li>类型运算符（前缀 + -）</li>
-<li>乘，除</li>
-<li>加，减</li>
-<li>大于，小于，不大于，不小于</li>
-<li>不等于，等于</li>
-<li>and</li>
-<li>or</li>
-</ol>
-<p>程序需要做的就是把优先级相关的东西去掉，然后转化成后缀表达式，即逆波兰表达式。</p>
-<h2 id="处理流程"><a href="#处理流程" class="headerlink" title="处理流程"></a>处理流程</h2><p>需要两个栈，<code>result</code> 和 <code>ops</code> 前者用于保存结果，后者用于暂存操作符。</p>
-<ol>
-<li>如果遇到操作数，则 <code>result</code> 入栈</li>
-<li>如果遇到操作符，则检查 <code>ops</code> 栈顶元素优先级</li>
-<li>如果其优先级不低于当前操作符（左括号除外），则弹出 <code>ops</code> 栈顶元素并压入 <code>result</code> 中</li>
-<li>重复此过程直到 <code>ops</code> 栈顶元素优先级小于当前操作符，或为左括号，或者 <code>ops</code> 为空</li>
-<li>将当前操作符压入 <code>ops</code> 中</li>
-<li>如果遇到左括号，直接压入 <code>ops</code></li>
-<li>如果遇到右括号，则将 <code>ops</code> 中元素弹出，直到遇到左括号为止。左括号只弹出栈而不输出</li>
-<li>表达式处理完毕，则将栈中元素依次压入 <code>result</code> 中</li>
-</ol>
-<p>例如，<code>1 * 2 + 3 * 4</code> 就变成 <code>1 2 * 3 4 * +</code>。后缀表达式的计算比中缀要容易得多，也不需要关心优先级，只需要简单的使用栈处理下就好。这里需要注意的是，由于比较运算法需要关注左右操作数的位置，所以实际运算的时候需要注意使用栈弹出之后位置就发生了交换。</p>
-<p>上面的逻辑没有处理 <code>+</code> <code>-</code> 的类型前缀的情况。如果需要进行相关处理，则需要判断符号前面是不是数，如果是数的话，则认为当前的符号是二元操作符。因为一元操作符比二元操作符的优先级高，所以也可以将其转化为二元操作符。例如 <code>-1 + 1</code> 则可转变为 <code>-1 * 1 + 1</code>。</p>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>首先用正则解析出合法的输入</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> legalArthmeticRegex <span class="keyword">string</span> = <span class="string">`^(\d+(\.\d+)?|\+|\-|\*|\/|and|or|\(|\)|==|&gt;=|&lt;=|!=|&gt;|&lt;)+$`</span></span><br></pre></td></tr></table></figure>
-
-<p>然后需要实现一个简单的 <a target="_blank" rel="noopener" href="https://github.com/lycheng/gox/blob/master/stacks/stack.go">stack</a>，Golang 里面竟然没有实现 stack 这样的东西啊。</p>
-<p>然后解析出来之后，将其转为逆波兰式，这里需要用到 stack 来帮助解析。解析出来之后的计算就很简单了。</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">calculateRPN</span><span class="params">(tokens []<span class="keyword">string</span>)</span> <span class="params">(result <span class="keyword">float64</span>, err error)</span></span> &#123;</span><br><span class="line">	stack := stacks.NewStack()</span><br><span class="line">	<span class="keyword">for</span> _, token := <span class="keyword">range</span> tokens &#123;</span><br><span class="line">		<span class="keyword">if</span> isNumber(token) &#123;</span><br><span class="line">			stack.Push(token)</span><br><span class="line">			<span class="keyword">continue</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> stack.Size() &lt; <span class="number">2</span> &#123;</span><br><span class="line">			err = fmt.Errorf(<span class="string">&quot;reverse polish notation is wrong&quot;</span>)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">		b := stack.Pop()</span><br><span class="line">		a := stack.Pop()</span><br><span class="line">		result, err = calculate(a.(<span class="keyword">string</span>), b.(<span class="keyword">string</span>), token)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">		stack.Push(fmt.Sprintf(<span class="string">&quot;%.2f&quot;</span>, result))</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>最后输出的结果是 <code>float64</code> 的类型，布尔类型的结果只能以是否为 0 来进行判断。</p>
-<h2 id="高级玩法"><a href="#高级玩法" class="headerlink" title="高级玩法"></a>高级玩法</h2><p>使用后缀表达式，没办法解决例如 <code>and</code> <code>or</code> 的优化，只能简单的处理计算而已。</p>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>其实真正写的时间就一个下午而已，使用栈来实现的算法也是一搜一大堆。写下来发现其实感觉编译原理挺好玩的。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
-<li><a target="_blank" rel="noopener" href="https://github.com/lycheng/gox">gox</a></li>
-<li><a target="_blank" rel="noopener" href="https://msdn.microsoft.com/zh-cn/library/126fe14k.aspx">C++ 运算符优先级</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/zdebeer99/goexpression">github 上一个类似的 Golang 项目 goexpression</a></li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/10/04/golang-expression/" data-id="ckx7kmlc2000nrzc88umie2tv" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/eval/" rel="tag">eval</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/" rel="tag">golang</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-golang-reflect-performance" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/08/07/golang-reflect-performance/" class="article-date">
-  <time datetime="2016-08-06T16:00:00.000Z" itemprop="datePublished">2016-08-07</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/07/golang-reflect-performance/">Golang reflect 性能测试</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这阵子用 Golang 实现了一个类似于 python <code>in</code> 语法的小函数，项目 <a target="_blank" rel="noopener" href="https://github.com/lycheng/gox">gox</a> 的 benchmark 测试的结果如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">BenchmarkOriIn-4        500000000                3.22 ns/op</span><br><span class="line">BenchmarkMyIn-4         10000000               175 ns/op</span><br><span class="line">BenchmarkOriMapIn-4     100000000               16.3 ns/op</span><br><span class="line">BenchmarkMyMapIn-4       2000000               784 ns/op</span><br><span class="line">ok      github.com/lycheng/gox/container        7.939s</span><br></pre></td></tr></table></figure>
-
-<p>其中，OriIn 是顺序查询 slice 和 array 的元素是否存在，OriMapIn 是原生的语法去判断 key 是否存在。上述的结果可以看到相当巨大的性能差异。</p>
-<p>我实现的 In 的函数在处理 Map 的时候是通过遍历 keys 来查询的，因此每次的类型判断乘上数据量不仅仅是一个跟 N 有关的线性增长。</p>
-<h2 id="profile"><a href="#profile" class="headerlink" title="profile"></a>profile</h2><p>使用 Golang 的 <code>runtime/pprof</code> 包来检查相应的 CPU 消耗，这里不考虑内存消耗的问题。</p>
-<p>profile 程序</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;flag&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;log&quot;</span></span><br><span class="line">	<span class="string">&quot;os&quot;</span></span><br><span class="line">	<span class="string">&quot;runtime/pprof&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/lycheng/gox/container&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> cpuprofile = flag.String(<span class="string">&quot;cpuprofile&quot;</span>, <span class="string">&quot;gox.prof&quot;</span>, <span class="string">&quot;write cpu profile to file&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// l 如果太大则会内存不足</span></span><br><span class="line"><span class="keyword">var</span> l = flag.Int(<span class="string">&quot;len&quot;</span>, <span class="number">100000000</span>, <span class="string">&quot;find item in N sequence&quot;</span>)</span><br><span class="line"><span class="keyword">var</span> ori = flag.Bool(<span class="string">&quot;ori&quot;</span>, <span class="literal">false</span>, <span class="string">&quot;use ori array func&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">oriFind</span><span class="params">(item <span class="keyword">int</span>, items []<span class="keyword">int</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> _, i := <span class="keyword">range</span> items &#123;</span><br><span class="line">		<span class="keyword">if</span> i == item &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	flag.Parse()</span><br><span class="line">	<span class="keyword">if</span> *cpuprofile != <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">		f, err := os.Create(*cpuprofile)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Fatal(err)</span><br><span class="line">		&#125;</span><br><span class="line">		pprof.StartCPUProfile(f)</span><br><span class="line">		<span class="keyword">defer</span> pprof.StopCPUProfile()</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	items := []<span class="keyword">int</span>&#123;&#125;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; *l; i++ &#123;</span><br><span class="line">		items = <span class="built_in">append</span>(items, i)</span><br><span class="line">	&#125;</span><br><span class="line">	item := items[<span class="built_in">len</span>(items)<span class="number">-1</span>]</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> *ori &#123;</span><br><span class="line">		fmt.Println(oriFind(item, items))</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		fmt.Println(container.In(item, items))</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>应用如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&gt; go build profile.go</span><br><span class="line"></span><br><span class="line"># 简单的数组遍历</span><br><span class="line">&gt; ./profile -ori true</span><br><span class="line">true</span><br><span class="line"></span><br><span class="line"># 使用 reflect</span><br><span class="line">&gt; ./profile</span><br><span class="line">true</span><br></pre></td></tr></table></figure>
-
-<p>相对不用 <code>reflect</code> 只是简单的整型数组的查找，top10 的消耗如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&gt; go tool pprof profile gox.prof</span><br><span class="line">Entering interactive mode (type &quot;help&quot; for commands)</span><br><span class="line">(pprof) top10</span><br><span class="line">3060ms of 3060ms total (  100%)</span><br><span class="line">Dropped 6 nodes (cum &lt;= 15.30ms)</span><br><span class="line">Showing top 10 nodes out of 27 (cum &gt;= 20ms)</span><br><span class="line">      flat  flat%   sum%        cum   cum%</span><br><span class="line">     810ms 26.47% 26.47%     1790ms 58.50%  runtime.scang</span><br><span class="line">     760ms 24.84% 51.31%      980ms 32.03%  runtime.readgstatus</span><br><span class="line">     630ms 20.59% 71.90%      630ms 20.59%  runtime.memmove</span><br><span class="line">     340ms 11.11% 83.01%     1250ms 40.85%  main.main</span><br><span class="line">     220ms  7.19% 90.20%      220ms  7.19%  runtime/internal/atomic.Load</span><br><span class="line">     200ms  6.54% 96.73%      200ms  6.54%  runtime.memclr</span><br><span class="line">      80ms  2.61% 99.35%       80ms  2.61%  main.oriFind</span><br><span class="line">      20ms  0.65%   100%       20ms  0.65%  runtime.scanblock</span><br><span class="line">         0     0%   100%       20ms  0.65%  runtime.(*mspan).sweep</span><br><span class="line">         0     0%   100%       20ms  0.65%  runtime.(*mspan).sweep.func1</span><br></pre></td></tr></table></figure>
-
-<p>gox 的版本</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&gt; go tool pprof profile gox.prof</span><br><span class="line">Entering interactive mode (type &quot;help&quot; for commands)</span><br><span class="line">(pprof) top10</span><br><span class="line">5100ms of 5260ms total (96.96%)</span><br><span class="line">Dropped 15 nodes (cum &lt;= 26.30ms)</span><br><span class="line">Showing top 10 nodes out of 29 (cum &gt;= 200ms)</span><br><span class="line">      flat  flat%   sum%        cum   cum%</span><br><span class="line">    1010ms 19.20% 19.20%     1010ms 19.20%  runtime.memmove</span><br><span class="line">     780ms 14.83% 34.03%     1450ms 27.57%  runtime.scang</span><br><span class="line">     590ms 11.22% 45.25%     2310ms 43.92%  github.com/lycheng/gox/container.inArray</span><br><span class="line">     540ms 10.27% 55.51%     1040ms 19.77%  github.com/lycheng/gox/container.equals</span><br><span class="line">     530ms 10.08% 65.59%      670ms 12.74%  runtime.readgstatus</span><br><span class="line">     500ms  9.51% 75.10%      500ms  9.51%  reflect.Value.Int</span><br><span class="line">     480ms  9.13% 84.22%      480ms  9.13%  reflect.Value.Index</span><br><span class="line">     270ms  5.13% 89.35%     3770ms 71.67%  main.main</span><br><span class="line">     200ms  3.80% 93.16%      200ms  3.80%  reflect.Value.Len</span><br><span class="line">     200ms  3.80% 96.96%      200ms  3.80%  runtime.memclr</span><br></pre></td></tr></table></figure>
-
-<p>两种代码的执行时间只是 5s 和 3s 的区别，而 <code>container.inArray</code> 在这里面就占用了 2310ms，几乎花了一半的时间在类型判断和比较上面。</p>
-<p><code>gox</code> 这东西可能在数据量较小的情况下可以使用。但在我平时工作的应用场景里面，很少用到这种异构的数组。每个元素去判断类型消耗实在是太大了啊。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>reflect</code> 这东西感觉还是少用点会比较好，除非用来编写奇怪动态数据，例如根据 key 修改 struct 的某些数据。文章后面的参考中有较好的第三方库。</p>
-<p>而在我编写的过程中，也很容易出现各种 panic 的情况，例如需要覆盖各种可能的数据类型，这种情况不好处理，万一有所遗漏则就是 bug 了。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
-<li><a target="_blank" rel="noopener" href="https://blog.golang.org/profiling-go-programs">profiling in golang</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/fatih/structs">Golang 中动态修改 struct 的库</a></li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/07/golang-reflect-performance/" data-id="ckx7kmlc1000lrzc821y84ol2" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/reflect/" rel="tag">reflect</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
-
-  <nav id="page-nav">
-    
-    <a class="extend prev" rel="prev" href="/page/2/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/">Next &amp;raquo;</a>
-  </nav>
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/annotation/" rel="tag">annotation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/architecture/" rel="tag">architecture</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ci/" rel="tag">ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/concurrency/" rel="tag">concurrency</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/container/" rel="tag">container</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/context/" rel="tag">context</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/database/" rel="tag">database</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/debug/" rel="tag">debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/encoding/" rel="tag">encoding</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/engineering/" rel="tag">engineering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/error/" rel="tag">error</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/eval/" rel="tag">eval</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/generic/" rel="tag">generic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/" rel="tag">https</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/influxdb/" rel="tag">influxdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/innodb/" rel="tag">innodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jenkins/" rel="tag">jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lambda/" rel="tag">lambda</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/metaclass/" rel="tag">metaclass</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/metrics/" rel="tag">metrics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/microservice/" rel="tag">microservice</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mock/" rel="tag">mock</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/" rel="tag">network</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/" rel="tag">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/partitions/" rel="tag">partitions</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/patch/" rel="tag">patch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pipeline/" rel="tag">pipeline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/protocol/" rel="tag">protocol</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/" rel="tag">proxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react/" rel="tag">react</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/" rel="tag">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/security/" rel="tag">security</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/" rel="tag">ssl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sync/" rel="tag">sync</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/" rel="tag">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thread/" rel="tag">thread</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/timezone/" rel="tag">timezone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tls/" rel="tag">tls</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/traefik/" rel="tag">traefik</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/unittest/" rel="tag">unittest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/virtualenv/" rel="tag">virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/virtualenvwrapper/" rel="tag">virtualenvwrapper</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/annotation/" style="font-size: 10px;">annotation</a> <a href="/tags/architecture/" style="font-size: 10px;">architecture</a> <a href="/tags/blog/" style="font-size: 10px;">blog</a> <a href="/tags/ci/" style="font-size: 10px;">ci</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/container/" style="font-size: 10px;">container</a> <a href="/tags/context/" style="font-size: 10px;">context</a> <a href="/tags/database/" style="font-size: 10px;">database</a> <a href="/tags/debug/" style="font-size: 10px;">debug</a> <a href="/tags/docker/" style="font-size: 17.5px;">docker</a> <a href="/tags/encoding/" style="font-size: 12.5px;">encoding</a> <a href="/tags/engineering/" style="font-size: 10px;">engineering</a> <a href="/tags/error/" style="font-size: 10px;">error</a> <a href="/tags/eval/" style="font-size: 10px;">eval</a> <a href="/tags/generic/" style="font-size: 10px;">generic</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/influxdb/" style="font-size: 10px;">influxdb</a> <a href="/tags/innodb/" style="font-size: 10px;">innodb</a> <a href="/tags/java/" style="font-size: 17.5px;">java</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/tags/metaclass/" style="font-size: 10px;">metaclass</a> <a href="/tags/metrics/" style="font-size: 10px;">metrics</a> <a href="/tags/microservice/" style="font-size: 10px;">microservice</a> <a href="/tags/mock/" style="font-size: 10px;">mock</a> <a href="/tags/mysql/" style="font-size: 12.5px;">mysql</a> <a href="/tags/network/" style="font-size: 12.5px;">network</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/partitions/" style="font-size: 10px;">partitions</a> <a href="/tags/patch/" style="font-size: 10px;">patch</a> <a href="/tags/pipeline/" style="font-size: 10px;">pipeline</a> <a href="/tags/protocol/" style="font-size: 12.5px;">protocol</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/react/" style="font-size: 10px;">react</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/security/" style="font-size: 15px;">security</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/sync/" style="font-size: 10px;">sync</a> <a href="/tags/tcp/" style="font-size: 10px;">tcp</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/timezone/" style="font-size: 10px;">timezone</a> <a href="/tags/tls/" style="font-size: 10px;">tls</a> <a href="/tags/traefik/" style="font-size: 10px;">traefik</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/unittest/" style="font-size: 10px;">unittest</a> <a href="/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/tags/virtualenvwrapper/" style="font-size: 10px;">virtualenvwrapper</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2021/12/15/designing-data-intensive-applications-note/">Designing Data-Intensive Applications Notes</a>
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
           </li>
+          
         
-          <li>
-            <a href="/2021/10/23/oauth-introduction/">OAuth Introduction</a>
-          </li>
         
-          <li>
-            <a href="/2020/11/13/mysql-innodb/">MySQL InnoDB Introduction</a>
-          </li>
-        
-          <li>
-            <a href="/2020/09/14/cloud-design-patterns/">Cloud Design Patterns</a>
-          </li>
-        
-          <li>
-            <a href="/2020/08/21/about-ssl-tls/">About SSL And TLS</a>
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
           </li>
         
       </ul>
     </div>
   </div>
+</nav>
 
   
-</aside>
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Have Fun."></span>
+          
+        </div>
+
         
       </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2021 Shing<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+
+      
+        <div class="scroll-down-bar">
+          <i class="iconfont icon-arrowdown"></i>
+        </div>
+      
     </div>
   </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      <div class="container nopadding-x-md">
+        <div id="board"
+          style="margin-top: 0">
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
+
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2017/08/26/mysql-partitions/" target="_self">
+          MySQL 分区实践
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2017/08/26/mysql-partitions/" target="_self">
+        <div>
+          在项目中有需要优化之前有涉及分区的表，这里记录下不同的分区方法的相关测试。 基础在未来，native 的分区功能会被移除，只有在 InnoDB 和 NDB 才会继续保存该功能，本文是以 InnoDB 为例进行说明。简单来说，分区是指在根据表的某种用户自定义的规则，将数据分到不同的物理存储的文件中。在外部看来，这个表还是一样的，只是在 query 的时候，会根据具体的分区规则查询具体的分区。 has
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-08-26 00:00" pubdate>
+              2017-08-26
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/mysql/">#mysql</a>
+            
+              <a href="/tags/partitions/">#partitions</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2017/06/17/python-abstact-class/" target="_self">
+          Python 中的虚拟基类
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2017/06/17/python-abstact-class/" target="_self">
+        <div>
+          Python 这类动态类型语言，Duck Typing 是一个比较突出的优点。属性，方法的惰性计算，给代码的编写带来了高度的灵活性。当然有利有弊，Duck Typing 这东西在 Python 中更多是一种规范，而不是强制约束。如果我们需要约束这些接口，需要做些什么呢？ 运行时检查下面看一下简单的例子，这是个比较常见的场景，通过基类定义了一系列的接口，然后继承的子类根据自己特定的需求实现具体的接口
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-06-17 00:00" pubdate>
+              2017-06-17
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/python/">#python</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2017/05/17/python3-str-bytes/" target="_self">
+          Python3 字符串问题
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2017/05/17/python3-str-bytes/" target="_self">
+        <div>
+          在写代码的时候遇到一个比较奇怪的问题，精简之后的代码如下 12345678910111213141516171819import redistry:    from urllib.parse import urlparseexcept:    from urlparse import urlparsekey = &#x27;baidu&#x27;val = &#x27;http://www.bai
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-05-17 00:00" pubdate>
+              2017-05-17
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/python/">#python</a>
+            
+              <a href="/tags/encoding/">#encoding</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2017/03/26/python-encoding/" target="_self">
+          Python 编码问题
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2017/03/26/python-encoding/" target="_self">
+        <div>
+          本文关注的是 python2 和 python3 在编码处理上的异同。所使用的python2 的版本为 2.7.12，python3 的版本为 3.5.2。 unicodeunicode 是为了解决不同的语言背景下的统一的文字编码问题，简单来说就是给全世界所有的语言的字符唯一的 ID 来进行识别。例如，使用 python2 来输出汉字 “你好” 12s = u&#x27;你好&#x27;print
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-03-26 00:00" pubdate>
+              2017-03-26
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/python/">#python</a>
+            
+              <a href="/tags/encoding/">#encoding</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2017/03/14/python-collections/" target="_self">
+          Python collections 库解析
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2017/03/14/python-collections/" target="_self">
+        <div>
+          本文会简单介绍以下 python 标准库 collections 的相关使用。collections 在基础数据结构的基础上进一步封装了更高级的数据结构。 以下代码的环境为 python3.5.2 defaultdictdefaultdict 是 dict 的子类，基本用法与 dict 一样，在 key 不存在是，添加了 default_facetory 提供的默认值的功能。 定义如下 1coll
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-03-14 00:00" pubdate>
+              2017-03-14
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/python/">#python</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2017/01/10/http-notes/" target="_self">
+          HTTP 协议笔记
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2017/01/10/http-notes/" target="_self">
+        <div>
+          前言在这里简单讲下 HTTP 协议相关的东西，包括方法，header，API 的设计等等。 协议以当前主流版本 HTTP/1.1 来稍微讲下一些比较重要的地方。 URI 和 URL URI: Uniform Resource Identifier，统一资源标识符 URL: Uniform Resource Locator，统一资源定位符 URN: Uniform Resource Name，统一资
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-01-10 00:00" pubdate>
+              2017-01-10
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/http/">#http</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2016/12/12/golang-error-handle/" target="_self">
+          Golang 错误处理
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2016/12/12/golang-error-handle/" target="_self">
+        <div>
+          前言Golang 中 error 的类型定义很简单，就是一个 interface 123type error interface &#123;	Error() string&#125;  在标准库中，可以使用 errors 和 fmt 包来生成 error 12e1 := fmt.Errorf(&quot;%s&quot;, &quot;error&quot;)e2 := errors.New(&
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2016-12-12 00:00" pubdate>
+              2016-12-12
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/golang/">#golang</a>
+            
+              <a href="/tags/error/">#error</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2016/10/29/golang-sync-package/" target="_self">
+          Golang sync 相关使用
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2016/10/29/golang-sync-package/" target="_self">
+        <div>
+          前言本文大概讲下 golang sync 包的相关用法。sync 用在较为底层的库的同步上面，别的情况是推荐使用 channel 来同步进程。 Mutexsync 包里面有两种互斥锁，分别是 sync.Mutex 和 sync.RWMutex。前者是基本的互斥锁，后者在前者的基础上实现的读写锁。 在这里我有一个简单的 stack 的实现，这里仅列出 push 方法的实现，可以看到，线程安全的的 s
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2016-10-29 00:00" pubdate>
+              2016-10-29
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/golang/">#golang</a>
+            
+              <a href="/tags/sync/">#sync</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2016/10/19/golang-context/" target="_self">
+          Golang context
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2016/10/19/golang-context/" target="_self">
+        <div>
+          前言在去使用 Golang context 之前，推荐先去看 Golang pipeline 的博文，这里有讲到 Golang channel 的一些使用的技巧。  1.6 的版本只能通过 golang.org/x/net/context 来使用， 1.7 之后才可以通过直接引用来使用  应用场景Golang 创建了 goroutine 之后，在外部很难进行干预（只能依靠一个 chan 的关闭来通
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2016-10-19 00:00" pubdate>
+              2016-10-19
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/golang/">#golang</a>
+            
+              <a href="/tags/context/">#context</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2016/10/04/golang-expression/" target="_self">
+          Golang 算术表达式解析
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2016/10/04/golang-expression/" target="_self">
+        <div>
+          前言项目中需要用到解析算术表达式的模块，简单来说，就是 eval 函数，但并没有相应的标准库有类似的实现，所以想使用栈实现一个简单的算术表达式解析的模块。 首先，需要明确的是运算符优先级，这里只需要实现加减乘除，括号，and，or，不等号相关的符号即可。对应的优先级如下  括号 类型运算符（前缀 + -） 乘，除 加，减 大于，小于，不大于，不小于 不等于，等于 and or  程序需要做的就是把
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2016-10-04 00:00" pubdate>
+              2016-10-04
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/golang/">#golang</a>
+            
+              <a href="/tags/eval/">#eval</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+
+
+  <nav aria-label="navigation">
+    <span class="pagination" id="pagination">
+      <a class="extend prev" rel="prev" href="/page/2/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/#board">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/#board">4</a><a class="page-number" href="/page/5/#board">5</a><a class="extend next" rel="next" href="/page/4/#board"><i class="iconfont icon-arrowright"></i></a>
+    </span>
+  </nav>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
-
-  
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
   </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
 </body>
 </html>

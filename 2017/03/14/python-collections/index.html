@@ -1,145 +1,330 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
 
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  <title>Python collections 库解析 | Shing&#39;s logs</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="本文会简单介绍以下 python 标准库 collections 的相关使用。collections 在基础数据结构的基础上进一步封装了更高级的数据结构。 以下代码的环境为 python3.5.2 defaultdictdefaultdict 是 dict 的子类，基本用法与 dict 一样，在 key 不存在是，添加了 default_facetory 提供的默认值的功能。 定义如下 1coll">
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Shing">
+  <meta name="keywords" content="Golang, Python, Engineering">
+  
+    <meta name="description" content="本文会简单介绍以下 python 标准库 collections 的相关使用。collections 在基础数据结构的基础上进一步封装了更高级的数据结构。 以下代码的环境为 python3.5.2 defaultdictdefaultdict 是 dict 的子类，基本用法与 dict 一样，在 key 不存在是，添加了 default_facetory 提供的默认值的功能。 定义如下 1coll">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python collections 库解析">
 <meta property="og:url" content="http://yoursite.com/2017/03/14/python-collections/index.html">
 <meta property="og:site_name" content="Shing&#39;s logs">
 <meta property="og:description" content="本文会简单介绍以下 python 标准库 collections 的相关使用。collections 在基础数据结构的基础上进一步封装了更高级的数据结构。 以下代码的环境为 python3.5.2 defaultdictdefaultdict 是 dict 的子类，基本用法与 dict 一样，在 key 不存在是，添加了 default_facetory 提供的默认值的功能。 定义如下 1coll">
-<meta property="og:locale" content="zh_CN">
+<meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2017-03-13T16:00:00.000Z">
 <meta property="article:modified_time" content="2021-10-23T06:49:34.223Z">
 <meta property="article:author" content="Shing">
 <meta property="article:tag" content="python">
-<meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="Shing&#39;s logs" type="application/atom+xml">
+<meta name="twitter:card" content="summary_large_image">
   
   
-    <link rel="icon" href="/favicon.png">
   
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
+  <title>Python collections 库解析 - Shing&#39;s logs</title>
 
-<meta name="generator" content="Hexo 5.4.0"></head>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
 
 <body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Shing&#39;s logs</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-python-collections" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/03/14/python-collections/" class="article-date">
-  <time datetime="2017-03-13T16:00:00.000Z" itemprop="datePublished">2017-03-14</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      Python collections 库解析
-    </h1>
   
 
-      </header>
+  <header>
     
-    <div class="article-entry" itemprop="articleBody">
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Shing&#39;s Logs</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Python collections 库解析"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2017-03-14 00:00" pubdate>
+          March 14, 2017 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.6k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          39 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
       
-        <p>本文会简单介绍以下 python 标准库 collections 的相关使用。collections 在基础数据结构的基础上进一步封装了更高级的数据结构。</p>
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Python collections 库解析</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>本文会简单介绍以下 python 标准库 collections 的相关使用。collections 在基础数据结构的基础上进一步封装了更高级的数据结构。</p>
 <p>以下代码的环境为 python3.5.2</p>
 <h2 id="defaultdict"><a href="#defaultdict" class="headerlink" title="defaultdict"></a>defaultdict</h2><p>defaultdict 是 dict 的子类，基本用法与 dict 一样，在 key 不存在是，添加了 <code>default_facetory</code> 提供的默认值的功能。</p>
 <p>定义如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">collections.defaultdict([default_factory[, ...]])</span><br></pre></td></tr></table></figure>
+<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs inform7">collections.defaultdict(<span class="hljs-comment">[default_factory<span class="hljs-comment">[, ...]</span>]</span>)<br></code></pre></td></tr></table></figure>
 
 <p>样例</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">d = collections.defaultdict(<span class="built_in">int</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    d[i % <span class="number">3</span>] += <span class="number">1</span></span><br><span class="line"><span class="built_in">print</span>(d)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实际上，上述的代码类似于</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">D</span>(<span class="params">collections.defaultdict</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__missing__</span>(<span class="params">self, key</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.default_factory(key)</span><br><span class="line">d = D(<span class="built_in">int</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更简单的 lambda</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">constant_factory</span>(<span class="params">value</span>):</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">lambda</span>: value</span><br><span class="line">d = collections.defaultdict(constant_factory(<span class="number">0</span>))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs python">d = collections.defaultdict(<span class="hljs-built_in">int</span>)<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">10</span>):<br>    d[i % <span class="hljs-number">3</span>] += <span class="hljs-number">1</span><br><span class="hljs-built_in">print</span>(d)<br><br><span class="hljs-comment"># 实际上，上述的代码类似于</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">D</span>(collections.defaultdict):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__missing__</span>(<span class="hljs-params">self, key</span>):<br>        <span class="hljs-keyword">return</span> self.default_factory(key)<br>d = D(<span class="hljs-built_in">int</span>)<br><br><span class="hljs-comment"># 更简单的 lambda</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">constant_factory</span>(<span class="hljs-params">value</span>):<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">lambda</span>: value<br>d = collections.defaultdict(constant_factory(<span class="hljs-number">0</span>))<br></code></pre></td></tr></table></figure>
 
 <p>最后，需要注意的是，defaultdict 生效只在 <code>obj[key]</code> 这种调用的模式下，如果使用 <code>obj.get</code> 则不会触发。</p>
 <h2 id="OrderedDict"><a href="#OrderedDict" class="headerlink" title="OrderedDict"></a>OrderedDict</h2><p>基本用法也和 dict 一样，但是会记住 key 插入的顺序。它有两个额外的方法</p>
 <ul>
-<li><code>popitem(last=True)</code>: 弹出一个键值对，last=False的话则弹出第一个</li>
-<li><code>move_to_end(key, last=True)</code>: 移动某个 key 到最后（该 key 必须存在），last=False 则移动到第一</li>
+<li><code>popitem(last=True)</code>: 弹出一个键值对，last&#x3D;False的话则弹出第一个</li>
+<li><code>move_to_end(key, last=True)</code>: 移动某个 key 到最后（该 key 必须存在），last&#x3D;False 则移动到第一</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">od = collections.OrderedDict</span><br><span class="line">d = od.fromkeys(<span class="string">&quot;abcde&quot;</span>)</span><br><span class="line">d.move_to_end(<span class="string">&quot;b&quot;</span>, <span class="literal">False</span>)</span><br><span class="line"><span class="keyword">for</span> key, val <span class="keyword">in</span> d.items():</span><br><span class="line">    <span class="built_in">print</span>(key) <span class="comment"># b a c d e</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">od = collections.OrderedDict<br>d = od.fromkeys(<span class="hljs-string">&quot;abcde&quot;</span>)<br>d.move_to_end(<span class="hljs-string">&quot;b&quot;</span>, <span class="hljs-literal">False</span>)<br><span class="hljs-keyword">for</span> key, val <span class="hljs-keyword">in</span> d.items():<br>    <span class="hljs-built_in">print</span>(key) <span class="hljs-comment"># b a c d e</span><br></code></pre></td></tr></table></figure>
 
 <p>下面是一些有趣的例子</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LastUpdatedOrderedDict</span>(<span class="params">collections.OrderedDict</span>):</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27; 每一个 key 新增或者修改操作都将其置于最后，可用于实现类似 LRU 的算法</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__setitem__</span>(<span class="params">self, key, value</span>):</span></span><br><span class="line">        <span class="keyword">if</span> key <span class="keyword">in</span> self:</span><br><span class="line">            <span class="keyword">del</span> self[key]</span><br><span class="line">        <span class="built_in">super</span>().__setitem__(key, value)</span><br><span class="line">        </span><br><span class="line"><span class="comment"># 在初始化时指定 key 的排序依据</span></span><br><span class="line">d = &#123;<span class="string">&#x27;banana&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;apple&#x27;</span>: <span class="number">4</span>, <span class="string">&#x27;pear&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;orange&#x27;</span>: <span class="number">2</span>&#125;</span><br><span class="line">collections.OrderedDict(<span class="built_in">sorted</span>(d.items(), key=<span class="keyword">lambda</span> t: t[<span class="number">0</span>])) <span class="comment"># sort by key</span></span><br><span class="line">collections.OrderedDict(<span class="built_in">sorted</span>(d.items(), key=<span class="keyword">lambda</span> t: t[<span class="number">1</span>])) <span class="comment"># sort by value</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">LastUpdatedOrderedDict</span>(collections.OrderedDict):<br>    <span class="hljs-string">&#x27;&#x27;&#x27; 每一个 key 新增或者修改操作都将其置于最后，可用于实现类似 LRU 的算法</span><br><span class="hljs-string">    &#x27;&#x27;&#x27;</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__setitem__</span>(<span class="hljs-params">self, key, value</span>):<br>        <span class="hljs-keyword">if</span> key <span class="hljs-keyword">in</span> self:<br>            <span class="hljs-keyword">del</span> self[key]<br>        <span class="hljs-built_in">super</span>().__setitem__(key, value)<br>        <br><span class="hljs-comment"># 在初始化时指定 key 的排序依据</span><br>d = &#123;<span class="hljs-string">&#x27;banana&#x27;</span>: <span class="hljs-number">3</span>, <span class="hljs-string">&#x27;apple&#x27;</span>: <span class="hljs-number">4</span>, <span class="hljs-string">&#x27;pear&#x27;</span>: <span class="hljs-number">1</span>, <span class="hljs-string">&#x27;orange&#x27;</span>: <span class="hljs-number">2</span>&#125;<br>collections.OrderedDict(<span class="hljs-built_in">sorted</span>(d.items(), key=<span class="hljs-keyword">lambda</span> t: t[<span class="hljs-number">0</span>])) <span class="hljs-comment"># sort by key</span><br>collections.OrderedDict(<span class="hljs-built_in">sorted</span>(d.items(), key=<span class="hljs-keyword">lambda</span> t: t[<span class="hljs-number">1</span>])) <span class="hljs-comment"># sort by value</span><br></code></pre></td></tr></table></figure>
 
 <h2 id="Counter"><a href="#Counter" class="headerlink" title="Counter"></a>Counter</h2><p>同样是 dict 的子类，但是用于统计某个 key 的数量。它提供一些额外方法</p>
 <ol>
 <li><code>elements</code>: 返回所有大于 1 的 key，如果是 key 的数量大于 1 则会输出多次，同理，小于 0 则不输出</li>
-<li><code>most_common([n])</code>: 返回 key 和其对应的 count，默认输出全部数据，n=1 则返回 count 最大的</li>
+<li><code>most_common([n])</code>: 返回 key 和其对应的 count，默认输出全部数据，n&#x3D;1 则返回 count 最大的</li>
 <li><code>subtract([iterable-or-mapping])</code>: 对应的 count 的相减</li>
 <li><code>fromkeys(iterable)</code>: 不可用，使用构造函数</li>
 <li><code>update([iterable-or-mapping])</code>: 已存在的 key 则 count 增加</li>
 </ol>
 <p>常见的用法</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">c = collections.Counter() <span class="comment"># a new, empty counter</span></span><br><span class="line">c = collections.Counter(&#123;<span class="string">&#x27;red&#x27;</span>: <span class="number">4</span>, <span class="string">&#x27;blue&#x27;</span>: <span class="number">2</span>&#125;) <span class="comment"># from a mapping</span></span><br><span class="line">c = collections.Counter(cats=<span class="number">4</span>, dogs=<span class="number">8</span>) <span class="comment"># from keyword args</span></span><br><span class="line"></span><br><span class="line">c = collections.Counter(<span class="string">&#x27;hello&#x27;</span>) <span class="comment"># from an iterable</span></span><br><span class="line"><span class="built_in">print</span>(c[<span class="string">&#x27;l&#x27;</span>]) <span class="comment"># 2</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sum</span>(c.values())                 <span class="comment"># total of all counts</span></span><br><span class="line">c.clear()                       <span class="comment"># reset all counts</span></span><br><span class="line"><span class="built_in">list</span>(c)                         <span class="comment"># list unique elements</span></span><br><span class="line"><span class="built_in">set</span>(c)                          <span class="comment"># convert to a set</span></span><br><span class="line"><span class="built_in">dict</span>(c)                         <span class="comment"># convert to a regular dictionary</span></span><br><span class="line">c.items()                       <span class="comment"># convert to a list of (elem, cnt) pairs</span></span><br><span class="line">collections.Counter(<span class="built_in">dict</span>(list_of_pairs))</span><br><span class="line">c.most_common()[:-n-<span class="number">1</span>:-<span class="number">1</span>]       <span class="comment"># n least common elements</span></span><br><span class="line"></span><br><span class="line">b + c                           <span class="comment"># 对应的 count 相加（相减）</span></span><br><span class="line">b | c                           <span class="comment"># 并集，相同取最大的 count</span></span><br><span class="line">b &amp; c                           <span class="comment"># 交集，相同取最小的 count</span></span><br><span class="line"></span><br><span class="line">+c <span class="comment"># 相当于一个空的 counter 相加（或相减），但只保留整数 count 的 key</span></span><br><span class="line">-c <span class="comment"># 同上</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs python">c = collections.Counter() <span class="hljs-comment"># a new, empty counter</span><br>c = collections.Counter(&#123;<span class="hljs-string">&#x27;red&#x27;</span>: <span class="hljs-number">4</span>, <span class="hljs-string">&#x27;blue&#x27;</span>: <span class="hljs-number">2</span>&#125;) <span class="hljs-comment"># from a mapping</span><br>c = collections.Counter(cats=<span class="hljs-number">4</span>, dogs=<span class="hljs-number">8</span>) <span class="hljs-comment"># from keyword args</span><br><br>c = collections.Counter(<span class="hljs-string">&#x27;hello&#x27;</span>) <span class="hljs-comment"># from an iterable</span><br><span class="hljs-built_in">print</span>(c[<span class="hljs-string">&#x27;l&#x27;</span>]) <span class="hljs-comment"># 2</span><br><br><span class="hljs-built_in">sum</span>(c.values())                 <span class="hljs-comment"># total of all counts</span><br>c.clear()                       <span class="hljs-comment"># reset all counts</span><br><span class="hljs-built_in">list</span>(c)                         <span class="hljs-comment"># list unique elements</span><br><span class="hljs-built_in">set</span>(c)                          <span class="hljs-comment"># convert to a set</span><br><span class="hljs-built_in">dict</span>(c)                         <span class="hljs-comment"># convert to a regular dictionary</span><br>c.items()                       <span class="hljs-comment"># convert to a list of (elem, cnt) pairs</span><br>collections.Counter(<span class="hljs-built_in">dict</span>(list_of_pairs))<br>c.most_common()[:-n-<span class="hljs-number">1</span>:-<span class="hljs-number">1</span>]       <span class="hljs-comment"># n least common elements</span><br><br>b + c                           <span class="hljs-comment"># 对应的 count 相加（相减）</span><br>b | c                           <span class="hljs-comment"># 并集，相同取最大的 count</span><br>b &amp; c                           <span class="hljs-comment"># 交集，相同取最小的 count</span><br><br>+c <span class="hljs-comment"># 相当于一个空的 counter 相加（或相减），但只保留整数 count 的 key</span><br>-c <span class="hljs-comment"># 同上</span><br></code></pre></td></tr></table></figure>
 
 <h2 id="deque"><a href="#deque" class="headerlink" title="deque"></a>deque</h2><p><a target="_blank" rel="noopener" href="https://docs.python.org/3/library/collections.html#deque-objects">deque</a> 是双端队列，首尾都可以进行插入和删除，同时也可以对某个位置进行插入。</p>
 <p>需要注意的是，在初始化的时候指定了 maxlen，则在相应的更新操作则会造成已有的元素的移动</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">d = collections.deque(maxlen=<span class="number">3</span>)</span><br><span class="line">d.extend(<span class="built_in">range</span>(<span class="number">3</span>)) <span class="comment"># deque([0, 1, 2], maxlen=3)</span></span><br><span class="line">d.append(<span class="number">4</span>) <span class="comment"># deque([1, 2, 4], maxlen=3)</span></span><br><span class="line">d.insert(<span class="number">0</span>, -<span class="number">1</span>) <span class="comment"># IndexError: deque already at its maximum size</span></span><br><span class="line"></span><br><span class="line">d.pop()</span><br><span class="line">d.insert(<span class="number">0</span>, -<span class="number">1</span>) <span class="comment"># deque([-1, 1, 2], maxlen=3)</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python">d = collections.deque(maxlen=<span class="hljs-number">3</span>)<br>d.extend(<span class="hljs-built_in">range</span>(<span class="hljs-number">3</span>)) <span class="hljs-comment"># deque([0, 1, 2], maxlen=3)</span><br>d.append(<span class="hljs-number">4</span>) <span class="hljs-comment"># deque([1, 2, 4], maxlen=3)</span><br>d.insert(<span class="hljs-number">0</span>, -<span class="hljs-number">1</span>) <span class="hljs-comment"># IndexError: deque already at its maximum size</span><br><br>d.pop()<br>d.insert(<span class="hljs-number">0</span>, -<span class="hljs-number">1</span>) <span class="hljs-comment"># deque([-1, 1, 2], maxlen=3)</span><br></code></pre></td></tr></table></figure>
 
 <p>一些样例</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">tail</span>(<span class="params">filename, n=<span class="number">10</span></span>):</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27; Return the last n lines of a file</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(filename) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="keyword">return</span> deque(f, n)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">delete_nth</span>(<span class="params">d, n</span>):</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27; 删除第 n 个元素</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    d.rotate(-n)</span><br><span class="line">    d.popleft()</span><br><span class="line">    d.rotate(n)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">tail</span>(<span class="hljs-params">filename, n=<span class="hljs-number">10</span></span>):<br>    <span class="hljs-string">&#x27;&#x27;&#x27; Return the last n lines of a file</span><br><span class="hljs-string">    &#x27;&#x27;&#x27;</span><br>    <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(filename) <span class="hljs-keyword">as</span> f:<br>        <span class="hljs-keyword">return</span> deque(f, n)<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">delete_nth</span>(<span class="hljs-params">d, n</span>):<br>    <span class="hljs-string">&#x27;&#x27;&#x27; 删除第 n 个元素</span><br><span class="hljs-string">    &#x27;&#x27;&#x27;</span><br>    d.rotate(-n)<br>    d.popleft()<br>    d.rotate(n)<br></code></pre></td></tr></table></figure>
 
 <h2 id="nametuple"><a href="#nametuple" class="headerlink" title="nametuple"></a>nametuple</h2><p><a target="_blank" rel="noopener" href="https://docs.python.org/3/library/collections.html#collections.namedtuple">nametuple</a> 是种用于强化 tuple 的可用性的数据结构。将 tuple 的 index 对应到 key，增强代码的可读性。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Point = collections.namedtuple(<span class="string">&#x27;Point&#x27;</span>, [<span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;y&#x27;</span>])</span><br><span class="line"><span class="comment"># Point = collections.namedtuple(&#x27;Point&#x27;, &#x27;x y&#x27;) # 也是可以的</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 增加的文档</span></span><br><span class="line">Point.__doc__ += <span class="string">&quot;Point with (x, y)&quot;</span></span><br><span class="line"></span><br><span class="line">p = Point._make((<span class="number">1</span>, <span class="number">2</span>))</span><br><span class="line"><span class="built_in">print</span>(p.x == p[<span class="number">0</span>]) <span class="comment"># True</span></span><br><span class="line"><span class="built_in">isinstance</span>(p, <span class="built_in">tuple</span>) <span class="comment"># True</span></span><br><span class="line"><span class="built_in">isinstance</span>(p, Point) <span class="comment"># True</span></span><br><span class="line"></span><br><span class="line">p.x = <span class="number">1</span> <span class="comment"># AttributeError: can&#x27;t set attribute</span></span><br><span class="line">p = p._replace(x=<span class="number">2</span>) <span class="comment"># 新对象，x=2,y=2</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python">Point = collections.namedtuple(<span class="hljs-string">&#x27;Point&#x27;</span>, [<span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>])<br><span class="hljs-comment"># Point = collections.namedtuple(&#x27;Point&#x27;, &#x27;x y&#x27;) # 也是可以的</span><br><br><span class="hljs-comment"># 增加的文档</span><br>Point.__doc__ += <span class="hljs-string">&quot;Point with (x, y)&quot;</span><br><br>p = Point._make((<span class="hljs-number">1</span>, <span class="hljs-number">2</span>))<br><span class="hljs-built_in">print</span>(p.x == p[<span class="hljs-number">0</span>]) <span class="hljs-comment"># True</span><br><span class="hljs-built_in">isinstance</span>(p, <span class="hljs-built_in">tuple</span>) <span class="hljs-comment"># True</span><br><span class="hljs-built_in">isinstance</span>(p, Point) <span class="hljs-comment"># True</span><br><br>p.x = <span class="hljs-number">1</span> <span class="hljs-comment"># AttributeError: can&#x27;t set attribute</span><br>p = p._replace(x=<span class="hljs-number">2</span>) <span class="hljs-comment"># 新对象，x=2,y=2</span><br></code></pre></td></tr></table></figure>
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span>(<span class="params">collections.namedtuple(<span class="params"><span class="string">&#x27;Point&#x27;</span>, <span class="string">&#x27;x y&#x27;</span></span>)</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot; 这样则可以定义相应的方法</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    下方 __slots__ = () 的设置则是为了不让对象生成 __dict__</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    __slots__ = ()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Point</span>(collections.namedtuple(<span class="hljs-string">&#x27;Point&#x27;</span>, <span class="hljs-string">&#x27;x y&#x27;</span>)):<br>    <span class="hljs-string">&quot;&quot;&quot; 这样则可以定义相应的方法</span><br><span class="hljs-string">    </span><br><span class="hljs-string">    下方 __slots__ = () 的设置则是为了不让对象生成 __dict__</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    __slots__ = ()<br></code></pre></td></tr></table></figure>
 
 <p>上述的代码可见，nametuple 同时具备类对象的属性引用和 tuple 的不可变性，实际上，你可以当做一个不可变属性的类对象来使用。</p>
 <h2 id="ChainMap"><a href="#ChainMap" class="headerlink" title="ChainMap"></a>ChainMap</h2><p>用于管理多个映射的数据结构。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">d1 = &#123;<span class="number">1</span>: <span class="number">2</span>, <span class="number">3</span>: <span class="number">4</span>, <span class="number">5</span>: <span class="number">6</span>&#125;</span><br><span class="line">d2 = &#123;<span class="number">1</span>: <span class="number">1</span>, <span class="number">6</span>: <span class="number">7</span>&#125;</span><br><span class="line"></span><br><span class="line">cm = collections.ChainMap(d1, d2)</span><br><span class="line">cm.get(<span class="number">1</span>) <span class="comment"># 2</span></span><br><span class="line"></span><br><span class="line">cm = collections.ChainMap(d2, d1)</span><br><span class="line">cm.get(<span class="number">1</span>) <span class="comment"># 1</span></span><br><span class="line"></span><br><span class="line">scm = cm.new_child() <span class="comment"># ChainMap(&#123;&#125;, &#123;1: 2, 3: 4, 5: 6&#125;, &#123;1: 1, 6: 7&#125;)</span></span><br><span class="line">pcm = cm.parents <span class="comment"># ChainMap(&#123;1: 1, 6: 7&#125;)</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python">d1 = &#123;<span class="hljs-number">1</span>: <span class="hljs-number">2</span>, <span class="hljs-number">3</span>: <span class="hljs-number">4</span>, <span class="hljs-number">5</span>: <span class="hljs-number">6</span>&#125;<br>d2 = &#123;<span class="hljs-number">1</span>: <span class="hljs-number">1</span>, <span class="hljs-number">6</span>: <span class="hljs-number">7</span>&#125;<br><br>cm = collections.ChainMap(d1, d2)<br>cm.get(<span class="hljs-number">1</span>) <span class="hljs-comment"># 2</span><br><br>cm = collections.ChainMap(d2, d1)<br>cm.get(<span class="hljs-number">1</span>) <span class="hljs-comment"># 1</span><br><br>scm = cm.new_child() <span class="hljs-comment"># ChainMap(&#123;&#125;, &#123;1: 2, 3: 4, 5: 6&#125;, &#123;1: 1, 6: 7&#125;)</span><br>pcm = cm.parents <span class="hljs-comment"># ChainMap(&#123;1: 1, 6: 7&#125;)</span><br></code></pre></td></tr></table></figure>
 
 <p>在上述代码中，可以看到对于同样的 key，会根据初始化时的顺序来定优先级，可以在数据级别实现类似于作用域的查找关系。</p>
 <p>ChainMap 把状态存储在 <code>maps</code> 这个 list 中，用户是可以编辑的，可以随意修改其中的顺序和值。 <code>new_child(m=None)</code> 则是可以根据当前的数据新建一个 ChainMap 但是在 list 的最前方插入一个参数中指定的 m，如果没有则是一个空的字典。<code>parents</code> 则返回去掉第一个 map 的 ChainMap。</p>
 <p>一些有趣的例子</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># python 变量查找顺序的模拟</span></span><br><span class="line"><span class="keyword">import</span> builtins</span><br><span class="line">pylookup = collections.ChainMap(<span class="built_in">locals</span>(), <span class="built_in">globals</span>(), <span class="built_in">vars</span>(builtins))</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DeepChainMap</span>(<span class="params">collections.ChainMap</span>):</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27; 实现层级更新和删除</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__setitem__</span>(<span class="params">self, key, value</span>):</span></span><br><span class="line">        <span class="keyword">for</span> mapping <span class="keyword">in</span> self.maps:</span><br><span class="line">            <span class="keyword">if</span> key <span class="keyword">in</span> mapping:</span><br><span class="line">                mapping[key] = value</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">        self.maps[<span class="number">0</span>][key] = value</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__delitem__</span>(<span class="params">self, key</span>):</span></span><br><span class="line">        <span class="keyword">for</span> mapping <span class="keyword">in</span> self.maps:</span><br><span class="line">            <span class="keyword">if</span> key <span class="keyword">in</span> mapping:</span><br><span class="line">                <span class="keyword">del</span> mapping[key]</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">        <span class="keyword">raise</span> KeyError(key)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># python 变量查找顺序的模拟</span><br><span class="hljs-keyword">import</span> builtins<br>pylookup = collections.ChainMap(<span class="hljs-built_in">locals</span>(), <span class="hljs-built_in">globals</span>(), <span class="hljs-built_in">vars</span>(builtins))<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">DeepChainMap</span>(collections.ChainMap):<br>    <span class="hljs-string">&#x27;&#x27;&#x27; 实现层级更新和删除</span><br><span class="hljs-string">    &#x27;&#x27;&#x27;</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__setitem__</span>(<span class="hljs-params">self, key, value</span>):<br>        <span class="hljs-keyword">for</span> mapping <span class="hljs-keyword">in</span> self.maps:<br>            <span class="hljs-keyword">if</span> key <span class="hljs-keyword">in</span> mapping:<br>                mapping[key] = value<br>                <span class="hljs-keyword">return</span><br>        self.maps[<span class="hljs-number">0</span>][key] = value<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__delitem__</span>(<span class="hljs-params">self, key</span>):<br>        <span class="hljs-keyword">for</span> mapping <span class="hljs-keyword">in</span> self.maps:<br>            <span class="hljs-keyword">if</span> key <span class="hljs-keyword">in</span> mapping:<br>                <span class="hljs-keyword">del</span> mapping[key]<br>                <span class="hljs-keyword">return</span><br>        <span class="hljs-keyword">raise</span> KeyError(key)<br></code></pre></td></tr></table></figure>
 
 <h2 id="UserDict-UserList-UserString"><a href="#UserDict-UserList-UserString" class="headerlink" title="UserDict, UserList, UserString"></a>UserDict, UserList, UserString</h2><p>比直接继承 dict, list, str 的区别就是，你可以直接使用 <code>self.data</code> 去获取数据。在里面就以 dict, list, str 来保存数据，相应的接口来操纵这个数据。</p>
 <p>在查找相关资料的时候，我没有发现使用这几个类去集成和去继承相应的 str, dict 有什么具体的优势。相关信息可参考 <a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/7148419/subclass-dict-userdict-dict-or-abc">这里</a>。</p>
@@ -147,146 +332,351 @@
 <li><a target="_blank" rel="noopener" href="https://hg.python.org/cpython/file/tip/Modules/_collectionsmodule.c">collections 模块源码</a></li>
 </ol>
 
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/python/">#python</a>
       
     </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/03/14/python-collections/" data-id="ckx7kmlc7000yrzc8etin0rb9" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+  
+</div>
 
-    </footer>
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Python collections 库解析</div>
+      <div>http://yoursite.com/2017/03/14/python-collections/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Shing</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>March 14, 2017</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2017/03/26/python-encoding/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          Python 编码问题
-        
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2017/03/26/python-encoding/" title="Python 编码问题">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Python 编码问题</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2017/01/10/http-notes/" title="HTTP 协议笔记">
+                        <span class="hidden-mobile">HTTP 协议笔记</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
       </div>
-    </a>
-  
-  
-    <a href="/2017/01/10/http-notes/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">HTTP 协议笔记</div>
-    </a>
-  
-</nav>
+    </div>
 
-  
-</article>
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
 
-</section>
-        
-          <aside id="sidebar">
-  
-    
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/annotation/" rel="tag">annotation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/architecture/" rel="tag">architecture</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ci/" rel="tag">ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/concurrency/" rel="tag">concurrency</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/container/" rel="tag">container</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/context/" rel="tag">context</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/database/" rel="tag">database</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/debug/" rel="tag">debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/encoding/" rel="tag">encoding</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/engineering/" rel="tag">engineering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/error/" rel="tag">error</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/eval/" rel="tag">eval</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/generic/" rel="tag">generic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/" rel="tag">https</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/influxdb/" rel="tag">influxdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/innodb/" rel="tag">innodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jenkins/" rel="tag">jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lambda/" rel="tag">lambda</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/metaclass/" rel="tag">metaclass</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/metrics/" rel="tag">metrics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/microservice/" rel="tag">microservice</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mock/" rel="tag">mock</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/" rel="tag">network</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/" rel="tag">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/partitions/" rel="tag">partitions</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/patch/" rel="tag">patch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pipeline/" rel="tag">pipeline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/protocol/" rel="tag">protocol</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/" rel="tag">proxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react/" rel="tag">react</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/" rel="tag">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/security/" rel="tag">security</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/" rel="tag">ssl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sync/" rel="tag">sync</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/" rel="tag">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thread/" rel="tag">thread</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/timezone/" rel="tag">timezone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tls/" rel="tag">tls</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/traefik/" rel="tag">traefik</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/unittest/" rel="tag">unittest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/virtualenv/" rel="tag">virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/virtualenvwrapper/" rel="tag">virtualenvwrapper</a></li></ul>
+
+  </aside>
+
+
     </div>
   </div>
+</div>
+
+
+
 
 
   
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/annotation/" style="font-size: 10px;">annotation</a> <a href="/tags/architecture/" style="font-size: 10px;">architecture</a> <a href="/tags/blog/" style="font-size: 10px;">blog</a> <a href="/tags/ci/" style="font-size: 10px;">ci</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/container/" style="font-size: 10px;">container</a> <a href="/tags/context/" style="font-size: 10px;">context</a> <a href="/tags/database/" style="font-size: 10px;">database</a> <a href="/tags/debug/" style="font-size: 10px;">debug</a> <a href="/tags/docker/" style="font-size: 17.5px;">docker</a> <a href="/tags/encoding/" style="font-size: 12.5px;">encoding</a> <a href="/tags/engineering/" style="font-size: 10px;">engineering</a> <a href="/tags/error/" style="font-size: 10px;">error</a> <a href="/tags/eval/" style="font-size: 10px;">eval</a> <a href="/tags/generic/" style="font-size: 10px;">generic</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/influxdb/" style="font-size: 10px;">influxdb</a> <a href="/tags/innodb/" style="font-size: 10px;">innodb</a> <a href="/tags/java/" style="font-size: 17.5px;">java</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/tags/metaclass/" style="font-size: 10px;">metaclass</a> <a href="/tags/metrics/" style="font-size: 10px;">metrics</a> <a href="/tags/microservice/" style="font-size: 10px;">microservice</a> <a href="/tags/mock/" style="font-size: 10px;">mock</a> <a href="/tags/mysql/" style="font-size: 12.5px;">mysql</a> <a href="/tags/network/" style="font-size: 12.5px;">network</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/partitions/" style="font-size: 10px;">partitions</a> <a href="/tags/patch/" style="font-size: 10px;">patch</a> <a href="/tags/pipeline/" style="font-size: 10px;">pipeline</a> <a href="/tags/protocol/" style="font-size: 12.5px;">protocol</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/react/" style="font-size: 10px;">react</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/security/" style="font-size: 15px;">security</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/sync/" style="font-size: 10px;">sync</a> <a href="/tags/tcp/" style="font-size: 10px;">tcp</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/timezone/" style="font-size: 10px;">timezone</a> <a href="/tags/tls/" style="font-size: 10px;">tls</a> <a href="/tags/traefik/" style="font-size: 10px;">traefik</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/unittest/" style="font-size: 10px;">unittest</a> <a href="/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/tags/virtualenvwrapper/" style="font-size: 10px;">virtualenvwrapper</a>
-    </div>
-  </div>
 
-  
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a></li></ul>
-    </div>
-  </div>
-
-
-  
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2021/12/15/designing-data-intensive-applications-note/">Designing Data-Intensive Applications Notes</a>
-          </li>
-        
-          <li>
-            <a href="/2021/10/23/oauth-introduction/">OAuth Introduction</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/13/mysql-innodb/">MySQL InnoDB Introduction</a>
-          </li>
-        
-          <li>
-            <a href="/2020/09/14/cloud-design-patterns/">Cloud Design Patterns</a>
-          </li>
-        
-          <li>
-            <a href="/2020/08/21/about-ssl-tls/">About SSL And TLS</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
 
-  
-</aside>
-        
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2021 Shing<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
     </div>
   </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
+</div>
+
     
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
 
 
   
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
 
   
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
 
 
 
 
-<script src="/js/script.js"></script>
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
 
 
+  
 
-
-  </div>
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
 </body>
 </html>

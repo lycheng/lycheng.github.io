@@ -1,1780 +1,788 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
 
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  <title>Shing&#39;s logs</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Shing">
+  <meta name="keywords" content="Golang, Python, Engineering">
+  
+    <meta property="og:type" content="website">
 <meta property="og:title" content="Shing&#39;s logs">
 <meta property="og:url" content="http://yoursite.com/index.html">
 <meta property="og:site_name" content="Shing&#39;s logs">
-<meta property="og:locale" content="zh_CN">
+<meta property="og:locale" content="en_US">
 <meta property="article:author" content="Shing">
-<meta property="article:tag" content="golang, python">
-<meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="Shing&#39;s logs" type="application/atom+xml">
+<meta property="article:tag" content="Golang, Python, Engineering">
+<meta name="twitter:card" content="summary_large_image">
   
   
-    <link rel="icon" href="/favicon.png">
   
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
+  <title>Shing&#39;s logs</title>
 
-<meta name="generator" content="Hexo 5.4.0"></head>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
 
 <body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Shing&#39;s logs</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 100vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Shing&#39;s Logs</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
         
-          <a class="main-nav-link" href="/">Home</a>
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
         
-          <a class="main-nav-link" href="/archives">Archives</a>
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
         
-      </nav>
-      <nav id="sub-nav">
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main">
-  
-    <article id="post-designing-data-intensive-applications-note" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2021/12/15/designing-data-intensive-applications-note/" class="article-date">
-  <time datetime="2021-12-14T16:00:00.000Z" itemprop="datePublished">2021-12-15</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/12/15/designing-data-intensive-applications-note/">Designing Data-Intensive Applications Notes</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Chapter-1-可靠系统"><a href="#Chapter-1-可靠系统" class="headerlink" title="Chapter 1 - 可靠系统"></a>Chapter 1 - 可靠系统</h1><ul>
-<li>以最小出错的方式来设计系统，减少人为出错</li>
-<li>想办法分离出最容易出错的地方和容易引发故障的接口</li>
-<li>充分的测试</li>
-<li>快速的恢复机制以尽量减少故障影响</li>
-<li>详细而清晰的监控子系统</li>
-<li>流程化</li>
-</ul>
-<h1 id="Chapter-2-数据模型和查询语言"><a href="#Chapter-2-数据模型和查询语言" class="headerlink" title="Chapter 2 - 数据模型和查询语言"></a>Chapter 2 - 数据模型和查询语言</h1><p>关系型和文档型数据库现状</p>
-<ul>
-<li>文档型：读时模式，读取的时候才去解析具体的字段</li>
-<li>RDS：写时模式，已有的关系经由表结构来确定</li>
-</ul>
-<p>关注存储的局部性</p>
-<p>SQL 是声明式查询语言，隐藏了数据库引擎的实现细节。如果交由命令式语言，则语句间有顺序关系，无法并行</p>
-<h1 id="Chapter-3-数据存储和检索"><a href="#Chapter-3-数据存储和检索" class="headerlink" title="Chapter 3 - 数据存储和检索"></a>Chapter 3 - 数据存储和检索</h1><p>SSTables 基本结构和 LSM-Tree</p>
-<ul>
-<li>每个日志结构的存储段都是一组 key-value 的序列</li>
-<li>每个段中的 key 只能出现一次，且按 key 的值进行排序</li>
-<li>Log-Structured Merge-Tree</li>
-</ul>
-<p>优缺点</p>
-<ul>
-<li>合并段可以使用类似归并排序的做法</li>
-<li>每个段都是按照 key 进行排序，则可知道每个段的取值范围，有利于查找 key</li>
-<li>写入较快，读取较慢</li>
-</ul>
-<p>B-trees</p>
-<ul>
-<li>将数据库分解成可变大小的段，并始终按顺序写入，这种设计更靠近底层硬件</li>
-<li>预写日志 WAL</li>
-</ul>
-<p>事务处理</p>
-<ul>
-<li>OLTP</li>
-<li>OLAP</li>
-</ul>
-<p>数据仓库</p>
-<ul>
-<li>可能包含 OLTP 数据库的只读副本</li>
-<li>从 OLTP 数据库中提取（Extract）然后转换（Transform）数据，加载（Load）到数据仓库中，成为 ETL 的过程</li>
-</ul>
-<p>列式存储</p>
-<ul>
-<li>将每列中的所有值存储在一起</li>
-<li>列压缩，对于同一列来说，可能的值范围会小于等于数据量</li>
-</ul>
-<h1 id="Chapter-4-数据编码与演化"><a href="#Chapter-4-数据编码与演化" class="headerlink" title="Chapter 4 - 数据编码与演化"></a>Chapter 4 - 数据编码与演化</h1><p>数据格式和模式变更</p>
-<ul>
-<li>服务端升级</li>
-<li>客户端升级并且很长一段时间存在新旧版本</li>
-<li>向前兼容和向后兼容</li>
-</ul>
-<p>数据表示形式</p>
-<ul>
-<li>内存中，程序的数据结构<ul>
-<li>不同的语言并不兼容，如 Python pickle 和 Java 的 io.Serializable</li>
-<li>并没有考虑版本和向前向后的兼容性</li>
-</ul>
-</li>
-<li>文件或者网络中的字节序列</li>
-</ul>
-<p>编码格式</p>
-<ul>
-<li>JSON，XML 和 CSV，对人类更友好</li>
-<li>二进制格式，对机器更友好</li>
-<li>对不同组织使用同一数据编码格式的难度更高</li>
-</ul>
-<p>Thrift 和 Protobuf</p>
-<ul>
-<li>都是通过格式描述文件生成对应语言的编码解码用的代码</li>
-<li>最终用于传输是二进制编码数据</li>
-<li>对于 schema 的变化也都只能对新增字段更好的支持</li>
-</ul>
-<p>Avro</p>
-<ul>
-<li>通过 IDL 来确定传输数据的 schema</li>
-<li>区分 reader 和 writer 的 schema</li>
-<li>可用 union 和 null 来规避数据变更问题</li>
-<li>可以提供一个可查的版本数据库来获知当前的 schema</li>
-</ul>
-<h1 id="Chapter-5-数据复制"><a href="#Chapter-5-数据复制" class="headerlink" title="Chapter 5 - 数据复制"></a>Chapter 5 - 数据复制</h1><p>主节点和从节点</p>
-<ul>
-<li>主节点接收写入请求，从节点在主节点写入后获取其变更日志，保持顺序写入</li>
-<li>主从节点都能接收读请求</li>
-</ul>
-<p>同步复制和异步复制</p>
-<ul>
-<li>都是关系到主节点的写更新如何复制到从节点中</li>
-<li>同步复制则保证了主从节点的同步</li>
-<li>异步复制则有可能导致数据丢失，但相应的吞吐量更高</li>
-</ul>
-<p>节点失效，追赶式恢复</p>
-<p>主节点失效</p>
-<ul>
-<li>采用了异步复制，新的主节点出现数据丢失</li>
-<li>例如使用自增主键，那如果外部的数据系统缓存了某些 id，但恢复时新的主节点计数器落后</li>
-</ul>
-<p>复制日志</p>
-<ul>
-<li>基于语句复制，并不能保证唯一性，如包含 <code>NOW()</code> 语句，或者带自增 ID，多个语句执行顺序不一致</li>
-<li>基于 WAL（Write Ahead Log） 传输，WAL 的描述偏向底层，如果出现版本升级导致存储格式变化，则会出现恢复失败</li>
-<li>基于行的逻辑日志复制，如 binlog，表示的是存储引擎层面的改动</li>
-</ul>
-<p>复制滞后问题</p>
-<ul>
-<li><strong>读自己写</strong>，写入到了主节点，但还没同步到从节点，这就违反了读写一致性<ul>
-<li>考虑数据中心的位置也不一定在附近</li>
-<li>记录时间戳（逻辑时钟，如版本或者实际时钟），请求时带上用以获取最新的数据</li>
-<li>一个账号的多设备</li>
-</ul>
-</li>
-<li><strong>单调读</strong><ul>
-<li>不同的请求落到了同步情况不同的从节点上</li>
-<li>可以通过 id hash 到同一个从节点上</li>
-</ul>
-</li>
-<li><strong>前缀一致性读</strong><ul>
-<li>多个关联的数据写入实际上物理存储是隔离的，写入时并不按照顺序来</li>
-</ul>
-</li>
-</ul>
-<p>复制滞后的解决方案</p>
-<ul>
-<li>多主节点复制<ul>
-<li>离线客户端操作，会出现断线好久之后重新同步的情况，类同于多主</li>
-<li>协作编辑，本地数据同步到服务器和别的正在编辑的用户，需要解决写冲突</li>
-<li>冲突解决策略，最终收敛的策略</li>
-</ul>
-</li>
-<li>无主节点复制<ul>
-<li>客户端一次发送多个请求到后端写入</li>
-<li>读取时带版本信息，用以确认其最新值</li>
-<li>quorum &amp;&amp; happen-before?</li>
-</ul>
-</li>
-</ul>
-<h1 id="Chapter-6-数据分区"><a href="#Chapter-6-数据分区" class="headerlink" title="Chapter 6 - 数据分区"></a>Chapter 6 - 数据分区</h1><p>每一条数据只属于一个分区，分区的主要目的是为了将数据和查询均匀分布在所有的节点上。</p>
-<p>基于哈希分区无法应对如社交媒体名人或者热点信息带来的高度倾斜的负载，只能通过应用层去来减轻不平衡的程度</p>
-<ul>
-<li>在关键字头或者尾添加随机数将写操作重新分区，但带来读操作需要应用层进行合并</li>
-</ul>
-<p>二级索引</p>
-<ul>
-<li>二级索引往往不能准确标识一条数据</li>
-<li>基于文档的二级索引，不同的数据分区有不同的索引，查询需要查多个并合并</li>
-<li>基于词条的二级索引，全局索引，索引自身也分区方便快速查询，写入速度一般，二级索引更新可以异步</li>
-</ul>
-<p>分区再平衡</p>
-<ul>
-<li>直接取模，任何新节点的引入或者节点的删除都会导致所有数据迁移</li>
-<li>固定分区，分区数小于节点数，每个节点负责某一些分区，分区数需要创建时就确定好</li>
-<li>动态分区，根据当前实际数据量创建或者删除分区</li>
-<li>节点比例分区</li>
-</ul>
-<p>请求路由</p>
-<ul>
-<li>典型的服务发现问题，使用如 ZooKeeper 来存放对应关系</li>
-<li>P2P 的模式同步集群状态</li>
-</ul>
-<p>一致性哈希？</p>
-<h1 id="Chapter-7-事务"><a href="#Chapter-7-事务" class="headerlink" title="Chapter 7 - 事务"></a>Chapter 7 - 事务</h1><p>磁盘和 SSD 都各有好处，如</p>
-<ul>
-<li>磁盘的坏道率很低，但是整盘完全失效的情况却会概率高点</li>
-<li>SSD 对温度的要求会更高</li>
-</ul>
-<p>除了硬件上的各种优劣，软件上的问题也会导致数据的丢失</p>
-<h2 id="弱隔离级别"><a href="#弱隔离级别" class="headerlink" title="弱隔离级别"></a>弱隔离级别</h2><p>这里的弱是相对串行化来的</p>
-<p>读提交，read-committed</p>
-<ul>
-<li>防止脏读，snapshot</li>
-<li>防止脏写，通常采用行级锁</li>
-</ul>
-<p>其会导致读倾斜，即不可重复读，需要 MVCC，即快照级别的隔离</p>
-<p>防止更新丢失，如需要执行 +1 操作，可</p>
-<ul>
-<li>update set value = value + 1，但这种操作可能在 ORM 层面丢失了，回退回原来的两次操作</li>
-<li>显式加锁</li>
-<li>数据库可能提供隐式支持，如 PostgreSQL 的可重复读</li>
-</ul>
-<p>有些不支持事务的数据库，可能支持原子的 CAS（Compare And Swap）</p>
-<p>写倾斜</p>
-<ul>
-<li>对多个对象的约束，并行的事务无法检测合法性，如排班和会议室的预订</li>
-<li>可使用显式的加锁</li>
-<li>可额外加入可暴露出冲突的锁条件，如会议室和时间的所有组合</li>
-</ul>
-<h2 id="可串行化"><a href="#可串行化" class="headerlink" title="可串行化"></a>可串行化</h2><p>适用串行化的理由</p>
-<ul>
-<li>不同的隔离级别，各家数据库实现不同</li>
-<li>应用层代码无法判断是否安全</li>
-<li>OLTP 事务执行很快，只有少量的读写操作，而长时间的分析操作一般是只读</li>
-<li>内存越来越便宜，可加载全部的数据到内存中</li>
-</ul>
-<p><strong>存储过程</strong></p>
-<p>采用单线程串行执行的系统往往不支持交互式的多语句事务，相对而言对网络和 IO 的要求更低，但实际上</p>
-<ul>
-<li>存储过程不好管理，版本管理，调试都相对麻烦</li>
-<li>现代的也有像 Redis 采用 Lua 来实现存储过程</li>
-</ul>
-<p>需要注意的是，这里需要存储过程和内存数据库才能再单线程上执行所有事务变得可能。</p>
-<p>而分区问题，又需要组织好数据集来使得单个线程能在单个分区内执行事务。而跨分区的事务就又需要额外的资源来进行协调。 </p>
-<p><strong>两阶段加锁</strong></p>
-<p>two-phase locking, 2PL，现阶段唯一的串行化算法。</p>
-<p>多个事务可以同时读取同一对象，但只要出现任何写操作，则必须加锁来进行独占访问。实际实现中，则以共享锁和互斥锁来实现，如 MySQL 中的 Share Lock 和 Exclusive Lock，都需要在 SQL 显式使用，否则就是使用 MVCC 来处理多事务问题。</p>
-<p><strong>谓词锁</strong></p>
-<p>并不属于某一个对象，而是属于符合某些特定查询条件的所有对象，就是为了防止出现上面说过的会议室预定问题。在实际实现中，则以索引区间锁作为简化和近似。</p>
-<h1 id="Chapter-8-分布式系统的挑战"><a href="#Chapter-8-分布式系统的挑战" class="headerlink" title="Chapter 8 - 分布式系统的挑战"></a>Chapter 8 - 分布式系统的挑战</h1><p>故障和部分失效</p>
-<p>不可靠网络</p>
-<ul>
-<li>硬件不可靠</li>
-<li>IP 协议本身也不可靠</li>
-<li>人为配置错误</li>
-</ul>
-<p>需要故障检测，如下线失败节点，重试机制。</p>
-<p><strong>不可靠的时钟</strong></p>
-<ul>
-<li>墙上时钟，即根据某个日历返回当前时间和日期，如编程语言中的 get current time</li>
-<li>单调时钟，如 Java 中的 <code>System.nanoTIme()</code> ，用于单机上的差值比较，从而为应用层提供单调递增计时，不同节点上的单调时钟没有任何意义</li>
-<li>墙上时钟需要 NTP 来进行同步，但同步就会遇到如网络问题，服务器故障一类导致收到的结果不可用</li>
-<li>移动设备用户可调墙上时钟</li>
-<li>在分布式系统中采用墙上时要严格保证节点的时间同步，如果需要进行排序，最好采用递增计数器</li>
-<li>线程暂停（gc，线程切换）之前如果进行时间的比较，有可能出现错误的结果，哪怕是单调时钟，最好依赖如信号量等线程同步工具</li>
-</ul>
-<p>知识，真相和谎言</p>
-<ul>
-<li>节点可能已经被认为失效，但其仍可能认为自身没问题</li>
-<li>用 fencing 令牌来检测无意的误操作，已经过时的节点拒绝请求</li>
-<li>拜占庭故障，指的是存在可能破环系统的节点，如航天中辐射之后的 CPU 寄存器的不可预测的行为，还有软件的 bug</li>
-</ul>
-<h1 id="Chapter-9-一致性与共识"><a href="#Chapter-9-一致性与共识" class="headerlink" title="Chapter 9 - 一致性与共识"></a>Chapter 9 - 一致性与共识</h1><p>为了构建容错系统，最好先建立一套通用的抽象机制和与之对应的技术保证。</p>
-<p>事务隔离主要是为了处理并发执行事务时的各种临界条件，而分布式一致性则主要针对延迟和故障等问题来协调副本之间的状态。</p>
-<h2 id="可线性化"><a href="#可线性化" class="headerlink" title="可线性化"></a>可线性化</h2><p>可串行化强调的是事务执行的结果是与串行执行一致的，可线性化强调的是对单个对象的读写最新值的保证。</p>
-<p>依赖条件</p>
-<ul>
-<li>加锁和主节点选举</li>
-<li>约束和唯一性保证</li>
-<li>跨通道的时间依赖<ul>
-<li>如同时存在队列和 RPC 调用，两者到达顺序不同导致出现不一致的情况</li>
-</ul>
-</li>
-</ul>
-<h2 id="线性化的代价"><a href="#线性化的代价" class="headerlink" title="线性化的代价"></a>线性化的代价</h2><p>CAP 理论，可用性和分区容错性，系统只能支持其中两个。但实际上网络分区是一定存在的，一旦发生网络故障要么选择线性，要么选择可用性。</p>
-<p>CAP 理论有争议，实际上节点延迟和其它相对网络分区更弱的情况没有考虑进去，并且在多核环境下，也很难考虑线性化。</p>
-<h2 id="顺序保证"><a href="#顺序保证" class="headerlink" title="顺序保证 *"></a>顺序保证 *</h2><p>概念</p>
-<ul>
-<li><strong>全序</strong>是指，集合中的任两个元素之间都可以比较的关系。 比如实数中的任两个数都可以比较大小，那么“大小”就是实数集的一个<strong>全序</strong>关系</li>
-<li><strong>偏序</strong>是指，集合中只有部分元素之间可以比较的关系。 比如复数集中并不是所有的数都可以比较大小，那么“大小”就是复数集的一个<strong>偏序</strong>关系。</li>
-<li>在一个可线性化的系统中，存在全序操作关系。</li>
-<li>因果关系至少可以定义为偏序</li>
-</ul>
-<p>因果关系对所发生的事件施加了某种排序，某件事应该发生在某件事之前。我们称之为因果一致性。如</p>
-<ul>
-<li>Git 基于数字签名的上下文关系</li>
-</ul>
-<p>可线性化是全序操作关系，系统的行为像是只有一个数据副本。而对因果关系而言，如果两个操作没有 happens-before 的关系，则它们就是并发关系，并发的关系无法排序，这表明因果关系是可定义为偏序。同时，并发就意味着分支和合并。</p>
-<p>因果关系可以认为是一种可以容忍网络延迟，又能对网络故障提供容错的最强一致性模型。看似需要线性化的系统，实际上是需要因果一致性。</p>
-<h3 id="序列号排序"><a href="#序列号排序" class="headerlink" title="序列号排序"></a>序列号排序</h3><p>在存在唯一主节点的系统里面，主节点可生成单调递增的 id 来为每个操作复制。这样结果一定满足因果一致性。而不存在主节点的分布式系统，则需要外部手段来生成唯一自增 ID，如</p>
-<ul>
-<li>不同节点奇偶 id</li>
-<li>不同节点负责不同区间</li>
-<li>通过墙上时钟</li>
-</ul>
-<p>Lamport 时间戳</p>
-<ul>
-<li>每个节点都有一个唯一的标识符</li>
-<li>每个节点都有一个计数器</li>
-<li>每个节点都追踪迄今为止看到的最大计数器值，如果发现比自己维护的要大，则修改成该值</li>
-</ul>
-<p>实际上，处理时还是需要去收集到所有的请求信息才能去构造请求顺序。所以，还是主从复制的做法更直接有效。为了解决主节点的限制，以及故障时的节点切换，需要全序关系广播和原子广播。</p>
-<blockquote>
-<p>顺序保证的范围是作用在分区之上，如果需要跨分区则需要非常多的工作（如 Kafka）</p>
-</blockquote>
-<p>全序广播通常是指节点间交换信息的协议，要满足以下的基本安全属性</p>
-<ul>
-<li>可靠发送，如果发送到了一个节点，也必须发送到其它所有节点</li>
-<li>发送到每个节点的顺序相同</li>
-</ul>
-<p>可以将其视为日志，如复制日志，事务日志和预写日志，传递信息则是通过追加日志的形式更新。全序关系模型是基于异步的模型，保证顺序可以发送，但不保证发送成功，而可线性化则强调就近性，读取时保证可以看到最新的输入。</p>
-<h2 id="分布式事务和共识"><a href="#分布式事务和共识" class="headerlink" title="分布式事务和共识"></a>分布式事务和共识</h2><p>集群节点一致</p>
-<ul>
-<li>主节点选举</li>
-<li>原子事务提</li>
-</ul>
-<h3 id="两阶段提交-2PC"><a href="#两阶段提交-2PC" class="headerlink" title="两阶段提交 2PC"></a>两阶段提交 2PC</h3><p>引入中间的协调者，其通常实现为共享库，运行在相同的进程中</p>
-<ul>
-<li>阶段 1，协调者询问所有的参与者（多个数据节点）是否可以提交请求</li>
-<li>阶段 2，提交请求</li>
-</ul>
-<p>如果 1 中有任何的节点拒绝，则协调者在 2 中会向所有的节点发送放弃的请求。 而参与者确定了可以提交之后后续不会有放弃的选择，除非协调者确定不提交。对于单点系统而言，两个步骤是合二为一的，即写入事务日志即提交。如果协调者已经确定了阶段 1，则如果在阶段 2 之前失败，则参与者也不会单方面进行放弃。没有协调者的消息，参与者无法知道下一步的行动。协调者本身也应该拥有事务日志，在恢复后来决定是否需要继续未完成的事务。  </p>
-<h3 id="XA-交易"><a href="#XA-交易" class="headerlink" title="XA 交易"></a>XA 交易</h3><p>异构系统下如何实施两阶段提交的一个工业标准。</p>
-<ul>
-<li>停顿时仍持有锁</li>
-<li>启发式决策，参与节点在紧急情况下单方面做出决定，放弃或者继续那些停顿的事务</li>
-</ul>
-<p>如果协调者是应用服务器的一部分时，则其日志也变成了可靠系统的重要组成部分，要求与数据库本身一样重要。此时，已经不是无状态的系统了。</p>
-<h3 id="支持容错的共识"><a href="#支持容错的共识" class="headerlink" title="支持容错的共识"></a>支持容错的共识</h3><p>共识算法的基本性质</p>
-<ul>
-<li>协商一致性（Uniform agreement），所有的节点都接受相同的决议</li>
-<li>诚实性（Integrity），不能反悔，即不能对一项决议有两次决定</li>
-<li>合法性（Validity），如果决定了值 v，则一定是由某个节点提议的</li>
-<li>可终止性（Termination），节点如果不崩溃，则最终一定可以达成某项协议</li>
-</ul>
-<p>容错体现在可终止性上，强调一个共识算法不能空转，必须取得实质性的进展。此处，前提是发生崩溃和不可用的节点数必须小于半数。常见算法有</p>
-<ul>
-<li>VSR</li>
-<li>Paxos</li>
-<li>Raft</li>
-<li>Zab</li>
-</ul>
-<p><strong>Epoch 和 Quorum</strong></p>
-<p>协议定义了一个世代编号，在每个世代里面，主节点是唯一确定的。如果主节点挂掉，则其余节点进行新一轮的选举，选举会赋予一个单调递增的 epoch 号。如果出现两个不同的 epoch 号则更高的获胜。</p>
-<p>主节点如果想要做出决定，则须将提议发给其它所有节点，如果没有更高的 epoch 主节点存在时，在对当前提议进行投票。</p>
-<p>算上之前的主节点投票，这里会有两轮投票，其中参与投票的节点必须至少有一个参与了最近一次主节点选举。换言之，如果在针对提议的投票中没有出现更高 epoch 号码，则可以认为当前的主节点没有替换。</p>
-<h1 id="Chapter-10-批处理系统"><a href="#Chapter-10-批处理系统" class="headerlink" title="Chapter 10 - 批处理系统"></a>Chapter 10 - 批处理系统</h1><p>最简单的批处理就是使用如 awk 等工具进行日志分析。其特点</p>
-<ul>
-<li>将字节序列视为 ASCII 文本</li>
-<li>如果需要功能的组合则通过管道进行连接</li>
-<li>避免使用严格的格式或者二进制</li>
-<li>避免交互式输入</li>
-</ul>
-<p>最大的局限性就是其只能在一台机器上运行。而 MapReduce 就是一个类似于分布式的 UNIX 工具，其进行输入和输出依赖于像 HDFS 这样的分布式文件系统。</p>
-<h1 id="Chapter-11-流处理系统"><a href="#Chapter-11-流处理系统" class="headerlink" title="Chapter 11 - 流处理系统"></a>Chapter 11 - 流处理系统</h1><p>流处理系统即把时间流视为一种数据管理机制：一种无界的，持续增量处理的方式。在批处理系统中，通过文件名来标识一组相关的数据，流系统中，则被视为主题或者流。</p>
-<h2 id="消息系统"><a href="#消息系统" class="headerlink" title="消息系统"></a>消息系统</h2><p>对于不同的消息系统，会有两个问题</p>
-<ul>
-<li>如果生产者发送消息的速度比消费者快，会发生什么？<ul>
-<li>TCP 和 UNIX 管道会有个固定的缓冲区，如果填满了，发送者会堵塞</li>
-</ul>
-</li>
-<li>如果节点崩溃或者暂时离线，是否有消息丢失？<ul>
-<li>持久性和吞吐量并不能同时满足</li>
-</ul>
-</li>
-</ul>
-<p>如果不通过消息系统，则可以考虑</p>
-<ul>
-<li>UDP 组播，适用于低延迟的场景</li>
-<li>无代理的消息库（如 ZeroMQ）</li>
-<li>HTTP 或者 RPC 请求</li>
-</ul>
-<p>这些方法都需要一个在应用层失效的重传机制，还需要生产者和消费者都是一直在线的。</p>
-<p>消息代理，即消息队列，允许一个第三方服务来缓存需要传递的消息。具体体现在 JMS 和 AMQP 的标准上，常见的实现有 RabbitMQ，ActiveMQ。对于已经确认过的消息就会从代理中删除，就无法再接收该消息了。引入了像数据库的持久化存储的日志思想，就有了基于日志的消息存储。常见就是 Kafka。</p>
-<h2 id="数据库与流"><a href="#数据库与流" class="headerlink" title="数据库与流"></a>数据库与流</h2><p>在使用数据库的过程中，难免会因为缓慢增添外部的缓存，这样就容易出现不一致的情况。</p>
-<p>Change Data Capture，CDC，即变更数据捕获。记录了写入数据库的所有变更，并可以复制到其它系统的实行来提取数据。数据库的复制日志解析可以从数据源处拿 CDC。有了这些日志，就可以进行数据的重放。在需要重建索引或者外部缓存时，也可以通过从偏移量为 0 处开始，扫描日志中的所有消息，这也是一个数据库内容的完整副本。相关的日志压缩也是通过扫描指定的 key 获取其最新值来压缩合并。</p>
-<p>事件溯源，也可以将涉及到的所有对应用程序状态的变保存为事件的日志。不同的是，事件存储仅支持追加，不鼓励更新和删除。事件通常用来表达用户行为的意图，而不是一种对行为结果进行相应状态更新的机制。用户会发出一个命令，当命令检查完成（合法性校验）之后就变成了一个事件，这是命令和事件的区分。</p>
-<h2 id="状态，流和不可变性"><a href="#状态，流和不可变性" class="headerlink" title="状态，流和不可变性"></a>状态，流和不可变性</h2><p>通过不可变事件的追加日志，判断问题和恢复也会很方便。除此以外，还会捕获很多的信息，如顾客的意图而不只是购买的最终订单。</p>
-<p>通过相同的事件日志可以派生出多个视图，如 Druid 和 Pistachio 都使用 Kafka 作为输入源，通过从事件日志到数据库的转换，能得到基于不同 key 的数据库。这种将数据写入和读取形式分开，并允许不同的读取视图的想法被称为命令查询职责分离（Command Query Responsibility Segregation，CQRS），与此相对的，传统数据库和模式设计的方法是基于数据查询和数据写入的形式相同。</p>
-<p>这种模式最大的问题是，事件的捕获和变更日志的捕获通常是异步的，需要处理 “读自己写的” 这种问题。</p>
-<ul>
-<li>同步执行读取视图的更新，这写入一个事务将写操作合并到一个原子处理中，所以要么是事件日志和读取视图都在同一个存储系统，要不跨不同系统的分布式事务，或者是全序广播</li>
-<li>从事件日志中导出当前状态<ul>
-<li>对多对象事务的大部分需求源自单个用户需要在不同地方修改数据的操作</li>
-<li>通过事件溯源可以设计一个事件使其成为用户操作的独立描述，将其追加到日志中，这样原子化就会很容易</li>
-<li>如果以相同的方式对日志和应用程序进行分区（分区 3 的用户需要更新应用程序分区 3），则简单的单线程消费者不需要对写操作进行并发控制</li>
-</ul>
-</li>
-</ul>
-<h2 id="流处理"><a href="#流处理" class="headerlink" title="流处理"></a>流处理</h2><p>和批处理作业最大的不同是，流处理是不会结束的，因此排序无意义，也不能使用排序合并 join，容错机制也必须改变，从头开始运行运作了几年的流处理作业，几乎是不可能的。</p>
-<p>长期以来流处理都被用于监控目的，则需要长期对特定事件进行分析，如信用卡消费，交易系统的价格变化。</p>
-<p>复杂事件处理（Complex Event Processing）与正则表达式在字符串中搜索特定的字符模式类似，CEP 允许指定规则在流中搜索特定模式的事件。CEP 的查询是长久存储的，来自输入流的事件不断流过他们以匹配事件模式。实现有类似 Samza 这种支持声明式的 SQL 查询。</p>
-<p>与 CEP 相对的则是流分析，CEP 专注特定的事件序列，而流分析更多关注大量时间累积的效果和统计指标，如</p>
-<ul>
-<li>速率</li>
-<li>在时间窗口的平均值</li>
-<li>趋势的变化</li>
-</ul>
-<p>有时也使用概率算法，如布隆过滤器，常见的实现为 Flink 和 Kafka Streams。</p>
-<h2 id="流的事件问题"><a href="#流的事件问题" class="headerlink" title="流的事件问题"></a>流的事件问题</h2><p>需要关注的是事件时间和处理时间，如果使用的是处理节点上的本地系统时钟来确定窗口，在节点出现排队，网络故障或性能下降导致节点重启去处理过去的事件，就会出现事件事件和处理时间上延迟会非常明显。</p>
-<p>为了调整不正确的设备时钟，需要记录三个时间戳</p>
-<ul>
-<li>事件发生的事件</li>
-<li>事件发送到服务器的时间</li>
-<li>服务器收到事件的时间</li>
-</ul>
-<p>第三个时间戳减去第二个则可以估计出设备时钟和服务器时钟的偏移量（还要考虑到网络延迟），将偏移量应用于第一个时间即可估计出一个事件实际发生的真实时间。</p>
-<h3 id="窗口类型"><a href="#窗口类型" class="headerlink" title="窗口类型"></a>窗口类型</h3><p>定义用于作事件统计的一个事件范围</p>
-<ul>
-<li>轮转窗口，即一个固定的时间范围，如下午 2 点到 3 点，晚上 7 点 30 分到 7 点 31 分</li>
-<li>跳跃窗口，有固定的长度，但是允许平滑过渡，如一个五分钟的窗口，之前在统计 10:30 到 10:35 内的事件，设定 hop 是 1 分钟，那下一个窗口则可以是 10:31 到 10:36</li>
-<li>滑动窗口，包含在彼此的某个间隔内发生的所有事件，然后在事件过期之后从缓冲区中删除</li>
-<li>会话窗口，将同一用户相关的事件都分组在一起，一旦一个用户一段时间没有活动，则窗口结束</li>
-</ul>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>花了大半年时间看了两遍，看下来的总体感觉是我知道了一些东西，以及我还是有很多东西不懂。</p>
-<p>特别是第 8 章和第 9 章，分布式的事务和共识的一些知识，属于都了解，但在应用层做开发很少会接触，知道其存在，但有时会不知道其为何要如此设计。整本书算是一个后端开发整体技术的一个总览，并且在很多地方也有较为深入的介绍。是一本好书，希望 2 3 年后再看一遍，希望那时能看懂更多。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2021/12/15/designing-data-intensive-applications-note/" data-id="ckx7kmldk005jrzc8exdy2t37" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/network/" rel="tag">network</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/protocol/" rel="tag">protocol</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/security/" rel="tag">security</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-oauth-introduction" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2021/10/23/oauth-introduction/" class="article-date">
-  <time datetime="2021-10-22T16:00:00.000Z" itemprop="datePublished">2021-10-23</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/10/23/oauth-introduction/">OAuth Introduction</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>上下文中的 OAuth 仅考虑 OAuth 2.0，不考虑旧版的协议。</p>
-<h1 id="Protocol"><a href="#Protocol" class="headerlink" title="Protocol"></a>Protocol</h1><blockquote>
-<p>OAuth 2.0 is not an authentication protocol.</p>
-</blockquote>
-<blockquote>
-<p>As far as an OAuth client is concerned, it asked for a token, got a token, and eventually used that token to access some API. It doesn’t know anything about who authorized the application or if there was even a user there at all.</p>
-</blockquote>
-<p>OAuth 并不是一个用户认证协议，并不关注用户是谁和或者谁在使用 API。它关注授权和维护 token。用户认证是一个更大的主题，你可以以 OAuth 来实现。</p>
-<h1 id="Roles"><a href="#Roles" class="headerlink" title="Roles"></a>Roles</h1><p>OAuth defines four roles:</p>
-<ul>
-<li><strong>Resource Owner</strong>: The resource owner is the <em>user</em> who authorizes an <em>application</em> to access their account. The application’s access to the user’s account is limited to the scope of the authorization granted (e.g. read or write access)</li>
-<li><strong>Client</strong>: The client is the <em>application</em> that wants to access the <em>user</em>’s account. Before it may do so, it must be authorized by the user, and the authorization must be validated by the API.</li>
-<li><strong>Resource Server</strong>: The resource server hosts the protected user accounts.</li>
-<li><strong>Authorization Server</strong>: The authorization server verifies the identity of the <em>user</em> then issues access tokens to the <em>application</em>.</li>
-</ul>
-<p>Resource Owner 就是用户，用户委托 Client 以其去获取相应资源。如 Facebook / GitHub / Google 登陆是第三方网站希望获取 ID 信息，在授权确认的网页上会写有需要获取的权限，如邮箱地址。</p>
-<p><img src="/images/oauth-abstract-flow.png" alt="oauth-abstrac-flow"></p>
-<ol>
-<li>The <em>application</em> requests authorization to access service resources from the <em>user</em></li>
-<li>If the <em>user</em> authorized the request, the <em>application</em> receives an authorization grant</li>
-<li>The <em>application</em> requests an access token from the <em>authorization server</em> (API) by presenting authentication of its own identity, and the authorization grant</li>
-<li>If the application identity is authenticated and the authorization grant is valid, the <em>authorization server</em> (API) issues an access token to the application. Authorization is complete.</li>
-<li>The <em>application</em> requests the resource from the <em>resource server</em> (API) and presents the access token for authentication</li>
-<li>If the access token is valid, the <em>resource server</em> (API) serves the resource to the <em>application</em></li>
-</ol>
-<h1 id="Grant-Types"><a href="#Grant-Types" class="headerlink" title="Grant Types"></a>Grant Types</h1><p>在上面 Abstract Protocol Flow 图中，首先是需要获取 authorization grant 以此来获取 access token，OAuth 2 包含有以下几种类型</p>
-<h2 id="Authorization-Code"><a href="#Authorization-Code" class="headerlink" title="Authorization Code"></a><strong>Authorization Code</strong></h2><p>对浏览器友好，基于 HTTP 不断地 redirect</p>
-<ol>
-<li>请求 authorization server 的 API，其中包含一个注册时的 <code>client_id</code> 和想要获取的权限 <code>scope</code>，<code>redirect_uri</code> 和 <code>response_type=code</code></li>
-<li>弹出给用户的是一个权限描述页面，用户确认后，redirect 到 client 的 <code>redirect_uri</code>，请求中包含一个 authorization code</li>
-<li>client 再以 code 去 authorization server 请求 token 接口获取 access token</li>
-<li>authorization server 会返回相应 access token 给到 client<ol>
-<li>payload 中可能会包含一个有效期更长的 refresh token</li>
-</ol>
-</li>
-</ol>
-<p>此外，最开始 authorization code 的 request 会带有一个随机字符串 <code>state</code> ，客户端可以存在 cookie 中，authorization server 返回时，也会带有 <code>state</code> 字段以防 CSRF 攻击。</p>
-<h3 id="PKCE-Proof-Key-for-Code-Exchange"><a href="#PKCE-Proof-Key-for-Code-Exchange" class="headerlink" title="PKCE - Proof Key for Code Exchange"></a>PKCE - Proof Key for Code Exchange</h3><p>在 Authorization Code 流程中，authorization code 可能会被拦截，需要额外安全措施来保证 token 的生成，PKCE 就是一个该协议的扩展来帮助降低安全风险</p>
-<ol>
-<li>请求 authorization server 的 API 时，Client 会新增一个随机的 <code>code_challenge</code> 和相应的 hash 算法 <code>code_challenge_method</code> 字段</li>
-<li>authorization server 记录这些字段，在 Client 请求 access token 时，其会新增一个 <code>code_verifier</code> 字段（使用 hash 算法转换的值）</li>
-<li>authorization server 验证该字段和之前提供的 <code>code_challenge</code> 转换之后的值一致，则认为该 client 合法</li>
-<li>返回 access token</li>
-</ol>
-<p>在 OKTA 服务中，提及到如果需要在浏览器端使用 PKCE，则需要浏览器支持 Web Crypto API，具体可见该 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API">文档</a>。</p>
-<h2 id="Client-Credentials"><a href="#Client-Credentials" class="headerlink" title="Client Credentials"></a>Client Credentials</h2><p>不是针对实际用户的，而是用于 server to server 的 API 认证</p>
-<ol>
-<li>向 authorization server 发送请求，其中 <code>grant_type=client_credentials</code> ，还包括事前约定的 <code>client_id</code> 和 <code>client_secret</code></li>
-<li>authorization server 认证之后就返回 access token</li>
-</ol>
-<h2 id="Device-Code"><a href="#Device-Code" class="headerlink" title="Device Code"></a>Device Code</h2><blockquote>
-<p>The device code grant type provides a means for devices that lack a browser or have limited inputs to obtain an access token and access a user’s account.</p>
-</blockquote>
-<p>为没有浏览器，或者不方便进行输入的设备而设</p>
-<ol>
-<li>client 向 authorization server 发送请求，endpoint 和上述两种类型不同，需要提供 <code>client_id</code></li>
-<li>返回带 <code>device_code</code> 和 <code>user_code</code></li>
-<li>此时设备可以提供一个 QR Code，以 <code>device_code</code> 构成链接，用户端输入 <code>user_code</code> 来即可完成校验</li>
-</ol>
-<h1 id="OpenID-Connect-OIDC"><a href="#OpenID-Connect-OIDC" class="headerlink" title="OpenID Connect - OIDC"></a>OpenID Connect - OIDC</h1><blockquote>
-<p>OpenID Connect protocol is built on the OAuth 2.0 protocol and helps authenticate users and convey information about them. It is also more opinionated than plain OAuth 2.0, for example in its scope definitions.</p>
-</blockquote>
-<p>OAuth 本身其实不关心用户，它是一个授权协议，关注使用 token 去请求 API。OIDC 则是复用其获取 token 的流程，加以扩展功能。</p>
-<blockquote>
-<p>OAuth 2.0 leaves a lot of details up to implementers. For instance, it supports scopes, but scope names are not specified. It supports access tokens, but the format of those tokens are not specified.</p>
-</blockquote>
-<p>OIDC 完善了很多 OAuth 细节，包括 <code>scope</code> 定义，以及一个用于获取用户信息 <a target="_blank" rel="noopener" href="https://openid.net/specs/openid-connect-core-1_0.html#UserInfo">API</a> 等。此外一个重要的不同是，在返回 access token 时，带上了一个 <code>id_token</code> 。这是一个 JWT 格式的字段，解析出来就是用户信息。</p>
-<p>OAuth 定义好了流程，OIDC 则是复用了流程定义好了如字段和格式，而且定义好了 meta 信息的 API，用以做自动发现等功能（此功能是一个 Optional 选项，详情可见 <a target="_blank" rel="noopener" href="https://openid.net/connect/">文档</a>）。</p>
-<p>一些常用的 API</p>
-<ul>
-<li>/userinfo - 获取用户信息</li>
-<li>/introspect - 检查 token</li>
-<li>/token - 获取新的 token</li>
-<li>/revoke - 取消一个 access token 或者 refresh token</li>
-</ul>
-<h2 id="Single-Sign-On-SSO"><a href="#Single-Sign-On-SSO" class="headerlink" title="Single Sign On - SSO"></a>Single Sign On - SSO</h2><p><img src="/images/single-sign-on.png" alt="single-sign-on"></p>
-<p>上图是浏览器端的 SSO 流程。一个场景如下</p>
-<ol>
-<li>用户登录 domain1 时，此时没有 cookie，则需要跳转到 domain3 进行登录</li>
-<li>domain3 登录成功后，则使用返回 token 和 redirect 到 domain1，domain1 使用该 token 即可完成登录</li>
-<li>在登录成功 domain3 时，浏览存会存放有 domain3 的 cookie</li>
-<li>当 domain2 需要登录，跳转到 domain3 则不需要进行用户认证，通过 cookie 即可确认登录状态</li>
-<li>返回 token 和 redirect 到 domain2</li>
-</ol>
-<p>这么做的原因首先是浏览器的 Same Origin Policy 限制，不同域名 cookie 不可见。所以只能通过跳转到入口 domain 来使用其 cookie。</p>
-<h1 id="Token"><a href="#Token" class="headerlink" title="Token"></a>Token</h1><p>OIDC 授权结束后，client 可以拿到三个 token</p>
-<ul>
-<li>access token</li>
-<li>refresh token</li>
-<li>id token</li>
-</ul>
-<p>access token 用于访问资源，refresh token 则用于申请新的 access token ，id token 则是 JWT 格式封装的用户信息，除了 id token 限制使用 JWT 之外，其余没有格式要求。不同 token 的生命周期不同，以 OKTA 平台为例，其默认 token 生命周期为</p>
-<ul>
-<li><strong>ID token:</strong> 60 minutes</li>
-<li><strong>Access token:</strong> 60 minutes</li>
-<li><strong>Refresh token:</strong> 90 days</li>
-</ul>
-<p>OKTA 中 access token 也是使用 JWT 封装，resource server 收到请求时，也可以进行时间和签名认证。其中，JWT header 包含一个 <code>kid</code> 字段，通过一个无需认证 endpoint <code>/.well-known/oauth-authorization-server</code>（这个就是上文提到的 OIDC 用于接口发现的 meta endpoint）可以查询到一个 <code>/keys</code> 的 URI，通过 <code>client_id</code> 和 <code>kid</code> 即可查到相应的公钥，有了公钥就可以进行 access token 的合法性校验。</p>
-<p>access token 到期后，需要使用 refresh token 请求 <code>/token</code> 接口获取新的 access token 。refresh token 生命周期更长，为了防止被滥用，可以考虑</p>
-<ul>
-<li>使用 Native App 需要保证 refresh token 存放到只有自己程序可以访问的区域</li>
-<li>每次申请新的 access token 之后，会带新 refresh token 下来，revoke 旧 refresh token</li>
-<li>用户退出后，revoke 旧 refresh token</li>
-</ul>
-<p>在 OKTA 中，Browser-based 的 App 甚至不支持 refresh token</p>
-<blockquote>
-<p>Note: The Authorization Code flow with PKCE doesn’t support refresh tokens for SPAs and other browser-based apps.</p>
-</blockquote>
-<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>本文是对 OKTA 平台进行调研的一些笔记，我倒是重新认真看了 OAuth / SSO 的一些概念，受益颇多。个人感觉从 OAuth 进化到 OIDC 的路倒是挺有意思的。有文章介绍道说最开始是用了一个 <code>/me</code> 的 endpoint 来获得用户信息，但这样是有违 OAuth 设计的，于是在 OAuth 基础上实现了 OIDC。</p>
-<p>协议的设计和使用范围的确是一个很难平衡的点，总是很容易将就使用某个协议去越级做一些事情。</p>
-<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://www.digitalocean.com/community/tutorials/an-introduction-to-oauth-2">An Introduction To Oauth 2</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.oauth.com/playground/index.html">https://www.oauth.com/playground/index.html</a></li>
-<li><a target="_blank" rel="noopener" href="https://oauth.net/articles/authentication/">https://oauth.net/articles/authentication/</a></li>
-<li><a target="_blank" rel="noopener" href="https://datatracker.ietf.org/doc/html/rfc6749">https://datatracker.ietf.org/doc/html/rfc6749</a></li>
-<li><a target="_blank" rel="noopener" href="https://developer.okta.com/blog/2017/06/21/what-the-heck-is-oauth#pseudo-authentication-with-oauth-20">https://developer.okta.com/blog/2017/06/21/what-the-heck-is-oauth#pseudo-authentication-with-oauth-20</a></li>
-<li><a target="_blank" rel="noopener" href="https://auth0.com/blog/what-is-and-how-does-single-sign-on-work/">https://auth0.com/blog/what-is-and-how-does-single-sign-on-work/</a></li>
-<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API">https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API</a></li>
-<li><a target="_blank" rel="noopener" href="https://openid.net/connect/">https://openid.net/connect/</a></li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2021/10/23/oauth-introduction/" data-id="ckx7kmlcq0023rzc86mqcg5r2" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/network/" rel="tag">network</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/protocol/" rel="tag">protocol</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/security/" rel="tag">security</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-mysql-innodb" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/11/13/mysql-innodb/" class="article-date">
-  <time datetime="2020-11-12T16:00:00.000Z" itemprop="datePublished">2020-11-13</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/13/mysql-innodb/">MySQL InnoDB Introduction</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>用了 MySQL 这么久，现在才第一次看了下官方关于 InnoDB 的<a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/innodb-introduction.html" title="innodb-introduction">文档</a></p>
-<h2 id="Base"><a href="#Base" class="headerlink" title="Base"></a>Base</h2><p>先简单说一些 InnoDB 的特性</p>
-<ul>
-<li>ACID，支持事务 commit 和 rollback</li>
-<li>Row-level Locking</li>
-<li>聚簇索引（<a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_clustered_index">clustered index</a>）</li>
-<li>Foreign Key</li>
-</ul>
-<h3 id="Benefits"><a href="#Benefits" class="headerlink" title="Benefits"></a>Benefits</h3><ul>
-<li>自动 crash recovery</li>
-<li>用 buffer pool 缓存表和索引的数据</li>
-<li>可以压缩表和索引</li>
-<li>adaptive hash index，对于 <code>=</code> 和 <code>IN</code> 操作，能缓存常用 pages</li>
-</ul>
-<h3 id="Best-Practices"><a href="#Best-Practices" class="headerlink" title="Best Practices"></a>Best Practices</h3><ul>
-<li>指定主键或者 auto-increment</li>
-<li>关闭 autocommit</li>
-<li>不要使用 <code>LOCK TABLES</code> 而是 <code>SELECT ... FOR UPDATE</code> 锁对应行</li>
-</ul>
-<h2 id="Advanced"><a href="#Advanced" class="headerlink" title="Advanced"></a>Advanced</h2><h3 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a>ACID</h3><p>Atomicity</p>
-<ul>
-<li><p>Autocommit setting</p>
-</li>
-<li><p>COMMIT / ROLLBACK</p>
-</li>
-</ul>
-<p>Consistency</p>
-<ul>
-<li>doublewrite buffer</li>
-<li>crash recovery</li>
-</ul>
-<p>Isolation</p>
-<ul>
-<li>Autocommit setting</li>
-<li><code>SET ISOLATION LEVEL</code> 语句</li>
-<li>Locking</li>
-</ul>
-<p>Durability</p>
-<ul>
-<li>doublewrite buffer</li>
-<li><code>fsync() </code> system call</li>
-</ul>
-<p>其中，Consistency 和 Durability 着重点有点不同，前者是指数据上的一致性，满足相应的约束设置，通过一些策略保证数据在 crash 之后不会丢失或者出现脏数据。后者则是关注与硬件打交道，保证数据库软件上的稳定性。</p>
-<p>上述提到的 <a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_doublewrite_buffer" title="glos_doublewrite_buffer">doublewrite buffer</a> 是一个为了故障恢复的设计。</p>
-<blockquote>
-<p>Before writing <strong>pages</strong> to the <strong>data files</strong>, <code>InnoDB</code> first writes them to a storage area called the doublewrite buffer. Only after the write and the flush to the doublewrite buffer have completed, does <code>InnoDB</code> write the pages to their proper positions in the data file.</p>
-</blockquote>
-<p>意思是先写 buffer，然后确认 buffer 没问题再写到对应的磁盘位置。如果中间出现了 crash，就能直接从 buffer 写到对应的文件。需要注意的是，这里的数据单位是 page，这里的 page 也不是 OS 的 page 的概念，而是引擎本身定义的数据单元。</p>
-<p>如 InnoDB 默认是 16K，计算校验和也是以 16K 作为单位，但如果系统的 page 大小小于 16K 的话，则意味这有多次写入。如果出现 crash 的情况，只要计算 buffer 和磁盘处的校验和是否一致即可。此外，buffer 的写入是线性的，buffer 到实际的磁盘写入是随机的，所以实际上没有 100% 的性能损耗，更详细的可见 <a target="_blank" rel="noopener" href="https://www.percona.com/blog/2006/08/04/innodb-double-write/" title="innodb-double-write">这篇文章</a>。</p>
-<h3 id="Multi-Versioning"><a href="#Multi-Versioning" class="headerlink" title="Multi-Versioning"></a>Multi-Versioning</h3><p>InnoDB 是一个 multi-versioned 的存储引擎， 保留了修改前的信息，用以并发和事务回滚。实现上，有额外三个字段来支持这个功能</p>
-<ul>
-<li><code>DB_TRX_ID</code> insert 或者 update 当前行的上一个事务 ID，此外，删除也会有</li>
-<li><code>DB_ROLL_PTR</code> 指向一个 undo log 记录</li>
-<li><code>DB_ROW_ID</code> 一个单调递增的 row ID，如果没有指定主键，则会自动创建一个聚簇索引指向这个 ID，否则不会有任何索引引用该 ID</li>
-</ul>
-<p>undo log 有两种，一种是 insert undo log，当事务提交之后就可以删除。另一种是 update undo log，与事务生命周期绑定，只有还有事务引用该版本，则会一直保留。如果还有对应的 update undo log 存在，则该行数据则不会实际删除，只有相关事务提交了，update undo log 不在了才会进行删除，这由额外的线程进行 purge 操作。</p>
-<p>而对于聚簇索引和二级索引，两者处理逻辑也不同。前者直接在当前记录上更新，后者则不包含隐藏字段，标记删除然后新增记录。如果标记删除后，则通过聚簇索引相关的 undo log 反查去当时版本的记录。</p>
-<h3 id="In-Memory-Structures"><a href="#In-Memory-Structures" class="headerlink" title="In-Memory Structures"></a>In-Memory Structures</h3><h4 id="Buffer-Pool"><a href="#Buffer-Pool" class="headerlink" title="Buffer Pool"></a>Buffer Pool</h4><blockquote>
-<p>The buffer pool is an area in main memory where <code>InnoDB</code> caches table and index data as it is accessed. The buffer pool permits frequently used data to be processed directly from memory, which speeds up processing. On dedicated servers, up to 80% of physical memory is often assigned to the buffer pool.</p>
-</blockquote>
-<p>具体实现是基于 LRU 算法的 linked list，以 page 为元素。实现上有 new sublist 和 old sublist 两种。</p>
-<p><img src="https://dev.mysql.com/doc/refman/8.0/en/images/innodb-buffer-pool-list.png" alt="innodb-buffer-pool-list"></p>
-<p>insert 位置设计得挺巧妙，看了解释，触发 insert 有两种情况，一是实际调用 SQL，还有就是 read-ahead 产生的数据。那些用一次的 SQL 就会不断淘汰 old sublist 的元素，而不会影响 new sublist 的元素。</p>
-<h4 id="Change-Buffer"><a href="#Change-Buffer" class="headerlink" title="Change Buffer"></a>Change Buffer</h4><blockquote>
-<p>The change buffer is a special data structure that caches changes to secondary index pages when those pages are not in the buffer pool.</p>
-</blockquote>
-<p>与聚簇索引不同，二级索引的写入很多是无序的，所以如果需要对二级索引的更新需要现在缓存中聚合不然会浪费大量 IO。在闲置或者在 slow shutdown 的过程中，才会将 buffer 中的改动同步到磁盘。</p>
-<h4 id="Adaptive-Hash-Index-amp-amp-Log-Buffer"><a href="#Adaptive-Hash-Index-amp-amp-Log-Buffer" class="headerlink" title="Adaptive Hash Index &amp;&amp; Log Buffer"></a>Adaptive Hash Index &amp;&amp; Log Buffer</h4><p>AHI (Adaptive Hash Index) 由引擎本身监控判断如果创建 hash index 会提升速度，才会去创建。其缓存的是 index 和 pages 的关系，其可作用于几乎所有的涉及到 index 使用的场景，如 <code>JOIN</code>，但对 <code>LIKE</code> 的作用则不大。</p>
-<p>Log Buffer 用作 redo log 缓存，减少磁盘 IO。</p>
-<h3 id="On-Disk-Structures"><a href="#On-Disk-Structures" class="headerlink" title="On-Disk Structures"></a>On-Disk Structures</h3><h4 id="AUTO-INCREMENT"><a href="#AUTO-INCREMENT" class="headerlink" title="AUTO_INCREMENT"></a>AUTO_INCREMENT</h4><p>InnoDB 有配置项来针对 auto increment 字段。<a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/innodb-parameters.html#sysvar_innodb_autoinc_lock_mode" title="innodb_autoinc_lock_mode"><code>innodb_autoinc_lock_mode</code></a> 有三个选项</p>
-<ul>
-<li>0 - traditional</li>
-<li>1 - consecutive</li>
-<li>2 - interleaved</li>
-</ul>
-<p>旧版本 MySQL 用的是 1，MySQL 8.0 用的是 2。这个反映了 8.0 的同步机制从 statement-based replication（SBR） 到 row based replication （RBR）的改变。前者对语句的确定性要求很高，但 auto increment 的字段有可能出现不连续的情况，后者则对此并不敏感。创建表需指定 auto increment 的字段为 primary key 或者 unique key 才行（需要查询其最大值），而常见就是作为表的主键。</p>
-<p>目前有几种场景会产生新的记录</p>
-<ul>
-<li>simple insert - 简单的 insert 语句，可以预先得知插入行数</li>
-<li>bulk insert - 不能预先得知插入的行数</li>
-<li>mixed-mode - 插入语句中指定了 auto increment 字段的值和 <code>INSERT ... ON DUPLICATE KEY UPDATE</code>。后者会出现新分配的 auto increment 的值不会被使用的情况</li>
-</ul>
-<p>traditional 是有一个表级锁 AUTO-INC 来限制，而锁的使用是针对 insert 语句的，而不是事务，保证了 binary log 的执行顺序，那么就能保证同步之后的数据也是确定的。</p>
-<p>consecutive 机制是针对 bulk insert。如果在做 bulk insert 的时候，源表和结果表不一致，则目的表在源表进行第一行查询时上一个 shared lock 之后再上一个 AUTO-INC 锁。如果源表和目的表一致，则在所有的行都查询出来时加上 shared lock 再上一个 AUTO-INC 锁。</p>
-<p>如果是 simple insert，则没有 AUTO-INC 锁，而是通过一个 mutex 来获取已知的自增的值。这个 mutex 获取是在资源的阶段，而不是一直持有到语句结束。如果别的事务在使用 bulk insert 则意味着需要等待。目前而言，auto increment 产生的值都是连续的，而在 mixed mode 的情况下，会预先生成多几个值，而用不上的几个就丢失了。</p>
-<p>interleaved 机制则是没有表级别的 AUTO-INC 锁。语句可以同时执行，auto increment 的字段则是保证单调递增的生成，所以无法确定语句最后分配的值是多少。</p>
-<p>上述三种策略都是针对语句级别，意味着在事务回滚的时候，还是会有空缺的 auto increment 的值。第三种情况性能最好，但不能保证生成的值是连续的。</p>
-<h4 id="Index"><a href="#Index" class="headerlink" title="Index"></a>Index</h4><p>InnoDB 用 primary key 或者是第一个 unique index 作为 clustered index。每个表只有一个，如果不定义则会默认生成一个，和别的 index 即 secondary index 相比，其性能好很多。clustered index 指向数据的 page 而 secondary index 指向 clustered index，即 secondary index 会多一次 IO 操作。</p>
-<h4 id="Tablespaces"><a href="#Tablespaces" class="headerlink" title="Tablespaces"></a>Tablespaces</h4><p>system tablespace 是 change buffer 的存储区域，也存放创建于该区域的表和索引。</p>
-<p>file-per-table tablespaces 存放一个 InnoDB 表数据和索引。单个文件的实现在管理上非常方便，如果多个表混用一个文件，涉及到文件磁盘空间管理，备份等操作都相对复杂。相对地，做 <code>fsync</code> 操作时，如果一次写入多个表就涉及到多个 <code>fysnc</code> 的调用。</p>
-<p>general tablespace 通过 <code>CREATE TABLESPACE xx</code> 来创建，是一个 InnoDB 的 shared tablespace。相比上述的 file-per-table tablespaces，general tablespace 可以定义再 MySQL 的目录之外来做数据管理或者数据备份，也有更好的内存优化来做内存表。</p>
-<p>还有如 undo tablespace，temporary tablespace 等在运行时针对特定功能的 tablespace，在实际应用层使用上不会涉及，更多是后续针对实际使用的性能指标来进行微调。</p>
-<h4 id="Redo-Log-and-Undo-Logs"><a href="#Redo-Log-and-Undo-Logs" class="headerlink" title="Redo Log and Undo Logs"></a>Redo Log and Undo Logs</h4><blockquote>
-<p>The redo log is a disk-based data structure used during crash recovery to correct data written by incomplete transactions. During normal operations, the redo log encodes requests to change table data that result from SQL statements or low-level API calls.</p>
-</blockquote>
-<p>Redo Log 是记录准备要去变更数据的 SQL 或者 API。InnoDB 事务中的 A C D 特性就是由 Redo Log 去实现。在故障中恢复时，就是依赖 Redo Log 去将还没持久化的数据写到磁盘中。</p>
-<p>Redo Log 不是直接写磁盘，而是写到一个 log buffer 先，然后由 log buffer 再写到磁盘。在 8.0 之前的版本，log buffer 的写入需要先获取一个全局的 mutex 来，8.0 之后改用了一个基于 atomic 的操作来在 log buffer 预分配空间</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">sn_t</span> start_sn = log.sn.<span class="built_in">fetch_add</span>(len);</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">sn_t</span> end_sn = start_sn + len;</span><br></pre></td></tr></table></figure>
-
-<p>此外还有一个 link buf 来维护 log buffer 到磁盘的写入磁盘的进度，详细细节可见 <a target="_blank" rel="noopener" href="https://mysqlserverteam.com/mysql-8-0-new-lock-free-scalable-wal-design/" title="8.0-wal-design">这篇文章</a>。log buffer 的写入是需要保证顺序的，每一次写入到 log buffer 则会携带一个自增的 LSN（Log Sequence Number），之后顺序写入到磁盘。写如了 log 之后，后续的实际修改数据或者故障恢复就有了保证。</p>
-<p>Undo Logs 相对简单，它记录了需要回滚时用到的旧记录和在多个事务操作过程中需要看修改前的记录的场景。因为仅仅在系统运行时使用，它设计上没有像 Redo Log 那样需要多个 IO 来保证写入，性能上比 Redo Log 好很多。</p>
-<h3 id="Locking-and-Transaction"><a href="#Locking-and-Transaction" class="headerlink" title="Locking and Transaction"></a>Locking and Transaction</h3><h4 id="Shared-Exclusive-Intention-Locks"><a href="#Shared-Exclusive-Intention-Locks" class="headerlink" title="Shared / Exclusive / Intention Locks"></a>Shared / Exclusive / Intention Locks</h4><p>InnoDB 有两种行级别锁</p>
-<ul>
-<li>A shared (S) lock permits the transaction that holds the lock to read a row.</li>
-<li>An exclusive (X) lock permits the transaction that holds the lock to update or delete a row.</li>
-</ul>
-<p>对数据读是共享锁，写时是互斥锁。此外还有一个意向锁</p>
-<ul>
-<li>An intention shared lock (IS) indicates that a transaction intends to set a shared lock on individual rows in a table.</li>
-<li>An intention exclusive lock (IX) indicates that a transaction intends to set an exclusive lock on individual rows in a table.</li>
-</ul>
-<p>意向锁是表级锁</p>
-<blockquote>
-<p>Before a transaction can acquire a shared lock on a row in a table, it must first acquire an IS lock or stronger on the table.<br>Before a transaction can acquire an exclusive lock on a row in a table, it must first acquire an IX lock on the table.</p>
-</blockquote>
-<p>它们的关系如下</p>
-<table>
-<thead>
-<tr>
-<th>*</th>
-<th>X</th>
-<th>IX</th>
-<th>S</th>
-<th>IS</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>X</td>
-<td>Conflict</td>
-<td>Conflict</td>
-<td>Conflict</td>
-<td>Conflict</td>
-</tr>
-<tr>
-<td>IX</td>
-<td>Conflict</td>
-<td>Compatible</td>
-<td>Conflict</td>
-<td>Compatible</td>
-</tr>
-<tr>
-<td>S</td>
-<td>Conflict</td>
-<td>Conflict</td>
-<td>Compatible</td>
-<td>Compatible</td>
-</tr>
-<tr>
-<td>IS</td>
-<td>Conflict</td>
-<td>Compatible</td>
-<td>Compatible</td>
-<td>Compatible</td>
-</tr>
-</tbody></table>
-<blockquote>
-<p>A lock is granted to a requesting transaction if it is compatible with existing locks, but not if it conflicts with existing locks. A transaction waits until the conflicting existing lock is released. If a lock request conflicts with an existing lock and cannot be granted because it would cause <a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_deadlock">deadlock</a>, an error occurs.</p>
-</blockquote>
-<p>行锁请求前必须先请求对应意向锁，意向锁间不互斥。意向锁是为了更快地判断是否存在互斥的行锁而不用进行全表扫描，如已经申请了 IX 锁，那么 S 锁就申请失败（这个 S 锁前会有一个 IS 锁但不会与 IX 互斥）。意向锁由系统自身进行控制，我们能操作的是显示声明需要用共享锁或者互斥锁。</p>
-<h4 id="Record-Locks"><a href="#Record-Locks" class="headerlink" title="Record Locks"></a>Record Locks</h4><blockquote>
-<p>A record lock is a lock on an index record. For example, <code>SELECT c1 FROM t WHERE c1 = 10 FOR UPDATE;</code> prevents any other transaction from inserting, updating, or deleting rows where the value of <code>t.c1</code> is <code>10</code>.</p>
-</blockquote>
-<p><code>SELECT ... FOR UPDATE</code> 会申请一个针对索引的锁，即使没有创建索引也会根据其隐含的聚簇索引来加锁，任何 insert / update / delete 相关记录的操作都会被禁止。</p>
-<h4 id="Gap-Locks"><a href="#Gap-Locks" class="headerlink" title="Gap Locks"></a>Gap Locks</h4><blockquote>
-<p>A gap lock is a lock on a gap between index records, or a lock on the gap before the first or after the last index record.</p>
-</blockquote>
-<p>当隔离级别是 <code>READ COMMITTED</code> 时，gap lock 不会生效。与别的锁不一样， 两个事务可以对同一个范围申请 gap lock，只有插入数据到该范围时 lock 才生效。</p>
-<h4 id="Next-Key-Locks"><a href="#Next-Key-Locks" class="headerlink" title="Next-Key Locks"></a>Next-Key Locks</h4><blockquote>
-<p>A next-key lock is a combination of a record lock on the index record and a gap lock on the gap before the index record.</p>
-</blockquote>
-<p>InnoDB 的共享锁和互斥锁实际上是作用在 index 上的。为了解决 <code>REPEATABLE READ</code> 隔离级别情况下的幻读，在申请锁时，会连同数据索引附近的数据范围也会上锁。而如果是唯一索引，则会降级为 Record Lock。</p>
-<h4 id="Insert-Intention-Locks"><a href="#Insert-Intention-Locks" class="headerlink" title="Insert Intention Locks"></a>Insert Intention Locks</h4><p>插入意向锁是一种由 <code>INSERT</code> 语句带来的锁。插入时在相应索引位置的附近的范围申请一个 index gap lock，如果其它事务同时插入到相同位置则需要等待锁释放。</p>
-<p>此外还有一个为地理坐标系数据 Spatial index 设计的 Predicate 锁，这里就不展开说了。在不显示声明使用锁的情况下，不同的隔离级别会有不同的默认锁操作</p>
-<ul>
-<li>READ COMMITTED - 读不加锁，写入加锁，导致事务进行中时读取到别的事务提交的数据</li>
-<li>REPEATABLE READ - 默认的隔离级别，第一次读时生成 snapshot，后续所有的 nonlocking select 都是读取到同一份数据，这部分是 MVCC 在起作用。而如果需要获取最新的数据，则需要 <code>SELECT ... FOR SHARE</code> 或者 <code>SELECT ... FOR UPDATE</code> 来读取，此时则是需要 Next-Key lock 来锁定一个范围，这样就能防止 Phantom Rows（幻读）出现。</li>
-</ul>
-<h3 id="Transaction"><a href="#Transaction" class="headerlink" title="Transaction"></a>Transaction</h3><h4 id="Isolation-Levels"><a href="#Isolation-Levels" class="headerlink" title="Isolation Levels"></a>Isolation Levels</h4><p>REPEATABLE READ，默认的隔离级别，MVCC 和 locking select 相互作用解决幻读问题。</p>
-<p>READ COMMITTED，每一次 nonlocking select 都是最新的数据，显式使用 locking select 也仅仅是 index lock 而不带 gap lock。</p>
-<p>READ UNCOMMITTED 则是性能最好的一个，但是几乎不可能在现实中用到，会出现脏读的现象。</p>
-<p>SERIALIZABLE 与 REPEATABLE READ 类似。如果 autocommit disabled 则每个 SELECT 都会隐式加上共享锁。如果 autocommit enabled 则每个 SELECT 是个单独的事务，在该隔离等级下，所有事务都是串行执行。</p>
-<h4 id="Autocommit-Commit-and-Rollback"><a href="#Autocommit-Commit-and-Rollback" class="headerlink" title="Autocommit, Commit and Rollback"></a>Autocommit, Commit and Rollback</h4><p>默认情况下，autocommit enabled。没有明确 <code>START TRANSACTION</code> 或者 <code>BEGIN</code> 语句则会自动提交每一个语句。在事务中如果使用 <code>COMMIT</code> 则会将当前改动落盘，即对别的事务可见，即 autocommit disabled 的话，则 locking read 是无效的。</p>
-<h4 id="Consistent-Nonlocking-Reads"><a href="#Consistent-Nonlocking-Reads" class="headerlink" title="Consistent Nonlocking Reads"></a>Consistent Nonlocking Reads</h4><blockquote>
-<p>A consistent read means that InnoDB uses multi-versioning to present to a query a snapshot of the database at a point in time. The query sees the changes made by transactions that committed before that point of time, and no changes made by later or uncommitted transactions.</p>
-</blockquote>
-<p>在 RR 的隔离等级下，每一次查询相同的数据都是第一次请求时的 snapshot，如果需要查看最新的数据，则需要先 commit 当前的数据或者使用 blocking select。</p>
-<h3 id="Deadlocks"><a href="#Deadlocks" class="headerlink" title="Deadlocks"></a>Deadlocks</h3><blockquote>
-<p>A deadlock is a situation where different transactions are unable to proceed because each holds a lock that the other needs. Because both transactions are waiting for a resource to become available, neither ever release the locks it holds.</p>
-</blockquote>
-<p>文中提到的例子</p>
-<table>
-<thead>
-<tr>
-<th>transaction</th>
-<th>A</th>
-<th>B</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>1</td>
-<td><code>SELECT * FROM t WHERE i = 1 FOR SHARE</code></td>
-<td></td>
-</tr>
-<tr>
-<td>2</td>
-<td></td>
-<td><code>DELETE FROM t WHERE i = 1</code></td>
-</tr>
-<tr>
-<td>3</td>
-<td><code>DELETE FROM t WHERE i = 1</code></td>
-<td></td>
-</tr>
-</tbody></table>
-<p>因为事务 A 在 i = 1 上有共享锁，B 申请互斥锁时需要等，之后 A 再申请互斥锁时则形成死锁。当死锁检测开启之后，会尝试回滚或者终止影响行数较小的事务。</p>
-<p>避免死锁的方法</p>
-<ul>
-<li>需要记住，死锁不是问题，程序应该支持重试事务</li>
-<li>尽量减少事务大小</li>
-<li>如果业务逻辑上需要很多 <code>SELECT ... FOR UPDATE</code> 或者 <code>SELECT ... FOR SHARE</code>，也可以考虑 READ COMMITTED 的隔离等级</li>
-</ul>
-<h2 id="Replication"><a href="#Replication" class="headerlink" title="Replication"></a>Replication</h2><blockquote>
-<p>Transactions that fail on the source do not affect replication. MySQL replication is based on the binary log where MySQL writes SQL statements that modify data</p>
-</blockquote>
-<p>这里有一个有意思的地方，replica 可以使用 MyISAM 来做引擎，这样一来像外键就没办法生效。如果你有一个表配置了外键的级联删除 <code>DELETE CASCADE</code> 则该表就不会删除关联的数据。不管是 statement-based 还是 row-based 复制也只是能够处理显式更新，而级联删除这种是引擎内部处理就没办法同步了。</p>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>其余的如数据压缩，I/O，参数配置等一些章节就选择性跳过了，目前更多地使用像 AWS 的 RDS 也很少接触实际的数据库配置了。个人感觉最有用的是锁和事务相关的介绍，数据写入磁盘的考虑也是很精彩。</p>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://draveness.me/whys-the-design-mysql-auto-increment/">https://draveness.me/whys-the-design-mysql-auto-increment/</a></li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/11/13/mysql-innodb/" data-id="ckx7kmldg0052rzc83powe8dy" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/database/" rel="tag">database</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/innodb/" rel="tag">innodb</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-cloud-design-patterns" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/09/14/cloud-design-patterns/" class="article-date">
-  <time datetime="2020-09-13T16:00:00.000Z" itemprop="datePublished">2020-09-14</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/09/14/cloud-design-patterns/">Cloud Design Patterns</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Link: <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/azure/architecture/patterns/">https://docs.microsoft.com/en-us/azure/architecture/patterns/</a></p>
-<h2 id="Ambassador"><a href="#Ambassador" class="headerlink" title="Ambassador"></a>Ambassador</h2><p>代理人模式</p>
-<blockquote>
-<p>Resilient cloud-based applications require features such as circuit breaking, routing, metering and monitoring, and the ability to make network-related configuration updates. It may be difficult or impossible to update legacy applications or existing code libraries to add these features, because the code is no longer maintained or can’t be easily modified by the development team.</p>
-</blockquote>
-<p>统一代理网络请求，兼容多个语言的服务，统一配置服务地址，重试，Rate limits，验证需要的配置等等。类似于 sidecar 模式，集中处理请求。也可以担任一个注册中心的角色，统一对外的请求地址，别的进程只需要配置一个地址即可。</p>
-<p>增加了 latency，如果是同一个语言的客户端，那么一个 package 也是一个更好的选择</p>
-<h2 id="Anti-Corruption-Layer"><a href="#Anti-Corruption-Layer" class="headerlink" title="Anti-Corruption Layer"></a>Anti-Corruption Layer</h2><p>防腐层设计</p>
-<blockquote>
-<p>Most applications rely on other systems for some data or functionality. For example, when a legacy application is migrated to a modern system, it may still need existing legacy resources. New features must be able to call the legacy system. This is especially true of gradual migrations, where different features of a larger application are moved to a modern system over time.<br>Often these legacy systems suffer from quality issues such as convoluted data schemas or obsolete APIs. The features and technologies used in legacy systems can vary widely from more modern systems. To interoperate with the legacy system, the new application may need to support outdated infrastructure, protocols, data models, APIs, or other features that you wouldn’t otherwise put into a modern application.</p>
-</blockquote>
-<p>用于新老系统间的交互，防止旧系统的一些设计污染到新系统，两者中间沟通做了一个翻译层</p>
-<h2 id="Asynchronous-Request-Reply"><a href="#Asynchronous-Request-Reply" class="headerlink" title="Asynchronous Request-Reply"></a>Asynchronous Request-Reply</h2><p>异步请求 / 响应模式</p>
-<blockquote>
-<p>Decouple backend processing from a frontend host, where backend processing needs to be asynchronous, but the frontend still needs a clear response.</p>
-</blockquote>
-<p>后端处理是异步的，但是前端需要及时的响应。</p>
-<blockquote>
-<p>One solution to this problem is to use HTTP polling. Polling is useful to client-side code, as it can be hard to provide call-back endpoints or use long running connections. Even when callbacks are possible, the extra libraries and services that are required can sometimes add too much extra complexity.</p>
-</blockquote>
-<p>HTTP 轮询来解决问题，需要额外添加一个查询接口，用来查询任务是否已经完成，然后再调用资源接口来获取资源。<br>更规范的做法也可以通过一个 HTTP 302 的状态码指向真正的资源 URL。HTTP 202 状态码中也有如 Retry-After<br>来告知客户端请求频率</p>
-<h2 id="Backends-for-Frontends"><a href="#Backends-for-Frontends" class="headerlink" title="Backends for Frontends"></a>Backends for Frontends</h2><blockquote>
-<p>Create one backend per user interface. Fine-tune the behavior and performance of each backend to best match the needs of the frontend environment, without worrying about affecting other frontend experiences.</p>
-</blockquote>
-<p>考虑到兼容浏览器和移动设备，为两边考虑不同的接口去实现功能</p>
-<h2 id="Bulkhead"><a href="#Bulkhead" class="headerlink" title="Bulkhead"></a>Bulkhead</h2><p>类似于船舱的分隔，将问题限制在局部而不是扩散到所有的服务。</p>
-<blockquote>
-<p>Partition service instances into different groups, based on consumer load and availability requirements. This design helps to isolate failures, and allows you to sustain service functionality for some consumers, even during a failure.</p>
-</blockquote>
-<p>可以根据系统的负载来进行分隔，不同类型的服务也可以放到不同的组。实际应用上如 k8s 限制内存和 CPU。</p>
-<blockquote>
-<p>Define partitions around the business and technical requirements of the application.</p>
-</blockquote>
-<h2 id="Cache-Aside"><a href="#Cache-Aside" class="headerlink" title="Cache-Aside"></a>Cache-Aside</h2><blockquote>
-<p>Applications use a cache to improve repeated access to information held in a data store. However, it’s impractical to expect that cached data will always be completely consistent with the data in the data store. Applications should implement a strategy that helps to ensure that the data in the cache is as up-to-date as possible, but can also detect and handle situations that arise when the data in the cache has become stale.</p>
-</blockquote>
-<p>Cache-Aside 的模式是</p>
-<ul>
-<li>直接读缓存，如果缓存没有数据则去数据库查，查出来就更新到缓存中</li>
-<li>涉及到更新则直接更新数据库，然后让缓存失效</li>
-</ul>
-<p>那么，是不是 Cache Aside 这个就不会有并发问题了？不是的，比如，一个是读操作，但是没有命中缓存，然后就到数据库中取数据，此时来了一个写操作，写完数据库后，让缓存失效，然后，之前的那个读操作再把老的数据放进去，所以，会造成脏数据。</p>
-<p>但，这个 case 理论上会出现，不过，实际上出现的概率可能非常低，因为这个条件需要发生在读缓存时缓存失效，而且并发着有一个写操作。而实际上数据库的写操作会比读操作慢得多，而且还要锁表，而读操作必需在写操作前进入数据库操作，而又要晚于写操作更新缓存，所有的这些条件都具备的概率基本并不大。</p>
-<p>Read-Through &amp;&amp; Write-Through</p>
-<ul>
-<li>和 Cache-Aside 的模式不同，Read-Through 和 Write-Through 将缓存隐藏到了自己的服务 / 内库中，调用方对缓存无感知</li>
-<li>Read-Through 套路就是在查询操作中更新缓存，当缓存失效的时候（过期或 LRU 换出）自己加载到缓存中</li>
-<li>Write-Through 则是更新数据时发生。当有数据更新的时候，如果没有命中缓存，直接更新数据库，然后返回。如果命中了缓存，则更新缓存，然后再由 Cache 自己更新数据库</li>
-</ul>
-<p>Write-Behind</p>
-<ul>
-<li>在更新数据的时候，只更新缓存，不更新数据库，而我们的缓存会异步地批量更新数据库</li>
-</ul>
-<h2 id="Choreography"><a href="#Choreography" class="headerlink" title="Choreography"></a>Choreography</h2><blockquote>
-<p>The services communicate with each other by using well-defined APIs. Even a single business operation can result in multiple point-to-point calls among all services. A common pattern for communication is to use a centralized service that acts as the orchestrator. It acknowledges all incoming requests and delegates operations to the respective services. In doing so, it also manages the workflow of the entire business transaction. Each service just completes an operation and is not aware of the overall workflow.</p>
-</blockquote>
-<p>如果是通过 HTTP / RPC 来请求后面的服务，则会造成服务间的耦合。这里可用队列服务进行解耦。前端服务发送消息到后端，后端处理。后端的服务也可能不仅仅充当消费者的角色，也可能是二次加工的生产者角色。</p>
-<blockquote>
-<p>Each service isn’t only responsible for the resiliency of its operation but also the workflow. This responsibility can be burdensome for the service and hard to implement. Each service must retry transient, nontransient, and time-out failures, so that the request terminates gracefully, if needed. Also, the service must be diligent about communicating the success or failure of the operation so that other services can act accordingly.</p>
-</blockquote>
-<p>但如果数据链路过长，还是容易造成问题，如消费能力不一致，消息的处理难度不一致，会导致整个 workflow 出现消息处理的延迟</p>
-<h2 id="Circuit-Breaker"><a href="#Circuit-Breaker" class="headerlink" title="Circuit Breaker"></a>Circuit Breaker</h2><blockquote>
-<p>However, there can also be situations where faults are due to unanticipated events, and that might take much longer to fix. These faults can range in severity from a partial loss of connectivity to the complete failure of a service. In these situations it might be pointless for an application to continually retry an operation that is unlikely to succeed, and instead the application should quickly accept that the operation has failed and handle this failure accordingly.</p>
-</blockquote>
-<p>错误可能一时半会恢复不过来，一直重试只会导致请求者的资源浪费（发起请求的线程持有的数据库连接，内存等等）</p>
-<blockquote>
-<p>Note that setting a shorter timeout might help to resolve this problem, but the timeout shouldn’t be so short that the operation fails most of the time, even if the request to the service would eventually succeed.</p>
-<p>The Circuit Breaker pattern, popularized by Michael Nygard in his book, Release It!, can prevent an application from repeatedly trying to execute an operation that’s likely to fail. Allowing it to continue without waiting for the fault to be fixed or wasting CPU cycles while it determines that the fault is long lasting. The Circuit Breaker pattern also enables an application to detect whether the fault has been resolved. If the problem appears to have been fixed, the application can try to invoke the operation.</p>
-</blockquote>
-<p>和重试不同，重试更多是针对一个接口的行为，但 Circuit Breaker 是由客户端（或者全局）维护的一个状态，保存着最近几次的请求成功与否的结果，用来预测当前是否处于失败的状态，如果是则直接返回失败而不去请求。Circuit Breaker 则是负责维护这些状态的转换</p>
-<ul>
-<li>Open - 服务正常</li>
-<li>Half-Open - 服务有部分异常，可以限制 Rate Limit</li>
-<li>Closed - 直接拒绝客户端请求</li>
-</ul>
-<h2 id="Claim-Check-Pattern"><a href="#Claim-Check-Pattern" class="headerlink" title="Claim-Check Pattern"></a>Claim-Check Pattern</h2><blockquote>
-<p>Split a large message into a claim check and a payload. Send the claim check to the messaging platform and store the payload to an external service. This pattern allows large messages to be processed, while protecting the message bus and the client from being overwhelmed or slowed down. This pattern also helps to reduce costs, as storage is usually cheaper than resource units used by the messaging platform.</p>
-</blockquote>
-<p>将体积较大的消息体存到如 S3，数据库中。队列中发送的则是该数据的 meta 信息，给消费者去定位实际的消息体</p>
-<h2 id="CQRS"><a href="#CQRS" class="headerlink" title="CQRS"></a>CQRS</h2><blockquote>
-<p>The Command and Query Responsibility Segregation (CQRS) pattern separates read and update operations for a data store.</p>
-</blockquote>
-<p>传统的基于 ORM 的设计并没有区分数据库的读写操作，那么意味着对于复杂的读写操作需要处理的 mapping 会比较多。此外，读写两边的资源消耗是不一致的，扩容的操作也不好弄。</p>
-<p>最基本的就是分离读写的 model，即数据库层的设计是根据具体的业务流程而不是对应某个 table。需要注意的是，如果是太简单的逻辑，硬是要使用 CQRS 模式，那么读写的数据库操作的代码的重复性会偏高，还不如简单的 ORM 操作。</p>
-<blockquote>
-<p>If separate read and write databases are used, they must be kept in sync. Typically this is accomplished by having the write model publish an event whenever it updates the database. Updating the database and publishing the event must occur in a single transaction.</p>
-</blockquote>
-<p>除了分离读写的 model 外，更极致点的做法是分离数据库，甚至对可以关系型数据库和文档型数据库混用。但分离数据库之后，提出了同步写数据库到读数据库这一步。</p>
-<p>考虑到这里的读写数据库的分离，在数据一致性上只能是最终一致性，如果对这点很敏感的需要考虑是否合适</p>
-<h2 id="Compensating-Transaction"><a href="#Compensating-Transaction" class="headerlink" title="Compensating Transaction*"></a>Compensating Transaction*</h2><blockquote>
-<p>Applications running in the cloud frequently modify data. This data might be spread across various data sources held in different geographic locations. To avoid contention and improve performance in a distributed environment, an application shouldn’t try to provide strong transactional consistency. Rather, the application should implement eventual consistency</p>
-</blockquote>
-<p>强一致性的对资源的要求很高，如果可以应该追求最终一致性。一个业务逻辑如果分成多步来执行的话，如果中间出现问题，那么可能需要选择回滚已执行的步骤或者重试后续的步骤。而前者可能跨越多个数据库，服务等等，不一定都具备回滚操作的能力。</p>
-<p>如对于订机票和订酒店的联合请求，如果后续流程有问题，则需要取消之前订的机票或者酒店，或者将选择权交给用户</p>
-<h2 id="Competing-Consumers"><a href="#Competing-Consumers" class="headerlink" title="Competing Consumers"></a>Competing Consumers</h2><blockquote>
-<p>Enable multiple concurrent consumers to process messages received on the same messaging channel. This enables a system to process multiple messages concurrently to optimize throughput, to improve scalability and availability, and to balance the workload.</p>
-</blockquote>
-<p>Producer 和 Consunmer 的模式，通过消息队列和 worker 去处理信息</p>
-<h2 id="Compute-Resource-Consolidation"><a href="#Compute-Resource-Consolidation" class="headerlink" title="Compute Resource Consolidation"></a>Compute Resource Consolidation</h2><blockquote>
-<p>Each computational unit consumes chargeable resources, even when it’s idle or lightly used. Therefore, this isn’t always the most cost-effective solution.</p>
-</blockquote>
-<p>计算单元如果单独管理，容易导致资源浪费（服务闲置等等）。那么改成服务分组，将一些业务相关度很强的放到一起进行 auto scaling。</p>
-<p>服务间相互依赖就有可能出现一个服务负载高的相关服务的调用也会变高的情况，如果将其左右一个单元来进行 scaling 的话更好管理。云服务商会有一些别的解决方案，也有一些成本更低廉的如 AWS Lambda 类似的服务，到了这里可能需要考虑具体任务的运行时长和这些服务的启动速度等的权衡</p>
-<h2 id="Deployment-stamps"><a href="#Deployment-stamps" class="headerlink" title="Deployment stamps"></a>Deployment stamps</h2><blockquote>
-<p>The deployment stamp pattern involves deploying multiple independent copies of application components, including data stores. Each individual copy is called a stamp, or sometimes a service unit or scale unit. This approach can improve the scalability of your solution, allow you to deploy instances across multiple regions, and separate your customer data.</p>
-</blockquote>
-<p>考虑到跨地域 / 租户的问题，可能服务需要一整套单独部署，做到数据层面的隔离。或者每个 stamp 的更新频率不一致，功能不一致，所以单独部署会是更好的选择。需要注意的是，单独部署后数据并不互通，这就涉及到一个迁移的过程</p>
-<h2 id="Event-Sourcing"><a href="#Event-Sourcing" class="headerlink" title="Event Sourcing*"></a>Event Sourcing*</h2><blockquote>
-<p>Instead of storing just the current state of the data in a domain, use an append-only store to record the full series of actions taken on that data. The store acts as the system of record and can be used to materialize the domain objects. This can simplify tasks in complex domains, by avoiding the need to synchronize the data model and the business domain, while improving performance, scalability, and responsiveness. It can also provide consistency for transactional data, and maintain full audit trails and history that can enable compensating actions.</p>
-</blockquote>
-<p>传统的 CRUD 在更新时候涉及到数据的，而处理数据的过程中会造成 Lock 等拖慢处理的速度。与 CQRS 一起食用更佳。如果系统对实时性要求高的，这个模式就不太适用了。</p>
-<h2 id="External-Configuration-Store"><a href="#External-Configuration-Store" class="headerlink" title="External Configuration Store"></a>External Configuration Store</h2><blockquote>
-<p>Move configuration information out of the application deployment package to a centralized location. This can provide opportunities for easier management and control of configuration data, and for sharing configuration data across applications and application instances.</p>
-</blockquote>
-<p>配置的统一管理，现在很多框架 / 服务可以提供该功能了</p>
-<h2 id="Federated-Identity"><a href="#Federated-Identity" class="headerlink" title="Federated Identity"></a>Federated Identity</h2><blockquote>
-<p>Delegate authentication to an external identity provider. This can simplify development, minimize the requirement for user administration, and improve the user experience of the application.</p>
-</blockquote>
-<p>将权限认证托管到一个统一的认证服务，服务自己就不需要维护权限的信息。关键字 STS（Security Token Services） ，IdP（Identity providers）。不是简单的单点登录，而是包含权限模块的认证服务</p>
-<h2 id="Gatekeeper"><a href="#Gatekeeper" class="headerlink" title="Gatekeeper"></a>Gatekeeper</h2><blockquote>
-<p>Protect applications and services by using a dedicated host instance that acts as a broker between clients and the application or service, validates and sanitizes requests, and passes requests and data between them. This can provide an additional layer of security, and limit the attack surface of the system.   </p>
-</blockquote>
-<p>挡在公网服务和内网服务之间，转发请求，隔离环境，进行安全的通信。这种网关类的服务本身不进行业务的请求，而是仅仅作为一个手递手的作用</p>
-<h2 id="Gateway-Aggregation"><a href="#Gateway-Aggregation" class="headerlink" title="Gateway Aggregation"></a>Gateway Aggregation</h2><blockquote>
-<p>Use a gateway to aggregate multiple individual requests into a single request. This pattern is useful when a client must make multiple calls to different backend systems to perform an operation.</p>
-</blockquote>
-<p>客户端可能需要请求多次某个服务，或者请求多个服务才能完成一次业务，那么可以在 Gateway 层进行聚合（如在 Nginx 处解析 JSON 请求，然后将请求体解析发送到后端具体服务）。需要主义的是，尽量不要和后端服务耦合。</p>
-<h2 id="Gateway-Offloading"><a href="#Gateway-Offloading" class="headerlink" title="Gateway Offloading"></a>Gateway Offloading</h2><blockquote>
-<p>Properly handling security issues (token validation, encryption, SSL certificate management) and other complex tasks can require team members to have highly specialized skills. For example, a certificate needed by an application must be configured and deployed on all application instances. With each new deployment, the certificate must be managed to ensure that it does not expire. Any common certificate that is due to expire must be updated, tested, and verified on every application deployment.</p>
-</blockquote>
-<p>常见的就是 Nginx 或者 AWS 的 Loadbalancer 处理了外部传进来的 HTTPS 请求，然后解析之后转成 HTTP 请求到后端，后端服务就不需要自己维护 SSL 证书相关了</p>
-<h2 id="Gateway-Routing"><a href="#Gateway-Routing" class="headerlink" title="Gateway Routing"></a>Gateway Routing</h2><blockquote>
-<p>Route requests to multiple services using a single endpoint. This pattern is useful when you wish to expose multiple services on a single endpoint and route to the appropriate service based on the request.</p>
-</blockquote>
-<p>Gateway 担任一个 HTTP 负载均衡的角色，根据 path 转发到后端的服务。此外还可以外部的 path 不变，内部服务的 path 变动，或者根据权重测试后端两个版本的接口</p>
-<h2 id="Geodes"><a href="#Geodes" class="headerlink" title="Geodes"></a>Geodes</h2><blockquote>
-<p><strong>ge</strong>ographical n<strong>ode</strong>s</p>
-</blockquote>
-<p>意味在多个区域部署多个节点（集群），和之前提到的 stamp 不同，这里的不同的节点并不进行数据隔离，而是为了减少网络连接的延迟。</p>
-<p>这些节点也可以处理一部分数据然后再推到中心去</p>
-<h2 id="Health-Endpoint-Monitoring"><a href="#Health-Endpoint-Monitoring" class="headerlink" title="Health Endpoint Monitoring"></a>Health Endpoint Monitoring</h2><blockquote>
-<p>Implement functional checks in an application that external tools can access through exposed endpoints at regular intervals. This can help to verify that applications and services are performing correctly.</p>
-</blockquote>
-<p>一个健康检查的 endpoint 可以包含数据库的，相关服务的检查。检查项包括</p>
-<ul>
-<li>状态码是否 200，是否页面错误或者被篡改</li>
-<li>网络延迟如何</li>
-<li>DNS 的返回记录是否正确，SSL 证书的过期时间</li>
-</ul>
-<p>上述的检查是基于公网的，如果是一个非业务端口需要暴露出去的话，需要考虑一些安全性问题</p>
-<h2 id="Index-Table"><a href="#Index-Table" class="headerlink" title="Index Table"></a>Index Table</h2><blockquote>
-<p>Create indexes over the fields in data stores that are frequently referenced by queries. This pattern can improve query performance by allowing applications to more quickly locate the data to retrieve from a data store.</p>
-</blockquote>
-<p>另外维护一个索引表，用于查询某些子集或者某个字段和对应主键的记录。不过这个是在数据库不支持次级索引的时候用的</p>
-<h2 id="Leader-Election"><a href="#Leader-Election" class="headerlink" title="Leader Election*"></a>Leader Election*</h2><blockquote>
-<p>Coordinate the actions performed by a collection of collaborating instances in a distributed application by electing one instance as the leader that assumes responsibility for managing the others. This can help to ensure that instances don’t conflict with each other, cause contention for shared resources, or inadvertently interfere with the work that other instances are performing.</p>
-</blockquote>
-<p>目前接触的比较少，实际情况是框架或者服务都有类似的功能了，很少需要实现一个集群选主的功能。如果需要协调多个实例的任务，才需要考虑该模式。实际使用时，也可以借助外部的分布式锁来防止出现冲突。而集群的 leader 更多应该是协调的作用，如果分配实际的任务给 leader 则可能出现 leader 因为负载挂掉的情况。</p>
-<h2 id="Materialized-View"><a href="#Materialized-View" class="headerlink" title="Materialized View"></a>Materialized View</h2><p>来自维基的解释</p>
-<blockquote>
-<p>In <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Computing">computing</a>, a <strong>materialized view</strong> is a <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Database">database</a> object that contains the results of a <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Query_(databases)">query</a>. For example, it may be a local copy of data located remotely, or may be a subset of the rows and/or columns of a table or <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Join_(SQL)">join</a> result, or may be a summary using an <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Aggregate_function">aggregate function</a>.</p>
-</blockquote>
-<blockquote>
-<p>When storing data, the priority for developers and data administrators is often focused on how the data is stored, as opposed to how it’s read. The chosen storage format is usually closely related to the format of the data, requirements for managing data size and data integrity, and the kind of store in use. For example, when using NoSQL document store, the data is often represented as a series of aggregates, each containing all of the information for that entity.</p>
-</blockquote>
-<p>数据库 schema 设计很多时候不是为了方便 query，而是数据存储和方便管理。数据库本身就支持 view 这种用法，现代情况可能更复杂了，可能包含异构数据，或者存储在 Redis 或者 NoSQL 中，这种情况下结合 Event Sourcing 模式来使用更好。实际使用时需要考虑 view 的生成的速度和可能出现的数据不一致</p>
-<h2 id="Pipes-And-Filters"><a href="#Pipes-And-Filters" class="headerlink" title="Pipes And Filters"></a>Pipes And Filters</h2><blockquote>
-<p>Decompose a task that performs complex processing into a series of separate elements that can be reused. This can improve performance, scalability, and reusability by allowing task elements that perform the processing to be deployed and scaled independently.</p>
-</blockquote>
-<p>把一个很庞大的程序拆分成一个流水线，每个任务只负责一个简单的功能，不同的任务根据需要来进行扩容和缩容。但这种模式不适合处理那种有上下文关联的任务</p>
-<h2 id="Priority-Queue"><a href="#Priority-Queue" class="headerlink" title="Priority Queue"></a>Priority Queue</h2><blockquote>
-<p>Prioritize requests sent to services so that requests with a higher priority are received and processed more quickly than those with a lower priority. This pattern is useful in applications that offer different service level guarantees to individual clients.</p>
-</blockquote>
-<p>一般可以通过设置多个队列来实现优先队列，但是需要注意消费者的数量或者消费者选择队列的策略，有可能导致一直消费高优先级的队列导致低优先级的队列没有消费。也可以选择支持优先队列实现的服务，如 RabbitMQ</p>
-<h2 id="Publisher-Subscriber"><a href="#Publisher-Subscriber" class="headerlink" title="Publisher-Subscriber"></a>Publisher-Subscriber</h2><blockquote>
-<p>A <em>message</em> is a packet of data. An <em>event</em> is a message that notifies other components about a change or an action that has taken place.</p>
-</blockquote>
-<p>消息和事件的区别是，前者是传递数据，后者则是一个事件变动的通知。</p>
-<h2 id="Queue-Based-Load-Leveling"><a href="#Queue-Based-Load-Leveling" class="headerlink" title="Queue-Based Load Leveling"></a>Queue-Based Load Leveling</h2><blockquote>
-<p>Use a queue that acts as a buffer between a task and a service it invokes in order to smooth intermittent heavy loads that can cause the service to fail or the task to time out. This can help to minimize the impact of peaks in demand on availability and responsiveness for both the task and the service.</p>
-</blockquote>
-<p>请求的速率是会变化的，队列作为缓冲区。和前面的订阅者模式不同，这里注重的对大量消息处理时导致的问题，前者则是注重事件的状态的变化时的通知。此外，如果需要返回值或者对返回值有时延要求的场景不适合这种模式。</p>
-<h2 id="Retry"><a href="#Retry" class="headerlink" title="Retry"></a>Retry</h2><blockquote>
-<p>Enable an application to handle transient failures when it tries to connect to a service or network resource, by transparently retrying a failed operation. This can improve the stability of the application.</p>
-</blockquote>
-<p>重试是一个很常见的功能，需要注意要区分能重试的请求和不应该重试的请求。如 HTTP 状态码 504 Gateway Timeout 可能由于负载均衡背后的服务正在重启导致的临时错误应该进行重试，但因为请求的资源或者请求体本身的问题引发的 40X 的状态码重试就要考虑下是否有必要了。此外接口的是否幂等也影响重试策略，对一些会出现冲突的请求应该谨慎。</p>
-<p>而重试的时间间隔也最好考虑在里面，如果选择固定的时间或者立即重试，那么会导致重试的请求不断的累计来攻击自己的服务。重拾的间隔可以增量或者按指数变化，这样新来的请求和旧的请求重试的时间就不会叠加在一起，平滑了服务的负载。</p>
-<p>多次重试之后还是不行应该放弃该请求，实际使用时也可以结合之前说的 Circuit Breaker Pattern</p>
-<h2 id="Saga-Distributed-Transactions"><a href="#Saga-Distributed-Transactions" class="headerlink" title="Saga Distributed Transactions*"></a>Saga Distributed Transactions*</h2><blockquote>
-<p>The <em>saga</em> design pattern is a way to manage data consistency across microservices in distributed transaction scenarios. A saga is a sequence of transactions that updates each service and publishes a message or event to trigger the next transaction step. If a step fails, the saga executes compensating transactions that counteract the preceding transactions.</p>
-</blockquote>
-<p>现在的微服务架构下，每个服务可以根据自己的业务管理数据库，数据库的选型也可以多种多样，但这样对需要做一致性要求的业务来讲就出现问题了。可能依赖链前面做完了，但当前的服务出现了问题，或者数据不合法导致前面的服务做的改动需要回滚。</p>
-<p>可以用队列分发消息或者一个中心的调度器去调用服务来进行一个业务中的不同步骤。需要注意的是，由于改动已经提交，那么回滚是不可能的，需要的时候一个相反的操作去撤销这些改动。</p>
-<p>此外，在一个事务处理的过程中，由于数据库是分开管理，前面的服务已经写入数据库了，再去读该服务的数据，从全局的数据来讲，这些就是脏数据。为此，可能需要实现类似于数据库</p>
-<h2 id="Scheduler-Agent-Supervisor"><a href="#Scheduler-Agent-Supervisor" class="headerlink" title="Scheduler Agent Supervisor"></a>Scheduler Agent Supervisor</h2><blockquote>
-<p>The Scheduler maintains information about the progress of the task and the state of each step in a durable data store, called the state store. The Supervisor can use this information to help determine whether a step has failed. </p>
-</blockquote>
-<blockquote>
-<p>When the application is ready to run a task, it submits a request to the Scheduler. The Scheduler records initial state information about the task and its steps (for example, step not yet started) in the state store and then starts performing the operations defined by the workflow. As the Scheduler starts each step, it updates the information about the state of that step in the state store (for example, step running).</p>
-<p>If a step references a remote service or resource, the Scheduler sends a message to the appropriate Agent. The message contains the information that the Agent needs to pass to the service or access the resource, in addition to the complete-by time for the operation. If the Agent completes its operation successfully, it returns a response to the Scheduler. The Scheduler can then update the state information in the state store (for example, step completed) and perform the next step. This process continues until the entire task is complete.</p>
-</blockquote>
-<p>这种模式和 k8s scheduler 的模式一样，提交一个包含多个资源变动的请求，管理者将这些请求发送到相应的 Agent，然后监视 state 是否完成。如果出现失败就是相应的重试的策略的选择。</p>
-<h2 id="Sequential-Convoy"><a href="#Sequential-Convoy" class="headerlink" title="Sequential Convoy"></a>Sequential Convoy</h2><blockquote>
-<p>Process a set of related messages in a defined order, without blocking processing of other groups of messages.</p>
-</blockquote>
-<p>对数据进行分组，组内数据有序处理。分组也可以作为一个 auto scaling 的依据，某些组别的数据量较少，某些组别的数据量较大。Kafka 的分区 key 可以用作类似的需求，如将同一个 user id 的用户的数据映射到某个分区，保证而 Kafka 保证分区内的数据有序，这样就可以保证速度和顺序的要求</p>
-<h2 id="Sharding"><a href="#Sharding" class="headerlink" title="Sharding"></a>Sharding</h2><blockquote>
-<p>Divide a data store into a set of horizontal partitions or shards. This can improve scalability when storing and accessing large volumes of data.</p>
-</blockquote>
-<p>数据分区管理。分区的策略有几种：</p>
-<ul>
-<li>Lookup - 基于一个 shard key 来进行分配，可以直接 key - partition 的转换，也可以添加一个 virtual partition，在后面 physical partition 的分配不平衡时可以进行一个 rebalance 的操作</li>
-<li>Range - shard key 是线性的，例如按照月份进行分区</li>
-<li>Hash - 基于一个 hash function 来进行分区，好处是不用像 Lookup 维护一个状态表，问题就是分区间的负载不平衡，后续也难以 rebalance</li>
-</ul>
-<p>上述的分区是技术上的实现，此外还可以根据数据的重要程度，热度，还有安全隔离等业务上的逻辑来进行分区。</p>
-<h2 id="Sidecar"><a href="#Sidecar" class="headerlink" title="Sidecar"></a>Sidecar</h2><blockquote>
-<p>Applications and services often require related functionality, such as monitoring, logging, configuration, and networking services. These peripheral tasks can be implemented as separate components or services.</p>
-</blockquote>
-<p>将业务无关的东西解耦出来，如日志，配置，网络等等，服务本身只负责业务，而技术架构上的东西交给 sidecar 进行处理。</p>
-<h2 id="Static-Content-Hosting"><a href="#Static-Content-Hosting" class="headerlink" title="Static Content Hosting"></a>Static Content Hosting</h2><blockquote>
-<p>Deploy static content to a cloud-based storage service that can deliver them directly to the client. This can reduce the need for potentially expensive compute instances.</p>
-</blockquote>
-<p>资源静态化，减少计算，利用更多如 CDN，S3 等服务进行加速网站的请求</p>
-<h2 id="Strangler"><a href="#Strangler" class="headerlink" title="Strangler"></a>Strangler</h2><blockquote>
-<p>Incrementally migrate a legacy system by gradually replacing specific pieces of functionality with new applications and services. As features from the legacy system are replaced, the new system eventually replaces all of the old system’s features, strangling the old system and allowing you to decommission it.</p>
-</blockquote>
-<p>旧服务的迁移到新服务，中间的过程不能一次性完成的话，存在新旧服务同时运行的情况，那么需要在前面加一个如代理或者负载均衡来处理新旧的交替。</p>
-<h2 id="Throttling"><a href="#Throttling" class="headerlink" title="Throttling"></a>Throttling</h2><blockquote>
-<p>Control the consumption of resources used by an instance of an application, an individual tenant, or an entire service. This can allow the system to continue to function and meet service level agreements, even when an increase in demand places an extreme load on resources.</p>
-</blockquote>
-<p>限流，和之前的 Circuit Breaker 有点不同，这次是主动保护服务，防止过载。对一些请求过于频繁的用户主动进行丢弃，或者对服务内某些功能进行裁剪，只保留核心功能。</p>
-<p>这里最好还是和客户端进行配合，通过特定的返回值告诉客户端下次请求的时间，或者客户端也屏蔽掉一些非核心功能。</p>
-<h2 id="Valet-Key"><a href="#Valet-Key" class="headerlink" title="Valet Key"></a>Valet Key</h2><blockquote>
-<p>Use a token that provides clients with restricted direct access to a specific resource, in order to offload data transfer from the application. This is particularly useful in applications that use cloud-hosted storage systems or queues, and can minimize cost and maximize scalability and performance.</p>
-</blockquote>
-<p>服务端不直接维护文件，流的资源，想法，通过 token 授予有限的权限给到客户端，客户端直接操作如 S3 等资源。减轻了服务端的负载，带宽等资源的占用，需要注意的就是数据的安全问题</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/09/14/cloud-design-patterns/" data-id="ckx7kmldf0050rzc85wx0dlp9" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/architecture/" rel="tag">architecture</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/engineering/" rel="tag">engineering</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nginx/" rel="tag">nginx</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-about-ssl-tls" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/08/21/about-ssl-tls/" class="article-date">
-  <time datetime="2020-08-20T16:00:00.000Z" itemprop="datePublished">2020-08-21</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/08/21/about-ssl-tls/">About SSL And TLS</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本文旨在简要介绍关于 SSL / TLS 的知识</p>
-<h2 id="Base"><a href="#Base" class="headerlink" title="Base"></a>Base</h2><p>TLS 是 SSL 的迭代版本，SSL 自从 3.0 之后便不再开发，TLS 1.0 为其继任者，目前最新版本为 TLS 1.3，而 TLS 1.0 也在 2020 年被废弃。下文统一使用 TLS 来进行说明，不进行区分 SSL / TLS。</p>
-<h3 id="Handshake"><a href="#Handshake" class="headerlink" title="Handshake"></a>Handshake</h3><p>TLS 连接在建立了 TCP 连接之后，首先是 TLS 握手步骤。TLS 安全性是基于非对称加密，而非对称加密对计算资源消耗十分巨大，并不适合在这种非常频繁的连接 / 数据传输操作上使用，而 TLS 的做法是先使用非对称加密进行握手，得到一个双方可信的对称加密用的秘钥，然后在此后的数据传输中都使用该秘钥来进行加密。</p>
-<p>握手的步骤大致如下（摘自 <a target="_blank" rel="noopener" href="https://zinglix.xyz/2019/05/07/tls-handshake/">TLS 握手究竟做了什么？</a>）</p>
-<ol>
-<li>客户端发起连接，客户端带上自己产生的随机数 A 和支持的加密套件向服务器发出 <code>Client Hello</code> 请求</li>
-<li>服务器收到请求后带上自己的随机数 B 以及选择的 Cypher Suite 返回 <code>Server Hello</code> 信息。在之后服务器发送自己的证书。<strong>此时服务器也可要求客户端出示证书</strong>。发送完成后发送 <code>Server Hello Done</code> 信息</li>
-<li>客户端通过验证服务器证书是否可靠以决定是否继续通信，若不可信则关闭连接</li>
-<li>若认为可信客户端则会生成一个新随机数 C，称为预主密钥（Pre Master Key），用于之后生成会话密钥，通过来自于证书的公钥进行加密提供给服务器</li>
-<li>客户端会再传递一个 <code>Change Cipher Spec</code>表示之后信息会使用新的会话密钥（session keys）加密信息和哈希。然后客户端发送 <code>Client finished</code> 握手结束</li>
-<li>服务器收到数据后解密得到预主密钥，计算得出会话密钥，然后同样向客户端发送 <code>Change Cipher Spec</code>  和 <code>Server finished</code></li>
-</ol>
-<p>这里可以看到，TLS 握手阶段需要 2 个 RTT。这里面还不包括 TCP 建立连接的三次握手的时间。除此以外，步骤 3 还可能进行一次 OCSP（The Online Certificate Status Protocol） 或者 CRL（Certificate revocation list，证书吊销列表） 的请求，这些请求结果会被缓存，我们更关心的是剩下的这 2 个 RTT。</p>
-<p>除此以外，如果断开了 TLS 连接，本身还支持连接复用机制，这样就可以减少 TLS 握手的时间损耗。</p>
-<p>通信双方握手结束后，双方都有了用于进行对称加密的会话密钥，之后通信都使用该密钥来加密 / 解密。上述流程是基于 RSA 算法的秘钥交换，此外还有一种 DH 的算法，可参考文后的链接。</p>
-<h3 id="Certificate"><a href="#Certificate" class="headerlink" title="Certificate"></a>Certificate</h3><p>在上文中提到，握手阶段客户端会验证证书是否可信。在服务器发送自己的证书给到客户端时，客户端需要进行校验该证书是否合法。</p>
-<p>一个证书包括</p>
-<ul>
-<li><strong>The domain name that the certificate was issued for</strong></li>
-<li>Which person, organization, or device it was issued to</li>
-<li><strong>Which certificate authority issued it</strong></li>
-<li><strong>The certificate authority’s digital signature</strong></li>
-<li><strong>Associated subdomains</strong></li>
-<li><strong>Issue date of the certificate</strong></li>
-<li>Expiration date of the certificate</li>
-<li><strong>The public key (the private key is kept secret)</strong></li>
-</ul>
-<p>Certificate Authority（CA）是独立的第三方，负责签发和维护 TLS 证书。证书本身带有数字签名，该数字签名使用的是其父级证书的私钥来签发，通过查询其父级证书通过其公钥即可查询出签名是否一致。而证书校验这个过程是一直递归到根证书，根证书是自签名的，这样就可以验证证书是否合法，这个链路称之为证书链（Chain of trust）。</p>
-<p>而被信任的根证书是随着操作系统，浏览器等分发，只要客户端验证一直到根证书都没问题，则认为该证书是合法的。伪造证书的关键在于 CA 签发证书是否严谨，此外如果没有得到根证书的验证也无法得到信任。</p>
-<p>常用的像 Fiddler 这类抓包工具，需要添加一个它自己的根证书这样才能解析 HTTPS 的流量，它自己本身就是类似于中间人攻击的角色。</p>
-<h3 id="Nginx-Examples"><a href="#Nginx-Examples" class="headerlink" title="Nginx-Examples"></a>Nginx-Examples</h3><p>基本的配置为</p>
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span>              <span class="number">443</span> ssl;</span><br><span class="line">    <span class="attribute">server_name</span>         www.example.com;</span><br><span class="line">    <span class="attribute">ssl_certificate</span>     www.example.com.crt;</span><br><span class="line">    <span class="attribute">ssl_certificate_key</span> www.example.com.key;</span><br><span class="line">    <span class="attribute">ssl_protocols</span>       TLSv1 TLSv1.<span class="number">1</span> TLSv1.<span class="number">2</span>;</span><br><span class="line">    <span class="attribute">ssl_ciphers</span>         HIGH:!aNULL:!MD5;</span><br><span class="line">    <span class="attribute">ssl_client_certificate</span> xxx.pem;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>其中最重要的是，<code>ssl_certificate</code> 为证书地址，<code>ssl_certificate_key</code> 为私钥地址，其余则为相应的 TLS 的配置，如 TLS 的版本，使用的算法等等。除此以外还有更多的配置可用，具体可查阅 Nginx 的 http ssl module。</p>
-<p>之前的握手阶段也提到过，服务端在返回自己的证书的时候，也可以要求客户端提供证书。客户端证书是用来校验是否是可信用户。上面有个 <code>ssl_client_certificate</code> 配置项，需要制定一个 PEM 格式的 CA 证书来验证客户端。配置了客户端证书就必须在请求是明确指定证书来请求服务端，否则就是 403 错误，常见的 HTTP Library 都支持配置证书。</p>
-<h2 id="Advanced"><a href="#Advanced" class="headerlink" title="Advanced"></a>Advanced</h2><h3 id="False-Start"><a href="#False-Start" class="headerlink" title="False-Start"></a>False-Start</h3><p>之前也提到过，一次 TLS 握手至少需要 2 个 RTT。但其实，在客户端算出随机数 C 时，已经可以得出用于非对称加密用的秘钥。启用 False Start 的特性之后，可以随着 <code>Client finished</code> 返回服务端时，把实际的请求信息也带到服务端。这样算下来，TLS 握手的时间可以减少到 1 个 RTT。</p>
-<h3 id="Keyless"><a href="#Keyless" class="headerlink" title="Keyless"></a>Keyless</h3><p>上述的 Nginx 样例，更多是在自己源站服务端使用 TLS，而现在更多是托管于 CDN 后面，这里就需要一些另外的设置。看了下常见的公有云的文档，都是需要将自己相关域名证书私钥上传才能在 CDN 节点启用 TLS。</p>
-<p>这样子在私钥的管理上会有问题。后来就有了 Cloudflare 提供的 Keyless 服务。其原理就是整个 TLS 握手需要解析一次客户端使用公钥加密的数据，那么只需要额外提供一个 Key Server 去帮忙解析这个加密过的数据就行。而后，我们只需要保证 CDN 节点到 Key Server 的链路是安全的，就可以保证 TLS 的安全性。</p>
-<p>Conclusion</p>
-<p>TLS 本身还是挺有意思的</p>
-<ul>
-<li>对称加密的安全性有问题，于是我们使用非对称加密来加密数据</li>
-<li>非对称加密不能加密太多内容，并且速度比不上对称加密，那么我们就通过非对称加密协商一个用于安全沟通的对称加密秘钥</li>
-<li>握手时考虑了双方的随机数不可信的问题</li>
-<li>有第三方 CA 来保证证书的安全性</li>
-<li>现在有了很多硬件可以加速非对称加密 / 解密的速度</li>
-</ul>
-<p>未来浏览器会逐步停止支持 HTTP 协议的网站，一点点的损耗换来安全，何乐而不为呢？参考阅读中重点推荐最后一个，比较完整的展示了 TLS 的特性。</p>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://zinglix.xyz/2019/05/07/tls-handshake">https://zinglix.xyz/2019/05/07/tls-handshake</a></li>
-<li><a target="_blank" rel="noopener" href="https://razeencheng.com/post/ssl-handshake-detail">https://razeencheng.com/post/ssl-handshake-detail</a></li>
-<li><a target="_blank" rel="noopener" href="https://developer.baidu.com/resources/online/doc/security/https-pratice-1.html">https://developer.baidu.com/resources/online/doc/security/https-pratice-1.html</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.cloudflare.com/learning/ssl/what-is-an-ssl-certificate/">https://www.cloudflare.com/learning/ssl/what-is-an-ssl-certificate/</a></li>
-<li><a target="_blank" rel="noopener" href="https://nginx.org/en/docs/http/ngx_http_ssl_module.html">https://nginx.org/en/docs/http/ngx_http_ssl_module.html</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.cloudflare.com/keyless-ssl-the-nitty-gritty-technical-details/">https://blog.cloudflare.com/keyless-ssl-the-nitty-gritty-technical-details/</a></li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/08/21/about-ssl-tls/" data-id="ckx7kmlco0020rzc821sxbvvy" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/https/" rel="tag">https</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nginx/" rel="tag">nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/security/" rel="tag">security</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ssl/" rel="tag">ssl</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tls/" rel="tag">tls</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-nginx-stream-debug" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/06/07/nginx-stream-debug/" class="article-date">
-  <time datetime="2020-06-06T16:00:00.000Z" itemprop="datePublished">2020-06-07</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/07/nginx-stream-debug/">Nginx stream debug</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>由于客户需要做 IP 白名单，所以我们在 AWS 建了两个 EC2 然后做了个 Nginx TCP Proxy，对应的 upstream 是 AWS 的 API Gateway。Nginx 最开始的版本类似于</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">user  nginx;</span><br><span class="line">worker_processes  1;</span><br><span class="line">error_log  /var/log/nginx/error.log warn;</span><br><span class="line">pid        /var/run/nginx.pid;</span><br><span class="line"></span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">stream &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    proxy_pass www.example.com:8080;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这种白名单的流量的走向大概是</p>
-<p>domain -&gt; CNAME to AWS ELB -&gt; ELB forward to EC2 -&gt; EC2 Nginx upstream to AWS API Gateway</p>
-<p>而没有白名单的流量走向</p>
-<p>domain -&gt; AWS API Gateway</p>
-<p>逻辑上是没有问题的，然后问题就出现了</p>
-<h2 id="SSL-issues"><a href="#SSL-issues" class="headerlink" title="SSL issues"></a>SSL issues</h2><blockquote>
-<p>hostname ‘xxx’ doesn’t match either of ‘*.yyy.net’, ‘yyy.net’</p>
-</blockquote>
-<p>初看之下是证书不匹配的问题，xxx 对应我们自己的做了静态 IP 的域名，而 yyy.net 对应的是一些别的公司的域名。</p>
-<p>这里我的看法是，因为 Nginx 的 upstream 对应的是 AWS API Gateway，如果域名后面的 IP 变了，而你还连着原来的 IP 就会有类似的问题，我自己也测试过，只要你改了域名的指向，Nginx 还是会连着旧的 IP，除非你手动 reload 或者 restart Nginx。</p>
-<h2 id="Resolver"><a href="#Resolver" class="headerlink" title="Resolver"></a>Resolver</h2><p>搜索了一圈，这个 <a target="_blank" rel="noopener" href="https://serverfault.com/questions/240476/how-to-force-nginx-to-resolve-dns-of-a-dynamic-hostname-everytime-when-doing-p/593003#593003">回答</a> 比较接近正确答案了。那时候去试了下这个配置，发现 set 是不能用在 stream 的 module 里面的，而有些回答也提出了在 upstream 处设置 resolver，但 stream 的 upstream 是不能设置 resolver 的。</p>
-<p>这时的配置类似于</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">user  nginx;</span><br><span class="line">worker_processes  1;</span><br><span class="line">error_log  /var/log/nginx/error.log warn;</span><br><span class="line">pid        /var/run/nginx.pid;</span><br><span class="line"></span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">stream &#123;</span><br><span class="line">    resolver 8.8.8.8 valid=60s;</span><br><span class="line">    listen 80;</span><br><span class="line">    proxy_pass www.example.com:8080;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>结果是运行起来没问题，但是一段时间 DNS 记录变了之后，还是会出现 SSL 证书问题。</p>
-<p><a target="_blank" rel="noopener" href="https://medium.com/driven-by-code/dynamic-dns-resolution-in-nginx-22133c22e3ab">这篇文章</a> 也提到类似的方式，还提了一点</p>
-<blockquote>
-<p>Nginx evaluates the value of the variable per-request, instead of just once at startup. By setting the address as a variable and using the variable in the <code>proxy_pass</code> directive, we force Nginx to resolve the correct load balancer address on every request.</p>
-</blockquote>
-<p>这一点在我看来是十分诡异的，通过设置变量而不是直接配置的形式就能让 Nginx 每次请求再单独解析 DNS 记录。</p>
-<h2 id="Traefik"><a href="#Traefik" class="headerlink" title="Traefik"></a>Traefik</h2><p>当时试了几种方法无果，想着要不换个软件试下好了，就试了下 Traefik，配置如下</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">traefik:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">traefik:v2.2</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">&quot;8080:80&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">./traefik.toml:/etc/traefik/traefik.toml</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">./tcp-proxy.toml:/etc/traefik/tcp-proxy.toml</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># traefik.toml</span></span><br><span class="line"><span class="section">[entryPoints]</span></span><br><span class="line">  <span class="section">[entryPoints.api]</span></span><br><span class="line">    <span class="attr">address</span> = <span class="string">&quot;:80&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[providers.file]</span></span><br><span class="line">  <span class="attr">filename</span> = <span class="string">&quot;/etc/traefik/tcp-proxy.toml&quot;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># tcp-proxy.toml</span></span><br><span class="line"><span class="section">[tcp.routers]</span></span><br><span class="line">  <span class="section">[tcp.routers.api]</span></span><br><span class="line">    <span class="attr">entryPoints</span> = [<span class="string">&quot;api&quot;</span>]</span><br><span class="line">    <span class="attr">rule</span> = <span class="string">&quot;HostSNI(`*`)&quot;</span></span><br><span class="line">    <span class="attr">service</span> = <span class="string">&quot;api&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[tcp.services]</span></span><br><span class="line">  <span class="section">[tcp.services.api.loadBalancer]</span></span><br><span class="line">    <span class="section">[[tcp.services.api.loadBalancer.servers]]</span></span><br><span class="line">      <span class="attr">address</span> = <span class="string">&quot;www.example.com:8080&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>不幸的是，本地测试能复现 Nginx 上的问题，如 <a target="_blank" rel="noopener" href="https://github.com/containous/traefik/issues/5675">issues/5675</a>。其实这里也可以看到，与 DNS cache 或者缓存没有什么关系，而是在建立连接时用了这个 IP，后续并没有去更新。</p>
-<blockquote>
-<p>Expected behavior: When the remote end dies or is rebuilt, the proxy gets timed out and a new one gets brought up.</p>
-<p>Actual behavior: all connections to this load balancer fail for eternity (we left it for an hour and it was still broken) until traefik is restarted and a new connection is instantiated with the correct IP.</p>
-</blockquote>
-<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><p>最后的解决方法来源于 <a target="_blank" rel="noopener" href="https://www.dosarrest.com/ddos-blog/nginx-with-stream-module-dynamic-upstream-cname/">这里</a>。因为在 stream 中无法使用 set，那么我们就用 map 来代替吧</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">user  nginx;</span><br><span class="line">worker_processes  1;</span><br><span class="line">error_log  /var/log/nginx/error.log warn;</span><br><span class="line">pid        /var/run/nginx.pid;</span><br><span class="line"></span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">stream &#123;</span><br><span class="line"></span><br><span class="line">    map $server_port $tcp_cname &#123;</span><br><span class="line">        80 &quot;www.example.com:8080&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    server &#123;</span><br><span class="line">        resolver 8.8.8.8 valid=60s;</span><br><span class="line">        listen 80;</span><br><span class="line">        proxy_pass $tcp_cname;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这种解决方法真是一点都高兴不起来。这应该是一种能 work 的方案，好像是解决了问题。但在这一系列的 debug 中，最大的问题是 Nginx 在 stream 和 http 两种 module 中有配置不一致的情况，两种看似等效的方式也能得出不同的结果。</p>
-<p>除此以外，当时想着要换成 traefik 的原因是这篇 <a target="_blank" rel="noopener" href="https://tenzer.dk/nginx-with-dynamic-upstreams/">文章</a>，里面有提到</p>
-<blockquote>
-<p>One way to solve this problem is to pay for Nginx Plus which adds the resolve flag to the server directive in an upstream group. That will make Nginx honour the TTL of the DNS record and occasionally re-resolve the record in order to get an updated list of servers to use.</p>
-</blockquote>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a target="_blank" rel="noopener" href="http://nginx.org/en/docs/stream/ngx_stream_core_module.html#resolver">http://nginx.org/en/docs/stream/ngx_stream_core_module.html#resolver</a></li>
-<li><a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_core_module.html">http://nginx.org/en/docs/http/ngx_http_core_module.html</a></li>
-<li><a target="_blank" rel="noopener" href="https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html#request-routing">https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html#request-routing</a></li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/06/07/nginx-stream-debug/" data-id="ckx7kmlco001yrzc89l2z9jzs" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nginx/" rel="tag">nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/proxy/" rel="tag">proxy</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcp/" rel="tag">tcp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/traefik/" rel="tag">traefik</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-jenkins-pipeline-thinking" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/06/03/jenkins-pipeline-thinking/" class="article-date">
-  <time datetime="2020-06-02T16:00:00.000Z" itemprop="datePublished">2020-06-03</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/03/jenkins-pipeline-thinking/">Jenkins pipeline thinking</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在 2019 年中至今花了挺多时间在 Jenkins pipeline 的改造，本文旨在描述这个过程中的一些思考和实践。涉及到 Python，Java，前端的项目。</p>
-<h2 id="Version-0-1"><a href="#Version-0-1" class="headerlink" title="Version 0.1"></a>Version 0.1</h2><p>最开始接手项目时，一个项目只有一个 Jenkinsfile。使用 branch 进判断，像 master 分支对应 production 环境，只要有代码提交，则 Jenkins 进行构建，执行 terraform 代码。程序本身通过 docker 来运行，每个 image 的 tag 对应其发布分支的 commit hash id。</p>
-<p>对于 Python library 类的项目，则会区分 master 分支和非 master 分支，如果最新的一个 commit message 中包含一个 <code>[release]</code> 的信息，则会进行构建，并进行 Github Release，区别就是 master 分支构建的版本是正式版本，非 master 的分支构建出来的版本包含 commit hash id 的信息。</p>
-<p>这种 pipeline 的模式好处就是非常简单，如果需要发布新版本只需要在对应的分支提交代码 / PR 即可。但后续我们加入了 dev / test 的环境，意味着我们需要维护 4 个分支。</p>
-<p>除此以外，因为我们使用 terraform 来进行部署，最终是通过 AWS 的 <a target="_blank" rel="noopener" href="https://aws.amazon.com/ecs/">ECS</a> 来运行，所以包括 staging / production 环境的资源限制（基于 cloudwatch 的 autoscaling），数据库和 Kafka 的配置等信息都通过代码来控制。我们需要更新这些配置的话，就需要编辑代码，则会引发 docker image 的更新。如果是简单的更改配置的话，也需要走一遍重新构建镜像的过程。</p>
-<p>最重要的问题是，我们没法回滚。因为部署都是基于 branch 的，没有一个版本的概念。发布了之后只能通过 git commit hash id 去找到我们发布时候的那个点，或者切换到想要回滚的那个点，找回那个点对应的镜像。</p>
-<h2 id="Version-0-2"><a href="#Version-0-2" class="headerlink" title="Version 0.2"></a>Version 0.2</h2><p>对于一个项目来说，功能开发完会提 PR，Github 那里会检测这个 PR 的测试的结果，代码质量检测，只有合格了才进行 merge。那么对于同一个阶段的代码来说，一次发布从代码提交到部署的中间必须会执行两次代码测试，image 构建等等。如果这些耗时很长的话，则会导致一次发布拖延甚久。</p>
-<p>如果不同项目之间出现依赖问题，那么一个项目的发布导致的拖延，线上的检查等等则会造成更多的等待。除此以外，因为 branch 是自动构建的，我们也只能等到发布的时候才进行 PR 的 merge。所以 0.2 的版本的首要解决的问题是，构建（image）和发布分离。</p>
-<p>这里我们去掉了原有 Jenkinsfile 中的部署部分的代码，将其移动到了 Jenkinsfile-release 中。通过 <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/47565933/build-pipeline-using-a-branch-parameter">Jenkins Parameterized Build</a> 的形式选择想要发布的 branch，获取到对应的 docker image 的 tag 然后执行相应的 terraform 代码，完成更新。</p>
-<p>这个模式目前只能解决发布和构建耦合在一起的问题。除此以外，这里一个比较严重的问题是，Jenkins 支持下拉框对应的 tag / branch，但实际上并不 checkout 到对应的 ref。后来发现应该是 Jenkins Git Plugin 的 <a target="_blank" rel="noopener" href="https://issues.jenkins-ci.org/plugins/servlet/mobile#issue/JENKINS-28447">bug</a>。</p>
-<h2 id="Version-0-3"><a href="#Version-0-3" class="headerlink" title="Version 0.3"></a>Version 0.3</h2><p>与上个版本最大的不同是，使用 git tag 来进行发布。保护分支变成两种，master 分支和 release/* 分支。前者对应 production / staging 的代码，后者对应 dev / test 的代码。对于 master 分支和 release/* 分支，都会打出 git tag，不同的是，后者会有个 build 的 suffix，用到了 Jenkins 构建时候的环境变量 <code>env.BUILD_NUMBER</code> ，如当前版本是 v1.0.0 则 release 对应的版本是 <code>v1.0.0b&lt;env.BUILD_NUMBER&gt;</code> 直到测试通过合并到 master 分支，则会打出 v1.0.0 不含后缀的 git tag。</p>
-<p>语义化版本之后，通过 Jenkins 的参数化构建，我们就能通过选择发布的 tag 来进行发布。如果我们 build 出来的 docker image 的 tag 也遵循这个规则，我们就能通过这个 git tag 对应上。那么部署要做的事情就简单多了，checkout 出对应的代码，通过 Makefile 获取对应的 image name 等基础信息，组合成需要发布的 docker image，通过这个点上的 terraform 代码进行部署。</p>
-<p>除此以外，如果通过选择 tag 的形式，如果新旧两个版本的代码没有兼容性问题，我们可以简单的通过选择上次稳定版本的代码来进行发布。</p>
-<h2 id="Version-0-4"><a href="#Version-0-4" class="headerlink" title="Version 0.4"></a>Version 0.4</h2><p>直到现在我们还是使用 terraform 来进行发布，好处还是我们能通过代码控制基础设施，包括内部域名，autoscaling 的参数配置等等。但随之而来的就是每次更新配置都需要修改项目的代码。当前最简单的方法就是将 terraform 代码迁移出来通过别的项目来管理，每次需要更新的时候，提 PR 更新想要发布的项目的 image tag 即可，此外，我们也有了一个统一管理不同服务版本的办法。</p>
-<p>最开始公司内部使用的是 k8s 来作部署工具，当时我写了一个简单的 Python 脚本加一个 template 的来渲染出对应 dev / test 环境的 k8s deployment.yml，然后复制到 k8s 对应的集群执行 <code>kubectl apply -f deployment.yml</code> 即可。现在逐步改用 <a target="_blank" rel="noopener" href="https://kustomize.io/">kustomize</a> 来部署，算是正规化了许多。而且，在 Jenkins slave 中保存了对应 k8s 集群的认证的配置文件，可以直接从 Jenkins slave 中发起 k8s deployment 的更新。</p>
-<p>基于 kustomize 还有一个比较重要的原因它支持 <a target="_blank" rel="noopener" href="https://github.com/kubernetes-sigs/kustomize/blob/master/examples/remoteBuild.md#url-format">remote resource</a>。所以我们目前的做法是，在项目中编写 base / dev / test layer，而去执行部署的程序引用 base layer，能保证我们 production 环境的端口，环境变量等基本配置一一致，而针对具体环境，又能设置具体的如资源限制，configmap，或者 ingress。</p>
-<h2 id="Version-X"><a href="#Version-X" class="headerlink" title="Version X"></a>Version X</h2><p><del>到了 0.4 的阶段，我觉得基本能满足我们的需求了。基本的目的是，项目本身只负责 image build 这一阶段，而后续的 push image 则是由具体的环境的 Jenkins 来进行，如你在 AWS / Aliyun 各有一个 docker registry。</del></p>
-<p>后面重新试了下，觉得这种方式过于繁琐，需要维护各种环境的构建环境，后续的想法是有在国内进行 image 的构建，而某个具体环境需要部署时，则将该版本的 docker image 推到对应的 docker registry。</p>
-<p>AWS 上的基础设置还是通过 terraform 来维护，不同的是，只有基础设置，具体服务就由 Jenkins Pipeline 来负责部署。而不同环境 / AWS 帐号的差异则通过 kustomize 的不同 layer 来实现。</p>
-<h2 id="Tools"><a href="#Tools" class="headerlink" title="Tools"></a>Tools</h2><h3 id="Jenkins"><a href="#Jenkins" class="headerlink" title="Jenkins"></a>Jenkins</h3><p>目前在各个项目中分布着 Pipeline 的两种语法，Goovy 的写法会更灵活，但 Declarative 的写法会更家规范。我们希望将所有的构建的细节都用 Makefile 封装起来，而 pipeline 则仅仅负责调用。对于不同的环境（国内 / 国外或者 AWS / Aliyun）的配置（如 docker registry）则通过环境变量来引入。</p>
-<h3 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h3><p>docker 在不同环境中的主要问题是网速，特别是依赖库的更新。这里可以通过 build args 来定制化这些配置，如 pip</p>
-<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ARG</span> PYPI_MIRROR=https://pypi.python.org/simple/</span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> pip install -i <span class="variable">$&#123;PYPI_MIRROR&#125;</span> -r config/requirements.txt</span></span><br></pre></td></tr></table></figure>
-
-<p>npm</p>
-<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ARG</span> NPM_REGISTRY=https://registry.npm.taobao.org</span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> npm install -g xxx --registry=<span class="variable">$&#123;NPM_REGISTRY&#125;</span></span></span><br></pre></td></tr></table></figure>
-
-<p>还有一个问题，必须要区分 build args 和 runtime env variables。前者是无关环境的，一个判别方法是，如果这个 image 换到别的环境去使用，能否仅仅通过 env variables 去配置？常见的就是前端的代码，因为 Nginx 或者 image 中放置的是通过工具编译过的 JavaScript 文件，无法配置环境变量。这里就需要额外添加 entrypoint.sh 和命令 <code>envsubst</code> 来进行改造。</p>
-<h3 id="kustomize"><a href="#kustomize" class="headerlink" title="kustomize"></a>kustomize</h3><p>这里我们还有讨论到一个点，就是 dev / test 环境的 configmap 要不要项目本身来维护。如果由自己来维护的话，方便进行开发调试，但另一方面就可能导致有配置和 staging / production 不一致出现问题。除此以外，如果 configmap 同名的话，仅仅是更新配置但 deployment 是不会重启 pod 的。</p>
-<h3 id="terraform"><a href="#terraform" class="headerlink" title="terraform"></a>terraform</h3><p>目前项目有用到 0.11 版本的语法的 terraform 0.12 版本的 terraform。目前发现，对于已经用旧语法进行部署的服务，如果用新的版本的 terraform 进行部署，则会报错。在这个过程中，需要维护旧的服务，并且逐渐迁移到新的版本。</p>
-<p>0.12 的语法更加简洁，并且有新加的如 <code>count</code> 和 <code>for_each</code> 等用法可以方便编写相似的资源。除此以外，新版本 terraform 去读取旧语法生成的 state 的内容也是可以的。</p>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://semver.org/">https://semver.org/</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.jenkins.io/doc/book/pipeline/syntax/#compare">https://www.jenkins.io/doc/book/pipeline/syntax/#compare</a></li>
-<li><a target="_blank" rel="noopener" href="https://mirror.tuna.tsinghua.edu.cn/help/pypi/">https://mirror.tuna.tsinghua.edu.cn/help/pypi/</a></li>
-<li><a target="_blank" rel="noopener" href="https://ledermann.dev/blog/2018/04/27/dockerize-and-configure-javascript-single-page-application/">https://ledermann.dev/blog/2018/04/27/dockerize-and-configure-javascript-single-page-application/</a></li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/06/03/jenkins-pipeline-thinking/" data-id="ckx7kmlcm001vrzc8bmsia9s1" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jenkins/" rel="tag">jenkins</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/pipeline/" rel="tag">pipeline</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-golang-in-2019" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/10/11/golang-in-2019/" class="article-date">
-  <time datetime="2019-10-10T16:00:00.000Z" itemprop="datePublished">2019-10-11</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/11/golang-in-2019/">Golang 2019 重新配置</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>好久没写过 Golang 了，上次写还是 <code>GOPATH</code> 的版本。本文以 <code>1.13.1</code> 为例子，再次整理些 Golang 的开发环境</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; go version</span><br><span class="line">go version go1.13.1 linux/amd64</span><br></pre></td></tr></table></figure>
-
-<p>以 <a target="_blank" rel="noopener" href="https://github.com/lycheng/gobjection">https://github.com/lycheng/gobjection</a> 项目为例</p>
-<h2 id="Env"><a href="#Env" class="headerlink" title="Env"></a>Env</h2><p>首先是关于 Golang Modules 的环境变量的设置</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export GO111MODULE=auto</span><br><span class="line">export GOPROXY=https://goproxy.io</span><br><span class="line"># export GOPROXY=http://mirrors.aliyun.com/goproxy/</span><br></pre></td></tr></table></figure>
-
-<p>初始化项目，Golang Modules 出来之后，不需要像以前那样必须跟着 <code>GOPATH</code> 里面 Github 的项目路径走了，可以自由安排路径</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go mod init github.com/lycheng/gobjection</span><br></pre></td></tr></table></figure>
-
-<h2 id="Init"><a href="#Init" class="headerlink" title="Init"></a>Init</h2><p>参考 <a target="_blank" rel="noopener" href="https://github.com/golang-standards/project-layout">Golang Project Layout</a> 创建了几个目录</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir cmd</span><br><span class="line">mkdir pkg</span><br></pre></td></tr></table></figure>
-
-<p>在项目根目录使用 <code>go get</code> 安装依赖的话会保存版本信息到 <code>go.mod</code> 中</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt; go get -u github.com/sirupsen/logrus</span><br><span class="line">&gt; cat go.mod</span><br><span class="line">module github.com/lycheng/gobjection</span><br><span class="line"></span><br><span class="line">go 1.13</span><br><span class="line"></span><br><span class="line">require (</span><br><span class="line">        github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect</span><br><span class="line">        github.com/sirupsen/logrus v1.4.2 // indirect</span><br><span class="line">        golang.org/x/sys v0.0.0-20190927073244-c990c680b611 // indirect</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
-<h2 id="In-The-End"><a href="#In-The-End" class="headerlink" title="In-The-End"></a>In-The-End</h2><p>几点感受</p>
-<ul>
-<li><code>GOPROXY</code> 试了下感觉还行，解决了以前下载 Github / golang.org 等仓库的依赖的痛点</li>
-<li>项目的路径终于不用像之前一样要按规定路径来</li>
-</ul>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://github.com/golang/go/wiki/Modules#recent-changes">Go Modules 1.13 的几个变化</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/golang-standards/project-layout">Golang Project Layout</a></li>
-<li><a target="_blank" rel="noopener" href="https://juejin.im/post/5d8ee2db6fb9a04e0b0d9c8b">干货满满的 Go Modules 和 goproxy.cn</a></li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/10/11/golang-in-2019/" data-id="ckx7kmlcm001trzc8hthr6pys" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/" rel="tag">golang</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-python-memory-leak-debug" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/01/14/python-memory-leak-debug/" class="article-date">
-  <time datetime="2019-01-13T16:00:00.000Z" itemprop="datePublished">2019-01-14</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/14/python-memory-leak-debug/">Python 内存暴涨的问题排查</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在工作的时候和同事检查一个 Python 程序的问题的时候没有头绪，日志看了下也基本正常。于是在网上搜了下看下别人的思路，发现了 <a target="_blank" rel="noopener" href="https://mg.pov.lt/objgraph/">objgraph</a> 这个库。</p>
-<p>抱着试一下的心态安装了试了下，然后发现发问题所在</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">BindParameter    181236 +180366</span><br><span class="line">_anonymous_label 181322 +180365</span><br><span class="line">dict             229511 +180160</span><br><span class="line">...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>上述输出是 <code>objgraph.show_growth()</code> 的输出，该函数会输出类实例的增量的变化。上述输出可以看到三个类型实例变量的增量是同步的，而前两个类型又是 SQLAlchemy 库的类型，于是怀疑是数据库的问题。</p>
-<p>后来追查下去，发现变化在于传入了一个千万级别的 ID 数组，使用该数组作为子查询来查询。</p>
-<p>除此以外其实还有像 <code>objgraph.get_leaking_objects()</code> 这样打印出没有被引用的对象（按其 <a target="_blank" rel="noopener" href="https://mg.pov.lt/objgraph/objgraph.html#objgraph.get_leaking_objects">文档说明</a> 有 bug）以及通过图来表示对象的引用关系，用来 debug 真是再合适不过了。</p>
-<p>由于当时 debug 的环境是 Python 2.6 的，现在 Python 3 有内置的库，如 <a target="_blank" rel="noopener" href="https://docs.python.org/3/library/tracemalloc.html">tracemalloc</a>，该库在 Python 3.4 开始引入，初步看了下，tracemalloc 可以提供比 gc 库更底层的功能。</p>
-<h2 id="One-More-Thing"><a href="#One-More-Thing" class="headerlink" title="One-More-Thing"></a>One-More-Thing</h2><p>我刚看这个 <code>objgraph.show_growth()</code> 的例子的时候，以为是用了全局变量去存储上次的结果来做 diff，然后看了代码觉得挺巧妙的</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show_growth</span>(<span class="params">limit=<span class="number">10</span>, peak_stats=&#123;&#125;, shortnames=<span class="literal">True</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Show the increase in peak object counts since last call.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Limits the output to ``limit`` largest deltas.  You may set ``limit`` to</span></span><br><span class="line"><span class="string">    None to see all of them.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Uses and updates ``peak_stats``, a dictionary from type names to previously</span></span><br><span class="line"><span class="string">    seen peak object counts.  Usually you don&#x27;t need to pay attention to this</span></span><br><span class="line"><span class="string">    argument.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    The caveats documented in :func:`typestats` apply.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Example:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &gt;&gt;&gt; show_growth()</span></span><br><span class="line"><span class="string">        wrapper_descriptor       970       +14</span></span><br><span class="line"><span class="string">        tuple                  12282       +10</span></span><br><span class="line"><span class="string">        dict                    1922        +7</span></span><br><span class="line"><span class="string">        ...</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    .. versionadded:: 1.5</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    .. versionchanged:: 1.8</span></span><br><span class="line"><span class="string">       New parameter: ``shortnames``.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    gc.collect()</span><br><span class="line">    stats = typestats(shortnames=shortnames)</span><br><span class="line">    deltas = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> name, count <span class="keyword">in</span> iteritems(stats):</span><br><span class="line">        old_count = peak_stats.get(name, <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">if</span> count &gt; old_count:</span><br><span class="line">            deltas[name] = count - old_count</span><br><span class="line">            peak_stats[name] = count</span><br><span class="line">    deltas = <span class="built_in">sorted</span>(deltas.items(), key=operator.itemgetter(<span class="number">1</span>),</span><br><span class="line">                    reverse=<span class="literal">True</span>)</span><br><span class="line">    <span class="keyword">if</span> limit:</span><br><span class="line">        deltas = deltas[:limit]</span><br><span class="line">    <span class="keyword">if</span> deltas:</span><br><span class="line">        width = <span class="built_in">max</span>(<span class="built_in">len</span>(name) <span class="keyword">for</span> name, count <span class="keyword">in</span> deltas)</span><br><span class="line">        <span class="keyword">for</span> name, delta <span class="keyword">in</span> deltas:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;%-*s%9d %+9d&#x27;</span> % (width, name, stats[name], delta))</span><br></pre></td></tr></table></figure>
-
-<p>关键在于 <code>peak_stats</code> 这个变量，其默认值为 <code>&#123;&#125;</code>。函数在 Python 中也是一种对象，而函数参数则是对象的属性，声明之后将一直保存在内存中（传入另一个值则像是屏蔽了该变量，而下次再使用默认值还是会是原来的变量）。</p>
-<p>以前遇到过一个 bug，在函数中加入了一个时间值，其默认值设为 <code>datetime.now()</code> 则不传入值的时候，该值永远是程序启动时的时间。</p>
-<p>在这段代码中则使用该默认值来保存当前的对象的分配情况。在当前调用时，存入该次的状态，下次继续调用时，则可以比较两次调用间的 diff 了。不过这种将状态通过一些语言特性隐藏起来了的写法，感觉还是不应该出现在普通的代码中，这样子特殊用途的代码则可以考虑使用。</p>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://mg.pov.lt/blog/hunting-python-memleaks.html">Hunting memory leaks in Python</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/xybaby/p/7491656.html">使用gc、objgraph干掉python内存泄露与循环引用！</a></li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/14/python-memory-leak-debug/" data-id="ckx7kmlck001rrzc86a1407dk" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/debug/" rel="tag">debug</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-k8s-init-with-kubeadm" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/12/14/k8s-init-with-kubeadm/" class="article-date">
-  <time datetime="2018-12-13T16:00:00.000Z" itemprop="datePublished">2018-12-14</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/14/k8s-init-with-kubeadm/">使用 kubeadm 初始化 k8s 集群</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>系统环境：CentOS 7.X</p>
-<p>Kubernetes 相关版本：</p>
-<ul>
-<li>kubeadm - v1.13.0</li>
-<li>kubelet - v1.13.0</li>
-<li>kubectl - v1.13.0</li>
-</ul>
-<h2 id="k8s-master-初始化"><a href="#k8s-master-初始化" class="headerlink" title="k8s master 初始化"></a>k8s master 初始化</h2><p>配置仓库，安装 kube 相关依赖</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; vim /etc/yum.repos.d/kubernetes.repo</span><br></pre></td></tr></table></figure>
-
-<p>设置 kubernetes 的 aliyun 仓库，CentOS 本身的源只支持到 1.5.X 的版本</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[kubernetes]</span><br><span class="line">name=Kubernetes</span><br><span class="line">baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=0</span><br><span class="line">repo_gpgcheck=0</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt; setenforce 0</span><br><span class="line">&gt; yum install -y kubelet kubeadm kubectl</span><br><span class="line">&gt; vim /etc/fstab # 注释最后一行来去掉 swap</span><br><span class="line">&gt; swapoff -a</span><br><span class="line">&gt; systemctl enable kubelet &amp;&amp; systemctl start kubelet</span><br></pre></td></tr></table></figure>
-
-<p>指定版本，指定仓库</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; kubeadm init --pod-network-cidr=10.244.0.0/16 --image-repository registry.aliyuncs.com/google_containers --kubernetes-version v1.13.0</span><br></pre></td></tr></table></figure>
-
-<p>配置 kubectl 环境，让非 root 用户都能使用 kubectl</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p $HOME/.kube</span><br><span class="line">sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config</span><br><span class="line">sudo chown $(id -u):$(id -g) $HOME/.kube/config</span><br></pre></td></tr></table></figure>
-
-<p>安装 flannel 网络</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; docker pull registry.cn-hangzhou.aliyuncs.com/kubernetes_containers/flannel:v0.10.0-amd64</span><br><span class="line">&gt; docker tag registry.cn-hangzhou.aliyuncs.com/kubernetes_containers/flannel:v0.10.0-amd64 quay.io/coreos/flannel:v0.10.0-amd64</span><br><span class="line">&gt; kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</span><br></pre></td></tr></table></figure>
-
-<p>安装完之后如果 coredns 有问题，可以修改 coredns deploy 配置之后再进行部署，</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; kubectl -n kube-system get deployment coredns -o yaml &gt; coredns.yaml</span><br><span class="line">&gt; vim coredns.yml # allowPrivilegeEscalation: true</span><br><span class="line">&gt; kubectl apply -f coredns.yml</span><br></pre></td></tr></table></figure>
-
-<p>相关 issue: <a target="_blank" rel="noopener" href="https://github.com/kubernetes/kubeadm/issues/998">https://github.com/kubernetes/kubeadm/issues/998</a></p>
-<p>之后在 master 节点执行下面的命令，应该是所有的服务都是在运行的</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; kubectl get pods -n kube-system</span><br></pre></td></tr></table></figure>
-
-<p>至此，master 节点的初始化结束</p>
-<h2 id="k8s-node-节点初始化"><a href="#k8s-node-节点初始化" class="headerlink" title="k8s node 节点初始化"></a>k8s node 节点初始化</h2><p>在 master 节点执行命令，获取用于 join 的命令</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; kubeadm token create --print-join-command</span><br></pre></td></tr></table></figure>
-
-<p>在 worker 节点上 执行上述命令</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; kubeadm join ...</span><br></pre></td></tr></table></figure>
-
-<p>然后在 master 节点执行可见相关结果</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; kubectl get pods -n kube-system</span><br><span class="line">&gt; kubectl get nodes</span><br></pre></td></tr></table></figure>
-
-<p>如果遇到 NotReady 的情况，可尝试先将该节点删掉</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; kubectl drain &lt;node name&gt; --delete-local-data --force --ignore-daemonsets</span><br><span class="line">&gt; kubectl delete node &lt;node name&gt;</span><br></pre></td></tr></table></figure>
-
-<p>然后在 worker 节点</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; kubeadm reset</span><br></pre></td></tr></table></figure>
-
-<p>之后再重新 join。目前遇到最多的问题是 cgroups-driver 不一致，目前尝试将 k8s 和 docker 都改成 systemd 即可。可使用下面的命令查看</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; systemctl status kubelet</span><br><span class="line">&gt; docker info | grep -i driver</span><br></pre></td></tr></table></figure>
-
-<p>给节点设置 role</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; kubectl label node &lt;node name&gt; node-role.kubernetes.io/node=</span><br></pre></td></tr></table></figure>
-
-<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>1.13 版本的 k8s 使用 kubeadm 安装的话会比之前的体验好很多，但是自己测试下来还是挺多坑的</p>
-<ul>
-<li>网络的问题，新版的 kubeadm 可以支持修改镜像仓库，使用 aliyun 的话还行，但你安装 flannel 的话还是需要手动处理下</li>
-<li>cgroups.driver 问题，这个的话与 k8s 和 docker 都有关系，两边需要统一才行</li>
-</ul>
-<p>总体而言会比之前的体验好点，目前新版的 kubeadm 也到了 GA 阶段了，未来的话希望体验更好点吧。</p>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/RainingNight/p/using-kubeadm-to-create-a-cluster-1-13.html">使用 kubeadm 初始化 1.13 版本的 k8s 集群</a></li>
-<li><a target="_blank" rel="noopener" href="https://kubernetes.io/blog/2018/12/03/kubernetes-1-13-release-announcement/">k8s 1.13 的 release 博客</a></li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/14/k8s-init-with-kubeadm/" data-id="ckx7kmlck001przc8afb0gyrg" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
-
-  <nav id="page-nav">
-    
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
-  </nav>
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/annotation/" rel="tag">annotation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/architecture/" rel="tag">architecture</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ci/" rel="tag">ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/concurrency/" rel="tag">concurrency</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/container/" rel="tag">container</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/context/" rel="tag">context</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/database/" rel="tag">database</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/debug/" rel="tag">debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/encoding/" rel="tag">encoding</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/engineering/" rel="tag">engineering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/error/" rel="tag">error</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/eval/" rel="tag">eval</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/generic/" rel="tag">generic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/" rel="tag">https</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/influxdb/" rel="tag">influxdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/innodb/" rel="tag">innodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jenkins/" rel="tag">jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lambda/" rel="tag">lambda</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/metaclass/" rel="tag">metaclass</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/metrics/" rel="tag">metrics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/microservice/" rel="tag">microservice</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mock/" rel="tag">mock</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/" rel="tag">network</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/" rel="tag">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/partitions/" rel="tag">partitions</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/patch/" rel="tag">patch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pipeline/" rel="tag">pipeline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/protocol/" rel="tag">protocol</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/" rel="tag">proxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react/" rel="tag">react</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/" rel="tag">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/security/" rel="tag">security</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/" rel="tag">ssl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sync/" rel="tag">sync</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/" rel="tag">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thread/" rel="tag">thread</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/timezone/" rel="tag">timezone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tls/" rel="tag">tls</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/traefik/" rel="tag">traefik</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/unittest/" rel="tag">unittest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/virtualenv/" rel="tag">virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/virtualenvwrapper/" rel="tag">virtualenvwrapper</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/annotation/" style="font-size: 10px;">annotation</a> <a href="/tags/architecture/" style="font-size: 10px;">architecture</a> <a href="/tags/blog/" style="font-size: 10px;">blog</a> <a href="/tags/ci/" style="font-size: 10px;">ci</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/container/" style="font-size: 10px;">container</a> <a href="/tags/context/" style="font-size: 10px;">context</a> <a href="/tags/database/" style="font-size: 10px;">database</a> <a href="/tags/debug/" style="font-size: 10px;">debug</a> <a href="/tags/docker/" style="font-size: 17.5px;">docker</a> <a href="/tags/encoding/" style="font-size: 12.5px;">encoding</a> <a href="/tags/engineering/" style="font-size: 10px;">engineering</a> <a href="/tags/error/" style="font-size: 10px;">error</a> <a href="/tags/eval/" style="font-size: 10px;">eval</a> <a href="/tags/generic/" style="font-size: 10px;">generic</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/influxdb/" style="font-size: 10px;">influxdb</a> <a href="/tags/innodb/" style="font-size: 10px;">innodb</a> <a href="/tags/java/" style="font-size: 17.5px;">java</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/tags/metaclass/" style="font-size: 10px;">metaclass</a> <a href="/tags/metrics/" style="font-size: 10px;">metrics</a> <a href="/tags/microservice/" style="font-size: 10px;">microservice</a> <a href="/tags/mock/" style="font-size: 10px;">mock</a> <a href="/tags/mysql/" style="font-size: 12.5px;">mysql</a> <a href="/tags/network/" style="font-size: 12.5px;">network</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/partitions/" style="font-size: 10px;">partitions</a> <a href="/tags/patch/" style="font-size: 10px;">patch</a> <a href="/tags/pipeline/" style="font-size: 10px;">pipeline</a> <a href="/tags/protocol/" style="font-size: 12.5px;">protocol</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/react/" style="font-size: 10px;">react</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/security/" style="font-size: 15px;">security</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/sync/" style="font-size: 10px;">sync</a> <a href="/tags/tcp/" style="font-size: 10px;">tcp</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/timezone/" style="font-size: 10px;">timezone</a> <a href="/tags/tls/" style="font-size: 10px;">tls</a> <a href="/tags/traefik/" style="font-size: 10px;">traefik</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/unittest/" style="font-size: 10px;">unittest</a> <a href="/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/tags/virtualenvwrapper/" style="font-size: 10px;">virtualenvwrapper</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2021/12/15/designing-data-intensive-applications-note/">Designing Data-Intensive Applications Notes</a>
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
           </li>
+          
         
-          <li>
-            <a href="/2021/10/23/oauth-introduction/">OAuth Introduction</a>
-          </li>
         
-          <li>
-            <a href="/2020/11/13/mysql-innodb/">MySQL InnoDB Introduction</a>
-          </li>
-        
-          <li>
-            <a href="/2020/09/14/cloud-design-patterns/">Cloud Design Patterns</a>
-          </li>
-        
-          <li>
-            <a href="/2020/08/21/about-ssl-tls/">About SSL And TLS</a>
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
           </li>
         
       </ul>
     </div>
   </div>
+</nav>
 
   
-</aside>
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Have Fun."></span>
+          
+        </div>
+
         
       </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2021 Shing<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+
+      
+        <div class="scroll-down-bar">
+          <i class="iconfont icon-arrowdown"></i>
+        </div>
+      
     </div>
   </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      <div class="container nopadding-x-md">
+        <div id="board"
+          style="margin-top: 0">
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
+
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2022/06/14/about-unit-tests/" target="_self">
+          About Unit Tests
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/06/14/about-unit-tests/" target="_self">
+        <div>
+          本文为公司组内的一次关于在 Java 项目上的单元测试的分享，面向的是实习生以及工作年限并不长的员工。 What is Unit TestsUNIT TESTING is a type of software testing where individual units or components of a software are tested. The purpose is to valida
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-06-14 00:00" pubdate>
+              2022-06-14
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/java/">#java</a>
+            
+              <a href="/tags/engineering/">#engineering</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/12/15/designing-data-intensive-applications-note/" target="_self">
+          Designing Data-Intensive Applications Notes
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2021/12/15/designing-data-intensive-applications-note/" target="_self">
+        <div>
+          Chapter 1 - 可靠系统 以最小出错的方式来设计系统，减少人为出错 想办法分离出最容易出错的地方和容易引发故障的接口 充分的测试 快速的恢复机制以尽量减少故障影响 详细而清晰的监控子系统 流程化  Chapter 2 - 数据模型和查询语言关系型和文档型数据库现状  文档型：读时模式，读取的时候才去解析具体的字段 RDS：写时模式，已有的关系经由表结构来确定  关注存储的局部性 SQL 是
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-12-15 00:00" pubdate>
+              2021-12-15
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/security/">#security</a>
+            
+              <a href="/tags/network/">#network</a>
+            
+              <a href="/tags/protocol/">#protocol</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/10/23/oauth-introduction/" target="_self">
+          OAuth Introduction
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2021/10/23/oauth-introduction/" target="_self">
+        <div>
+          上下文中的 OAuth 仅考虑 OAuth 2.0，不考虑旧版的协议。 Protocol OAuth 2.0 is not an authentication protocol.   As far as an OAuth client is concerned, it asked for a token, got a token, and eventually used that token to
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-10-23 00:00" pubdate>
+              2021-10-23
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/security/">#security</a>
+            
+              <a href="/tags/network/">#network</a>
+            
+              <a href="/tags/protocol/">#protocol</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2020/11/13/mysql-innodb/" target="_self">
+          MySQL InnoDB Introduction
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2020/11/13/mysql-innodb/" target="_self">
+        <div>
+          用了 MySQL 这么久，现在才第一次看了下官方关于 InnoDB 的文档 Base先简单说一些 InnoDB 的特性  ACID，支持事务 commit 和 rollback Row-level Locking 聚簇索引（clustered index） Foreign Key  Benefits 自动 crash recovery 用 buffer pool 缓存表和索引的数据 可以压缩表和索
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-11-13 00:00" pubdate>
+              2020-11-13
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/mysql/">#mysql</a>
+            
+              <a href="/tags/innodb/">#innodb</a>
+            
+              <a href="/tags/database/">#database</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2020/09/14/cloud-design-patterns/" target="_self">
+          Cloud Design Patterns
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2020/09/14/cloud-design-patterns/" target="_self">
+        <div>
+          Link: https://docs.microsoft.com/en-us/azure/architecture/patterns/ Ambassador代理人模式  Resilient cloud-based applications require features such as circuit breaking, routing, metering and monitoring, and
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-09-14 00:00" pubdate>
+              2020-09-14
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/nginx/">#nginx</a>
+            
+              <a href="/tags/engineering/">#engineering</a>
+            
+              <a href="/tags/architecture/">#architecture</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2020/08/21/about-ssl-tls/" target="_self">
+          About SSL And TLS
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2020/08/21/about-ssl-tls/" target="_self">
+        <div>
+          本文旨在简要介绍关于 SSL &#x2F; TLS 的知识 BaseTLS 是 SSL 的迭代版本，SSL 自从 3.0 之后便不再开发，TLS 1.0 为其继任者，目前最新版本为 TLS 1.3，而 TLS 1.0 也在 2020 年被废弃。下文统一使用 TLS 来进行说明，不进行区分 SSL &#x2F; TLS。 HandshakeTLS 连接在建立了 TCP 连接之后，首先是 TLS 握手
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-08-21 00:00" pubdate>
+              2020-08-21
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/nginx/">#nginx</a>
+            
+              <a href="/tags/security/">#security</a>
+            
+              <a href="/tags/ssl/">#ssl</a>
+            
+              <a href="/tags/tls/">#tls</a>
+            
+              <a href="/tags/https/">#https</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2020/06/07/nginx-stream-debug/" target="_self">
+          Nginx stream debug
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2020/06/07/nginx-stream-debug/" target="_self">
+        <div>
+          由于客户需要做 IP 白名单，所以我们在 AWS 建了两个 EC2 然后做了个 Nginx TCP Proxy，对应的 upstream 是 AWS 的 API Gateway。Nginx 最开始的版本类似于 12345678910111213user  nginx;worker_processes  1;error_log  /var/log/nginx/error.log warn;pid
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-06-07 00:00" pubdate>
+              2020-06-07
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/nginx/">#nginx</a>
+            
+              <a href="/tags/tcp/">#tcp</a>
+            
+              <a href="/tags/proxy/">#proxy</a>
+            
+              <a href="/tags/traefik/">#traefik</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2020/06/03/jenkins-pipeline-thinking/" target="_self">
+          Jenkins pipeline thinking
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2020/06/03/jenkins-pipeline-thinking/" target="_self">
+        <div>
+          在 2019 年中至今花了挺多时间在 Jenkins pipeline 的改造，本文旨在描述这个过程中的一些思考和实践。涉及到 Python，Java，前端的项目。 Version 0.1最开始接手项目时，一个项目只有一个 Jenkinsfile。使用 branch 进判断，像 master 分支对应 production 环境，只要有代码提交，则 Jenkins 进行构建，执行 terrafor
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-06-03 00:00" pubdate>
+              2020-06-03
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/docker/">#docker</a>
+            
+              <a href="/tags/jenkins/">#jenkins</a>
+            
+              <a href="/tags/pipeline/">#pipeline</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2019/10/11/golang-in-2019/" target="_self">
+          Golang 2019 重新配置
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/10/11/golang-in-2019/" target="_self">
+        <div>
+          好久没写过 Golang 了，上次写还是 GOPATH 的版本。本文以 1.13.1 为例子，再次整理些 Golang 的开发环境 12&gt; go versiongo version go1.13.1 linux/amd64  以 https://github.com/lycheng/gobjection 项目为例 Env首先是关于 Golang Modules 的环境变量的设置 123exp
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-10-11 00:00" pubdate>
+              2019-10-11
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/golang/">#golang</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2019/01/14/python-memory-leak-debug/" target="_self">
+          Python 内存暴涨的问题排查
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/01/14/python-memory-leak-debug/" target="_self">
+        <div>
+          在工作的时候和同事检查一个 Python 程序的问题的时候没有头绪，日志看了下也基本正常。于是在网上搜了下看下别人的思路，发现了 objgraph 这个库。 抱着试一下的心态安装了试了下，然后发现发问题所在 12345BindParameter    181236 +180366_anonymous_label 181322 +180365dict             229511 +1801
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-01-14 00:00" pubdate>
+              2019-01-14
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/python/">#python</a>
+            
+              <a href="/tags/memory-leak/">#memory-leak</a>
+            
+              <a href="/tags/debug/">#debug</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+
+
+  <nav aria-label="navigation">
+    <span class="pagination" id="pagination">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/#board">2</a><a class="page-number" href="/page/3/#board">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/#board">5</a><a class="extend next" rel="next" href="/page/2/#board"><i class="iconfont icon-arrowright"></i></a>
+    </span>
+  </nav>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
-
-  
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
   </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
 </body>
 </html>
