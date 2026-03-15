@@ -1,0 +1,753 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Shing">
+  <meta name="keywords" content="Golang, Python, Engineering">
+  
+    <meta name="description" content="上下文中的 OAuth 仅考虑 OAuth 2.0，不考虑旧版的协议。 Protocol OAuth 2.0 is not an authentication protocol.   As far as an OAuth client is concerned, it asked for a token, got a token, and eventually used that token to">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OAuth Introduction">
+<meta property="og:url" content="http://yoursite.com/2021/10/23/oauth-introduction/index.html">
+<meta property="og:site_name" content="Shing&#39;s logs">
+<meta property="og:description" content="上下文中的 OAuth 仅考虑 OAuth 2.0，不考虑旧版的协议。 Protocol OAuth 2.0 is not an authentication protocol.   As far as an OAuth client is concerned, it asked for a token, got a token, and eventually used that token to">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://yoursite.com/images/oauth-abstract-flow.png">
+<meta property="og:image" content="http://yoursite.com/images/single-sign-on.png">
+<meta property="article:published_time" content="2021-10-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-03-15T11:41:26.204Z">
+<meta property="article:author" content="Shing">
+<meta property="article:tag" content="network">
+<meta property="article:tag" content="protocol">
+<meta property="article:tag" content="security">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://yoursite.com/images/oauth-abstract-flow.png">
+  
+  
+  
+  <title>OAuth Introduction - Shing&#39;s logs</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Shing&#39;s Logs</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="OAuth Introduction"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-10-23 00:00" pubdate>
+          October 23, 2021 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.6k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          47 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">OAuth Introduction</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>上下文中的 OAuth 仅考虑 OAuth 2.0，不考虑旧版的协议。</p>
+<h1 id="Protocol"><a href="#Protocol" class="headerlink" title="Protocol"></a>Protocol</h1><blockquote>
+<p>OAuth 2.0 is not an authentication protocol.</p>
+</blockquote>
+<blockquote>
+<p>As far as an OAuth client is concerned, it asked for a token, got a token, and eventually used that token to access some API. It doesn’t know anything about who authorized the application or if there was even a user there at all.</p>
+</blockquote>
+<p>OAuth 并不是一个用户认证协议，并不关注用户是谁和或者谁在使用 API。它关注授权和维护 token。用户认证是一个更大的主题，你可以以 OAuth 来实现。</p>
+<h1 id="Roles"><a href="#Roles" class="headerlink" title="Roles"></a>Roles</h1><p>OAuth defines four roles:</p>
+<ul>
+<li><strong>Resource Owner</strong>: The resource owner is the <em>user</em> who authorizes an <em>application</em> to access their account. The application’s access to the user’s account is limited to the scope of the authorization granted (e.g. read or write access)</li>
+<li><strong>Client</strong>: The client is the <em>application</em> that wants to access the <em>user</em>’s account. Before it may do so, it must be authorized by the user, and the authorization must be validated by the API.</li>
+<li><strong>Resource Server</strong>: The resource server hosts the protected user accounts.</li>
+<li><strong>Authorization Server</strong>: The authorization server verifies the identity of the <em>user</em> then issues access tokens to the <em>application</em>.</li>
+</ul>
+<p>Resource Owner 就是用户，用户委托 Client 以其去获取相应资源。如 Facebook &#x2F; GitHub &#x2F; Google 登陆是第三方网站希望获取 ID 信息，在授权确认的网页上会写有需要获取的权限，如邮箱地址。</p>
+<p><img src="/images/oauth-abstract-flow.png" srcset="/img/loading.gif" lazyload alt="oauth-abstrac-flow"></p>
+<ol>
+<li>The <em>application</em> requests authorization to access service resources from the <em>user</em></li>
+<li>If the <em>user</em> authorized the request, the <em>application</em> receives an authorization grant</li>
+<li>The <em>application</em> requests an access token from the <em>authorization server</em> (API) by presenting authentication of its own identity, and the authorization grant</li>
+<li>If the application identity is authenticated and the authorization grant is valid, the <em>authorization server</em> (API) issues an access token to the application. Authorization is complete.</li>
+<li>The <em>application</em> requests the resource from the <em>resource server</em> (API) and presents the access token for authentication</li>
+<li>If the access token is valid, the <em>resource server</em> (API) serves the resource to the <em>application</em></li>
+</ol>
+<h1 id="Grant-Types"><a href="#Grant-Types" class="headerlink" title="Grant Types"></a>Grant Types</h1><p>在上面 Abstract Protocol Flow 图中，首先是需要获取 authorization grant 以此来获取 access token，OAuth 2 包含有以下几种类型</p>
+<h2 id="Authorization-Code"><a href="#Authorization-Code" class="headerlink" title="Authorization Code"></a><strong>Authorization Code</strong></h2><p>对浏览器友好，基于 HTTP 不断地 redirect</p>
+<ol>
+<li>请求 authorization server 的 API，其中包含一个注册时的 <code>client_id</code> 和想要获取的权限 <code>scope</code>，<code>redirect_uri</code> 和 <code>response_type=code</code></li>
+<li>弹出给用户的是一个权限描述页面，用户确认后，redirect 到 client 的 <code>redirect_uri</code>，请求中包含一个 authorization code</li>
+<li>client 再以 code 去 authorization server 请求 token 接口获取 access token</li>
+<li>authorization server 会返回相应 access token 给到 client<ol>
+<li>payload 中可能会包含一个有效期更长的 refresh token</li>
+</ol>
+</li>
+</ol>
+<p>此外，最开始 authorization code 的 request 会带有一个随机字符串 <code>state</code> ，客户端可以存在 cookie 中，authorization server 返回时，也会带有 <code>state</code> 字段以防 CSRF 攻击。</p>
+<h3 id="PKCE-Proof-Key-for-Code-Exchange"><a href="#PKCE-Proof-Key-for-Code-Exchange" class="headerlink" title="PKCE - Proof Key for Code Exchange"></a>PKCE - Proof Key for Code Exchange</h3><p>在 Authorization Code 流程中，authorization code 可能会被拦截，需要额外安全措施来保证 token 的生成，PKCE 就是一个该协议的扩展来帮助降低安全风险</p>
+<ol>
+<li>请求 authorization server 的 API 时，Client 会新增一个随机的 <code>code_challenge</code> 和相应的 hash 算法 <code>code_challenge_method</code> 字段</li>
+<li>authorization server 记录这些字段，在 Client 请求 access token 时，其会新增一个 <code>code_verifier</code> 字段（使用 hash 算法转换的值）</li>
+<li>authorization server 验证该字段和之前提供的 <code>code_challenge</code> 转换之后的值一致，则认为该 client 合法</li>
+<li>返回 access token</li>
+</ol>
+<p>在 OKTA 服务中，提及到如果需要在浏览器端使用 PKCE，则需要浏览器支持 Web Crypto API，具体可见该 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API">文档</a>。</p>
+<h2 id="Client-Credentials"><a href="#Client-Credentials" class="headerlink" title="Client Credentials"></a>Client Credentials</h2><p>不是针对实际用户的，而是用于 server to server 的 API 认证</p>
+<ol>
+<li>向 authorization server 发送请求，其中 <code>grant_type=client_credentials</code> ，还包括事前约定的 <code>client_id</code> 和 <code>client_secret</code></li>
+<li>authorization server 认证之后就返回 access token</li>
+</ol>
+<h2 id="Device-Code"><a href="#Device-Code" class="headerlink" title="Device Code"></a>Device Code</h2><blockquote>
+<p>The device code grant type provides a means for devices that lack a browser or have limited inputs to obtain an access token and access a user’s account.</p>
+</blockquote>
+<p>为没有浏览器，或者不方便进行输入的设备而设</p>
+<ol>
+<li>client 向 authorization server 发送请求，endpoint 和上述两种类型不同，需要提供 <code>client_id</code></li>
+<li>返回带 <code>device_code</code> 和 <code>user_code</code></li>
+<li>此时设备可以提供一个 QR Code，以 <code>device_code</code> 构成链接，用户端输入 <code>user_code</code> 来即可完成校验</li>
+</ol>
+<h1 id="OpenID-Connect-OIDC"><a href="#OpenID-Connect-OIDC" class="headerlink" title="OpenID Connect - OIDC"></a>OpenID Connect - OIDC</h1><blockquote>
+<p>OpenID Connect protocol is built on the OAuth 2.0 protocol and helps authenticate users and convey information about them. It is also more opinionated than plain OAuth 2.0, for example in its scope definitions.</p>
+</blockquote>
+<p>OAuth 本身其实不关心用户，它是一个授权协议，关注使用 token 去请求 API。OIDC 则是复用其获取 token 的流程，加以扩展功能。</p>
+<blockquote>
+<p>OAuth 2.0 leaves a lot of details up to implementers. For instance, it supports scopes, but scope names are not specified. It supports access tokens, but the format of those tokens are not specified.</p>
+</blockquote>
+<p>OIDC 完善了很多 OAuth 细节，包括 <code>scope</code> 定义，以及一个用于获取用户信息 <a target="_blank" rel="noopener" href="https://openid.net/specs/openid-connect-core-1_0.html#UserInfo">API</a> 等。此外一个重要的不同是，在返回 access token 时，带上了一个 <code>id_token</code> 。这是一个 JWT 格式的字段，解析出来就是用户信息。</p>
+<p>OAuth 定义好了流程，OIDC 则是复用了流程定义好了如字段和格式，而且定义好了 meta 信息的 API，用以做自动发现等功能（此功能是一个 Optional 选项，详情可见 <a target="_blank" rel="noopener" href="https://openid.net/connect/">文档</a>）。</p>
+<p>一些常用的 API</p>
+<ul>
+<li>&#x2F;userinfo - 获取用户信息</li>
+<li>&#x2F;introspect - 检查 token</li>
+<li>&#x2F;token - 获取新的 token</li>
+<li>&#x2F;revoke - 取消一个 access token 或者 refresh token</li>
+</ul>
+<h2 id="Single-Sign-On-SSO"><a href="#Single-Sign-On-SSO" class="headerlink" title="Single Sign On - SSO"></a>Single Sign On - SSO</h2><p><img src="/images/single-sign-on.png" srcset="/img/loading.gif" lazyload alt="single-sign-on"></p>
+<p>上图是浏览器端的 SSO 流程。一个场景如下</p>
+<ol>
+<li>用户登录 domain1 时，此时没有 cookie，则需要跳转到 domain3 进行登录</li>
+<li>domain3 登录成功后，则使用返回 token 和 redirect 到 domain1，domain1 使用该 token 即可完成登录</li>
+<li>在登录成功 domain3 时，浏览存会存放有 domain3 的 cookie</li>
+<li>当 domain2 需要登录，跳转到 domain3 则不需要进行用户认证，通过 cookie 即可确认登录状态</li>
+<li>返回 token 和 redirect 到 domain2</li>
+</ol>
+<p>这么做的原因首先是浏览器的 Same Origin Policy 限制，不同域名 cookie 不可见。所以只能通过跳转到入口 domain 来使用其 cookie。</p>
+<h1 id="Token"><a href="#Token" class="headerlink" title="Token"></a>Token</h1><p>OIDC 授权结束后，client 可以拿到三个 token</p>
+<ul>
+<li>access token</li>
+<li>refresh token</li>
+<li>id token</li>
+</ul>
+<p>access token 用于访问资源，refresh token 则用于申请新的 access token ，id token 则是 JWT 格式封装的用户信息，除了 id token 限制使用 JWT 之外，其余没有格式要求。不同 token 的生命周期不同，以 OKTA 平台为例，其默认 token 生命周期为</p>
+<ul>
+<li><strong>ID token:</strong> 60 minutes</li>
+<li><strong>Access token:</strong> 60 minutes</li>
+<li><strong>Refresh token:</strong> 90 days</li>
+</ul>
+<p>OKTA 中 access token 也是使用 JWT 封装，resource server 收到请求时，也可以进行时间和签名认证。其中，JWT header 包含一个 <code>kid</code> 字段，通过一个无需认证 endpoint <code>/.well-known/oauth-authorization-server</code>（这个就是上文提到的 OIDC 用于接口发现的 meta endpoint）可以查询到一个 <code>/keys</code> 的 URI，通过 <code>client_id</code> 和 <code>kid</code> 即可查到相应的公钥，有了公钥就可以进行 access token 的合法性校验。</p>
+<p>access token 到期后，需要使用 refresh token 请求 <code>/token</code> 接口获取新的 access token 。refresh token 生命周期更长，为了防止被滥用，可以考虑</p>
+<ul>
+<li>使用 Native App 需要保证 refresh token 存放到只有自己程序可以访问的区域</li>
+<li>每次申请新的 access token 之后，会带新 refresh token 下来，revoke 旧 refresh token</li>
+<li>用户退出后，revoke 旧 refresh token</li>
+</ul>
+<p>在 OKTA 中，Browser-based 的 App 甚至不支持 refresh token</p>
+<blockquote>
+<p>Note: The Authorization Code flow with PKCE doesn’t support refresh tokens for SPAs and other browser-based apps.</p>
+</blockquote>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>本文是对 OKTA 平台进行调研的一些笔记，我倒是重新认真看了 OAuth &#x2F; SSO 的一些概念，受益颇多。个人感觉从 OAuth 进化到 OIDC 的路倒是挺有意思的。有文章介绍道说最开始是用了一个 <code>/me</code> 的 endpoint 来获得用户信息，但这样是有违 OAuth 设计的，于是在 OAuth 基础上实现了 OIDC。</p>
+<p>协议的设计和使用范围的确是一个很难平衡的点，总是很容易将就使用某个协议去越级做一些事情。</p>
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://www.digitalocean.com/community/tutorials/an-introduction-to-oauth-2">An Introduction To Oauth 2</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.oauth.com/playground/index.html">https://www.oauth.com/playground/index.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://oauth.net/articles/authentication/">https://oauth.net/articles/authentication/</a></li>
+<li><a target="_blank" rel="noopener" href="https://datatracker.ietf.org/doc/html/rfc6749">https://datatracker.ietf.org/doc/html/rfc6749</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.okta.com/blog/2017/06/21/what-the-heck-is-oauth#pseudo-authentication-with-oauth-20">https://developer.okta.com/blog/2017/06/21/what-the-heck-is-oauth#pseudo-authentication-with-oauth-20</a></li>
+<li><a target="_blank" rel="noopener" href="https://auth0.com/blog/what-is-and-how-does-single-sign-on-work/">https://auth0.com/blog/what-is-and-how-does-single-sign-on-work/</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API">https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API</a></li>
+<li><a target="_blank" rel="noopener" href="https://openid.net/connect/">https://openid.net/connect/</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/security/" class="print-no-link">#security</a>
+      
+        <a href="/tags/network/" class="print-no-link">#network</a>
+      
+        <a href="/tags/protocol/" class="print-no-link">#protocol</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>OAuth Introduction</div>
+      <div>http://yoursite.com/2021/10/23/oauth-introduction/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Shing</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>October 23, 2021</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/12/15/designing-data-intensive-applications-note/" title="Designing Data-Intensive Applications Notes">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Designing Data-Intensive Applications Notes</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/11/13/mysql-innodb/" title="MySQL InnoDB Introduction">
+                        <span class="hidden-mobile">MySQL InnoDB Introduction</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,806 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Shing">
+  <meta name="keywords" content="Golang, Python, Engineering">
+  
+    <meta name="description" content="本文简单介绍下 k8s 的常用组件，知道其能为我们带来什么样的功能。 ResourcesCluster包含 Master 节点和众多的 Node 节点 Master管理集群的节点，其上包含下列服务 kube-apiserver  CLI 或者 UI  kube-scheduler  决定 Pod 放哪个 Node  kube-controller-manager  资源管理  Node Contr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="k8s 简介">
+<meta property="og:url" content="http://yoursite.com/2018/12/01/k8s-introduction/index.html">
+<meta property="og:site_name" content="Shing&#39;s logs">
+<meta property="og:description" content="本文简单介绍下 k8s 的常用组件，知道其能为我们带来什么样的功能。 ResourcesCluster包含 Master 节点和众多的 Node 节点 Master管理集群的节点，其上包含下列服务 kube-apiserver  CLI 或者 UI  kube-scheduler  决定 Pod 放哪个 Node  kube-controller-manager  资源管理  Node Contr">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-11-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-03-15T11:41:26.194Z">
+<meta property="article:author" content="Shing">
+<meta property="article:tag" content="container">
+<meta property="article:tag" content="k8s">
+<meta property="article:tag" content="microservice">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>k8s 简介 - Shing&#39;s logs</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Shing&#39;s Logs</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="k8s 简介"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2018-12-01 00:00" pubdate>
+          December 1, 2018 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.7k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          56 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">k8s 简介</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>本文简单介绍下 k8s 的常用组件，知道其能为我们带来什么样的功能。</p>
+<h2 id="Resources"><a href="#Resources" class="headerlink" title="Resources"></a>Resources</h2><h3 id="Cluster"><a href="#Cluster" class="headerlink" title="Cluster"></a>Cluster</h3><p>包含 Master 节点和众多的 Node 节点</p>
+<h3 id="Master"><a href="#Master" class="headerlink" title="Master"></a>Master</h3><p>管理集群的节点，其上包含下列服务</p>
+<p>kube-apiserver</p>
+<ul>
+<li>CLI 或者 UI</li>
+</ul>
+<p>kube-scheduler</p>
+<ul>
+<li>决定 Pod 放哪个 Node</li>
+</ul>
+<p>kube-controller-manager</p>
+<ul>
+<li>资源管理</li>
+</ul>
+<p>Node Controller</p>
+<ul>
+<li>Node go down 的时候进行处理</li>
+</ul>
+<p>Replication Controller</p>
+<ul>
+<li>保证 Pod 的数量是正确的</li>
+</ul>
+<p>Endpoints Controller</p>
+<ul>
+<li>连接 Service 和 Pods</li>
+</ul>
+<p>Service Account &amp; Token Controllers</p>
+<ul>
+<li>维护账号和用于 API 的 access token</li>
+</ul>
+<p>cloud-controller-manageretcd</p>
+<ul>
+<li>数据存储</li>
+<li>alpha feature</li>
+<li>与云服务商的服务打交道</li>
+</ul>
+<p>Pod 网络</p>
+<ul>
+<li>IP-per-Pod，每个 Pod 都拥有一个独立 IP 地址，Pod 内所有容器共享一个网络命名空间</li>
+<li>集群内所有 Pod 都在一个直接连通的扁平网络中，可通过 IP 直接访问</li>
+<li>所有容器之间无需 NAT 就可以直接互相访问</li>
+<li>所有 Node 和所有容器之间无需 NAT 就可以直接互相访问</li>
+<li>容器自己看到的 IP 跟其他容器看到的一样</li>
+<li>Master 节点的 etcd 服务存放着各个 Node 的网络信息</li>
+</ul>
+<h3 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h3><p>集群中的节点，提供服务的节点，包含一个或多个 Pod</p>
+<p>包含以下服务</p>
+<ul>
+<li>kubelet - 与 Master 通信</li>
+<li>kube-proxy - 转发请求到 Pod</li>
+<li>Pod 网络</li>
+</ul>
+<h3 id="Namespace"><a href="#Namespace" class="headerlink" title="Namespace"></a>Namespace</h3><ul>
+<li>为物理的 cluster 提供虚拟 cluster 的隔离</li>
+<li>如 test, production</li>
+</ul>
+<h3 id="Pod"><a href="#Pod" class="headerlink" title="Pod"></a>Pod</h3><ul>
+<li>最小工作单位</li>
+<li>同一个 Pod 中共享网络 namespace，即 localhost 可见各个容器的 port</li>
+<li>一般是一个 image 一个 Pod</li>
+</ul>
+<h3 id="Controller"><a href="#Controller" class="headerlink" title="Controller"></a>Controller</h3><ul>
+<li>用于控制 Pod 部署特性，如副本数量，部署的 Node</li>
+<li>常见的 Controller<ul>
+<li>Deployment</li>
+<li>ReplicaSet - 供 Deployment 使用，管理 Pod 多个副本</li>
+<li>DaemonSet - 每个 Node 最多一个 Pod，如 k8s 本身的管理进程</li>
+<li>StatefulSet - 保持部署的名称不变</li>
+<li>Job - Crontab</li>
+</ul>
+</li>
+</ul>
+<h3 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h3><p>为 Pod 提供负载均衡。一般来说，部署一个服务包含多个 Pod，而 Service 则是在其之上，他们间的关系如下</p>
+<p>request -&gt; Service (-&gt; Deployment) -&gt; ReplicaSet -&gt; Pod</p>
+<p>Service 是整合 Pod 的资源，作为其 LoadBalance，简单的例子如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">kind:</span> <span class="hljs-string">Service</span><br><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br><span class="hljs-attr">metadata:</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">my-service</span><br><span class="hljs-attr">spec:</span><br>  <span class="hljs-attr">selector:</span><br>    <span class="hljs-attr">app:</span> <span class="hljs-string">nginx</span><br>  <span class="hljs-attr">ports:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">protocol:</span> <span class="hljs-string">TCP</span><br>      <span class="hljs-attr">port:</span> <span class="hljs-number">8080</span><br>      <span class="hljs-attr">targetPort:</span> <span class="hljs-number">80</span><br></code></pre></td></tr></table></figure>
+
+<p>上述 yml 则是将 Service 的 8080 端口映射到 app&#x3D;nginx 的 Pod 中。因为 Pod 启动时是使用随机的 IP 的，这样子我们就可以通过指定 label 来选择相应的 Pod 了。</p>
+<p>默认情况下，Service 的类型是 ClusterIP，即仅提供集群内部的服务，需要对外提供服务，则需要另外配置(spec.type 中定义)，即 NodePort 和 LoadBalancer 两种。</p>
+<p>当配置为 NodePort 之后，集群的所有节点都监听一个 30000 以上的随机端口，将其收到的请求转发到 Service 中。此时，你就可以简单的在对应的机器上通过这个端口访问集群内部的 Service。</p>
+<p>而 LoadBalancer 目前看则是像与云厂商相关的配置，根据具体厂商自己的负载均衡服务来调用我们定义的 Service。</p>
+<h3 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h3><p>Pod 定义的服务可以通过 IP 和 Port 进行请求，而请求指定的 Service 则是通过 k8s 本身的 DNS 服务进行域名解析。</p>
+<p>如一个 Service 名为 serv，其在 test 这个 namespace 下，则其在集群内可以通过 serv.test 来进行访问。而同一个 namespace 下则仅需要 serv 来进行请求。</p>
+<h3 id="Ingress"><a href="#Ingress" class="headerlink" title="Ingress"></a>Ingress</h3><p>需要注意的 Ingress 目前还是 beta 的阶段，谨慎使用。</p>
+<p>之前提及的 NodePort 也可以提供对外的服务，但是它是服务在 TCP 层上的，意味着其不能根据 path 或者 header 进行转发，而 Ingress 是工作在 HTTP 层。</p>
+<p>request(not in cluster) -&gt; Ingress -&gt; Service (-&gt; Deployment) -&gt; ReplicaSet -&gt; Pod</p>
+<p>Ingress 的使用需要两部分，Controller 和 Ingress。后者描述规则，前者实现规则。这里跟之前提及的 spec 和 status 概念有点类似。Controller 则是很多常见的做 proxy 的软件，如</p>
+<ul>
+<li>Nginx</li>
+<li>Kong</li>
+<li>HAProxy</li>
+<li>…</li>
+</ul>
+<p>这里可以看一下简单的定义</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">extensions/v1beta1</span><br><span class="hljs-attr">kind:</span> <span class="hljs-string">Ingress</span><br><span class="hljs-attr">metadata:</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">test-ingress</span><br>  <span class="hljs-attr">annotations:</span><br>    <span class="hljs-attr">nginx.ingress.kubernetes.io/rewrite-target:</span> <span class="hljs-string">/</span><br><span class="hljs-attr">spec:</span><br>  <span class="hljs-attr">rules:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-attr">http:</span><br>      <span class="hljs-attr">paths:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">path:</span> <span class="hljs-string">/testpath</span><br>        <span class="hljs-attr">backend:</span><br>          <span class="hljs-attr">serviceName:</span> <span class="hljs-string">test</span><br>          <span class="hljs-attr">servicePort:</span> <span class="hljs-number">80</span><br></code></pre></td></tr></table></figure>
+
+<p>Ingress 使用 annotation 来配置信息。而 spec 的信息一般包含以下内容</p>
+<ul>
+<li>可选的 host</li>
+<li>一个或多个 path</li>
+<li>host 和 path 所对应的 host</li>
+</ul>
+<p>就目前的信息而言，Controller 这块像一个单独部署的 Nginx Pod，然后监听相关 spec 的更新，然后修改自身的 config 去满足需求。</p>
+<h2 id="In-detail"><a href="#In-detail" class="headerlink" title="In-detail"></a>In-detail</h2><h3 id="kubectl"><a href="#kubectl" class="headerlink" title="kubectl"></a>kubectl</h3><p>kubectl 用于管理 k8s 上的各种资源，常见的就是 kind&#x3D;Deployment 用于部署服务。其一般用法如下</p>
+<figure class="highlight node-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs node-repl"><span class="hljs-meta prompt_">&gt;</span> <span class="language-javascript">kubectl apply -f xx.<span class="hljs-property">yml</span></span><br></code></pre></td></tr></table></figure>
+
+<p>这里使用 yml 进行资源描述，而通过更新相应的 yml 文件，再次执行命令是则更新资源。实际上 k8s 是通过 REST API 对外提供服务，这里的 yml 则是实际上转化成 JSON 的格式发给 k8s Master 节点。</p>
+<p>对于资源包含三部分信息</p>
+<ul>
+<li>ResourceSpec: 用户定义的理想状态</li>
+<li>ResourceStatus: 当前执行的实际状态</li>
+<li>Resource ObjectMeta: meta 信息，name, API Version, label 或者 annotation 等等，用户和 k8s 都能对其进行更新</li>
+</ul>
+<p>而我们定义的是 ResourceSpec 和 Resource ObjectMeta，而 k8s 尽量帮我们满足需求，其实际在系统中表示则是 ResourceStatus。</p>
+<h3 id="Pod-1"><a href="#Pod-1" class="headerlink" title="Pod"></a>Pod</h3><p>容器只能在 Pod 中创建，这中间包含 Controllers: Deployment, Job, StatefulSet</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br><span class="hljs-attr">kind:</span> <span class="hljs-string">Pod</span><br><span class="hljs-attr">metadata:</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">rss-site</span><br>  <span class="hljs-attr">labels:</span><br>    <span class="hljs-attr">app:</span> <span class="hljs-string">nginx</span><br><span class="hljs-attr">spec:</span><br>  <span class="hljs-attr">containers:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">front-end</span><br>      <span class="hljs-attr">image:</span> <span class="hljs-string">nginx</span><br>      <span class="hljs-attr">ports:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">containerPort:</span> <span class="hljs-number">80</span><br></code></pre></td></tr></table></figure>
+
+<p>此时新建的 Pod 则会由 k8s 随机分配一个 IP，无法控制，所以一般不会单独使用 Pod。</p>
+<p>上述就是最简单的定义，一个 Pod 中包含一个 Nginx 容器，加一个 label app&#x3D;nginx。Pod 可设置相应的检查，检查服务或者容器的状态。</p>
+<ul>
+<li>livenessProbe: 检查容器是否在运行，失败时会触发相应的 restartPolicy</li>
+<li>readinessProbe: 检查容器能否服务，检查结果为 Success 时才相应地为 Service 服务</li>
+</ul>
+<p>这里对于 WEB&#x2F;HTTP 服务，我们需要每个开发通用的 API，如 HTTP GET ping &#x2F; pong 来表示统一的容器就绪状态。</p>
+<p>这里有一种 initContainers 的配置用于容器启动时的前置条件。可用于执行诸如 Pod 注册的功能，其用法是启动一个新的容器，执行相应的命令。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br><span class="hljs-attr">kind:</span> <span class="hljs-string">Pod</span><br><span class="hljs-attr">metadata:</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">myapp-pod</span><br>  <span class="hljs-attr">labels:</span><br>    <span class="hljs-attr">app:</span> <span class="hljs-string">myapp</span><br><span class="hljs-attr">spec:</span><br>  <span class="hljs-attr">containers:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">myapp-container</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">busybox</span><br>    <span class="hljs-attr">command:</span> [<span class="hljs-string">&#x27;sh&#x27;</span>, <span class="hljs-string">&#x27;-c&#x27;</span>, <span class="hljs-string">&#x27;echo The app is running! &amp;&amp; sleep 3600&#x27;</span>]<br>  <span class="hljs-attr">initContainers:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">init-myservice</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">busybox</span><br>    <span class="hljs-attr">command:</span> [<span class="hljs-string">&#x27;sh&#x27;</span>, <span class="hljs-string">&#x27;-c&#x27;</span>, <span class="hljs-string">&#x27;until nslookup myservice; do echo waiting for myservice; sleep 2; done;&#x27;</span>]<br>  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">init-mydb</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">busybox</span><br>    <span class="hljs-attr">command:</span> [<span class="hljs-string">&#x27;sh&#x27;</span>, <span class="hljs-string">&#x27;-c&#x27;</span>, <span class="hljs-string">&#x27;until nslookup mydb; do echo waiting for mydb; sleep 2; done;&#x27;</span>]<br></code></pre></td></tr></table></figure>
+
+<p>除此以外，还有一种用于注入依赖的，如 volume，环境变量</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">settings.k8s.io/v1alpha1</span><br><span class="hljs-attr">kind:</span> <span class="hljs-string">PodPreset</span><br><span class="hljs-attr">metadata:</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">allow-database</span><br><span class="hljs-attr">spec:</span><br>  <span class="hljs-attr">selector:</span><br>    <span class="hljs-attr">matchLabels:</span><br>      <span class="hljs-attr">role:</span> <span class="hljs-string">frontend</span><br>  <span class="hljs-attr">env:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">DB_PORT</span><br>      <span class="hljs-attr">value:</span> <span class="hljs-string">&quot;6379&quot;</span><br>  <span class="hljs-attr">volumeMounts:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/cache</span><br>      <span class="hljs-attr">name:</span> <span class="hljs-string">cache-volume</span><br>  <span class="hljs-attr">volumes:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">cache-volume</span><br>      <span class="hljs-attr">emptyDir:</span> &#123;&#125;<br></code></pre></td></tr></table></figure>
+
+<p>而别的容器使用的时候只需要符合对应的 label role&#x3D;frontend 即可</p>
+<p>需要注意的是，通过 API 去创建 Pod 之后，再去修改配置文件也不会对已有的 Pod 造成影响</p>
+<blockquote>
+<p>Subsequent changes to the template or even switching to a new template has no direct effect on the pods already created. Similarly, pods created by a replication controller may subsequently be updated directly.</p>
+</blockquote>
+<p>所以，也不推荐单独使用 Pod 这种资源，服务的管理应该使用更高层级的 Deployment 或者 StatefulSet 等等。</p>
+<h3 id="Deployment"><a href="#Deployment" class="headerlink" title="Deployment"></a>Deployment</h3><p>Deployment 包含几种功能</p>
+<ul>
+<li>使用 ReplicaSet 去上线 Pod，并根据预设条件判断是否成功</li>
+<li>更新 template 中 Pod 的状态，新的 ReplicaSet 会创建并转移旧的</li>
+<li>回滚到旧的 Deployment 版本</li>
+<li>通过设置副本数量扩容 &#x2F; 减容</li>
+</ul>
+<p>这里关注几个常见的场景</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs sh"><span class="hljs-comment"># 根据配置创建 Deployment</span><br>kubectl create -f app.yaml<br><br><span class="hljs-comment"># 查看 Deployment 信息</span><br>kubectl get deployments.<br><br><span class="hljs-comment"># 查看指定 Deployment 的更新状态</span><br>kubectl rollout status deployment.v1.apps/nginx-deployment<br><br><span class="hljs-comment"># 更新指定 Deployment 的镜像版本</span><br><span class="hljs-comment"># 后面 --record 选项需要添加，这样就可以在错误的升级之后回滚</span><br>kubectl <span class="hljs-built_in">set</span> image deployment.v1.apps/nginx-deployment nginx=nginx:1.9.1 --record<br><br><span class="hljs-comment"># 查看 rollout 信息</span><br>kubectl rollout <span class="hljs-built_in">history</span> deployment.v1.apps/nginx-deployment<br><br><span class="hljs-comment"># 查看指定版本的 rollout 信息，版本信息可以在上面的命令获取</span><br>kubectl rollout <span class="hljs-built_in">history</span> deployment.v1.apps/nginx-deployment --revision=2<br><br><span class="hljs-comment"># 回滚到上一个版本</span><br>kubectl rollout undo deployment.v1.apps/nginx-deployment<br><br><span class="hljs-comment"># 回滚到指定版本</span><br>kubectl rollout undo deployment.v1.apps/nginx-deployment --to-revision=2<br><br><span class="hljs-comment"># 手动扩容</span><br>kubectl scale deployment.v1.apps/nginx-deployment --replicas=10<br><br><span class="hljs-comment"># 根据条件自动扩容</span><br>kubectl autoscale deployment.v1.apps/nginx-deployment --min=10 --max=15 --cpu-percent=80<br><br><span class="hljs-comment"># rolling update，作用于 Pods 和 ReplicationControllers，还是推荐使用 Deployment</span><br>kubectl rolling-update frontend-v1 frontend-v2 --image=image:v2<br></code></pre></td></tr></table></figure>
+
+<p>需要注意的是，Label selector 并不推荐更新，需要在部署的时候就提前规划好 label 的使用</p>
+<blockquote>
+<p>It is generally discouraged to make label selector updates and it is suggested to plan your selectors up front. In any case, if you need to perform a label selector update, exercise great caution and make sure you have grasped all of the implications.</p>
+</blockquote>
+<h4 id="ReplicaSet"><a href="#ReplicaSet" class="headerlink" title="ReplicaSet"></a>ReplicaSet</h4><p>docs: <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/">https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/</a></p>
+<p>ReplicaSet 是下一代的 Replication Controller，加多了 selector 的支持。官方更推荐使用 Deployment 来管理多个副本，而不用自己维护一个 ReplicaSet</p>
+<blockquote>
+<p> If you want the rolling update functionality please consider using Deployments instead.</p>
+</blockquote>
+<p>除了 rolling update 这个功能以外，看这个 <a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000016060606">文章</a> 似乎 ReplicaSet &#x2F; Deployment 会影响到单独创建的符合条件的 Pod.</p>
+<h4 id="Others"><a href="#Others" class="headerlink" title="Others"></a>Others</h4><p>除了最简单的 Deployment 以外，还包含其它资源类型：StatefulSet, DaemonSet, Job</p>
+<blockquote>
+<p>Note: StatefulSets are stable (GA) in 1.9.</p>
+</blockquote>
+<p>与 Deployment 不同，StatefulSet 用于部署有状态（磁盘）的应用。有着更为严格的扩容，更新机制，详见 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/">文档</a>。</p>
+<blockquote>
+<p>A DaemonSet ensures that all (or some) Nodes run a copy of a Pod.</p>
+</blockquote>
+<p>DaemonSet 用于部署如日志收集，监控系统等服务。</p>
+<p>Job 为分布式的 Crontab，可以指定 Pod 去执行任务。</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>本文简介了 k8s 一些常用服务及其相关关系，而其底层实现（如其实现转发的 iptables 规则等等）则暂未涉及。</p>
+<p>这里我们可以知道，k8s 本身仅仅做服务或者说 Pod 的管理，如果需要精确到流量（如 X% 的流量走这个版本，Y% 的流量走第二个版本）在 k8s 中则需要配置相应的 replicas 数量来实现。</p>
+<p>而 Istio 或其它 ServiceMesh 插件或框架则提供了这类功能。</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/CloudMan6/p/8294766.html">5 分钟玩转 Docker 容器系列文章</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cncf.io/wp-content/uploads/2018/03/CNCF-Presentation-Template-K8s-Deployment.pdf">k8s Deployment 生动的介绍</a></li>
+<li><a target="_blank" rel="noopener" href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.10/#-strong-api-overview-strong-">k8s API 文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/">Pod 配置 Probe</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/k8s/" class="print-no-link">#k8s</a>
+      
+        <a href="/tags/container/" class="print-no-link">#container</a>
+      
+        <a href="/tags/microservice/" class="print-no-link">#microservice</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>k8s 简介</div>
+      <div>http://yoursite.com/2018/12/01/k8s-introduction/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Shing</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>December 1, 2018</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/12/11/docker-alpine-image-timezone/" title="Docker 容器时区设置">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Docker 容器时区设置</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/10/31/use-python-mock/" title="Python mock 的使用">
+                        <span class="hidden-mobile">Python mock 的使用</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

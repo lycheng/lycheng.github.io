@@ -1,0 +1,681 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Shing">
+  <meta name="keywords" content="Golang, Python, Engineering">
+  
+    <meta name="description" content="由于客户需要做 IP 白名单，所以我们在 AWS 建了两个 EC2 然后做了个 Nginx TCP Proxy，对应的 upstream 是 AWS 的 API Gateway。Nginx 最开始的版本类似于 12345678910111213user  nginx;worker_processes  1;error_log  &#x2F;var&#x2F;log&#x2F;nginx&#x2F;error.log warn;pid">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nginx stream debug">
+<meta property="og:url" content="http://yoursite.com/2020/06/07/nginx-stream-debug/index.html">
+<meta property="og:site_name" content="Shing&#39;s logs">
+<meta property="og:description" content="由于客户需要做 IP 白名单，所以我们在 AWS 建了两个 EC2 然后做了个 Nginx TCP Proxy，对应的 upstream 是 AWS 的 API Gateway。Nginx 最开始的版本类似于 12345678910111213user  nginx;worker_processes  1;error_log  &#x2F;var&#x2F;log&#x2F;nginx&#x2F;error.log warn;pid">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-06-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-03-15T11:41:26.200Z">
+<meta property="article:author" content="Shing">
+<meta property="article:tag" content="nginx">
+<meta property="article:tag" content="proxy">
+<meta property="article:tag" content="tcp">
+<meta property="article:tag" content="traefik">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Nginx stream debug - Shing&#39;s logs</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Shing&#39;s Logs</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Nginx stream debug"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-06-07 00:00" pubdate>
+          June 7, 2020 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.4k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          29 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Nginx stream debug</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>由于客户需要做 IP 白名单，所以我们在 AWS 建了两个 EC2 然后做了个 Nginx TCP Proxy，对应的 upstream 是 AWS 的 API Gateway。Nginx 最开始的版本类似于</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">user</span>  nginx;<br><span class="hljs-attribute">worker_processes</span>  <span class="hljs-number">1</span>;<br><span class="hljs-attribute">error_log</span>  /var/log/nginx/<span class="hljs-literal">error</span>.log <span class="hljs-literal">warn</span>;<br><span class="hljs-attribute">pid</span>        /var/run/nginx.pid;<br><br><span class="hljs-section">events</span> &#123;<br>    <span class="hljs-attribute">worker_connections</span>  <span class="hljs-number">1024</span>;<br>&#125;<br><br><span class="hljs-section">stream</span> &#123;<br>    <span class="hljs-attribute">listen</span> <span class="hljs-number">80</span>;<br>    <span class="hljs-attribute">proxy_pass</span> www.example.com:<span class="hljs-number">8080</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这种白名单的流量的走向大概是</p>
+<p>domain -&gt; CNAME to AWS ELB -&gt; ELB forward to EC2 -&gt; EC2 Nginx upstream to AWS API Gateway</p>
+<p>而没有白名单的流量走向</p>
+<p>domain -&gt; AWS API Gateway</p>
+<p>逻辑上是没有问题的，然后问题就出现了</p>
+<h2 id="SSL-issues"><a href="#SSL-issues" class="headerlink" title="SSL issues"></a>SSL issues</h2><blockquote>
+<p>hostname ‘xxx’ doesn’t match either of ‘*.yyy.net’, ‘yyy.net’</p>
+</blockquote>
+<p>初看之下是证书不匹配的问题，xxx 对应我们自己的做了静态 IP 的域名，而 yyy.net 对应的是一些别的公司的域名。</p>
+<p>这里我的看法是，因为 Nginx 的 upstream 对应的是 AWS API Gateway，如果域名后面的 IP 变了，而你还连着原来的 IP 就会有类似的问题，我自己也测试过，只要你改了域名的指向，Nginx 还是会连着旧的 IP，除非你手动 reload 或者 restart Nginx。</p>
+<h2 id="Resolver"><a href="#Resolver" class="headerlink" title="Resolver"></a>Resolver</h2><p>搜索了一圈，这个 <a target="_blank" rel="noopener" href="https://serverfault.com/questions/240476/how-to-force-nginx-to-resolve-dns-of-a-dynamic-hostname-everytime-when-doing-p/593003#593003">回答</a> 比较接近正确答案了。那时候去试了下这个配置，发现 set 是不能用在 stream 的 module 里面的，而有些回答也提出了在 upstream 处设置 resolver，但 stream 的 upstream 是不能设置 resolver 的。</p>
+<p>这时的配置类似于</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">user</span>  nginx;<br><span class="hljs-attribute">worker_processes</span>  <span class="hljs-number">1</span>;<br><span class="hljs-attribute">error_log</span>  /var/log/nginx/<span class="hljs-literal">error</span>.log <span class="hljs-literal">warn</span>;<br><span class="hljs-attribute">pid</span>        /var/run/nginx.pid;<br><br><span class="hljs-section">events</span> &#123;<br>    <span class="hljs-attribute">worker_connections</span>  <span class="hljs-number">1024</span>;<br>&#125;<br><br><span class="hljs-section">stream</span> &#123;<br>    <span class="hljs-attribute">resolver</span> <span class="hljs-number">8.8.8.8</span> valid=<span class="hljs-number">60s</span>;<br>    <span class="hljs-attribute">listen</span> <span class="hljs-number">80</span>;<br>    <span class="hljs-attribute">proxy_pass</span> www.example.com:<span class="hljs-number">8080</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>结果是运行起来没问题，但是一段时间 DNS 记录变了之后，还是会出现 SSL 证书问题。</p>
+<p><a target="_blank" rel="noopener" href="https://medium.com/driven-by-code/dynamic-dns-resolution-in-nginx-22133c22e3ab">这篇文章</a> 也提到类似的方式，还提了一点</p>
+<blockquote>
+<p>Nginx evaluates the value of the variable per-request, instead of just once at startup. By setting the address as a variable and using the variable in the <code>proxy_pass</code> directive, we force Nginx to resolve the correct load balancer address on every request.</p>
+</blockquote>
+<p>这一点在我看来是十分诡异的，通过设置变量而不是直接配置的形式就能让 Nginx 每次请求再单独解析 DNS 记录。</p>
+<h2 id="Traefik"><a href="#Traefik" class="headerlink" title="Traefik"></a>Traefik</h2><p>当时试了几种方法无果，想着要不换个软件试下好了，就试了下 Traefik，配置如下</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">version:</span> <span class="hljs-string">&#x27;3&#x27;</span><br><br><span class="hljs-attr">services:</span><br>  <span class="hljs-attr">traefik:</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">traefik:v2.2</span><br>    <span class="hljs-attr">ports:</span><br>     <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;8080:80&quot;</span><br>    <span class="hljs-attr">volumes:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-string">./traefik.toml:/etc/traefik/traefik.toml</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-string">./tcp-proxy.toml:/etc/traefik/tcp-proxy.toml</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs toml"><span class="hljs-comment"># traefik.toml</span><br><span class="hljs-section">[entryPoints]</span><br>  <span class="hljs-section">[entryPoints.api]</span><br>    <span class="hljs-attr">address</span> = <span class="hljs-string">&quot;:80&quot;</span><br><br><span class="hljs-section">[providers.file]</span><br>  <span class="hljs-attr">filename</span> = <span class="hljs-string">&quot;/etc/traefik/tcp-proxy.toml&quot;</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs toml"><span class="hljs-comment"># tcp-proxy.toml</span><br><span class="hljs-section">[tcp.routers]</span><br>  <span class="hljs-section">[tcp.routers.api]</span><br>    <span class="hljs-attr">entryPoints</span> = [<span class="hljs-string">&quot;api&quot;</span>]<br>    <span class="hljs-attr">rule</span> = <span class="hljs-string">&quot;HostSNI(`*`)&quot;</span><br>    <span class="hljs-attr">service</span> = <span class="hljs-string">&quot;api&quot;</span><br><br><span class="hljs-section">[tcp.services]</span><br>  <span class="hljs-section">[tcp.services.api.loadBalancer]</span><br>    <span class="hljs-section">[[tcp.services.api.loadBalancer.servers]]</span><br>      <span class="hljs-attr">address</span> = <span class="hljs-string">&quot;www.example.com:8080&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>不幸的是，本地测试能复现 Nginx 上的问题，如 <a target="_blank" rel="noopener" href="https://github.com/containous/traefik/issues/5675">issues&#x2F;5675</a>。其实这里也可以看到，与 DNS cache 或者缓存没有什么关系，而是在建立连接时用了这个 IP，后续并没有去更新。</p>
+<blockquote>
+<p>Expected behavior: When the remote end dies or is rebuilt, the proxy gets timed out and a new one gets brought up.</p>
+<p>Actual behavior: all connections to this load balancer fail for eternity (we left it for an hour and it was still broken) until traefik is restarted and a new connection is instantiated with the correct IP.</p>
+</blockquote>
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><p>最后的解决方法来源于 <a target="_blank" rel="noopener" href="https://www.dosarrest.com/ddos-blog/nginx-with-stream-module-dynamic-upstream-cname/">这里</a>。因为在 stream 中无法使用 set，那么我们就用 map 来代替吧</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs awk">user  nginx;<br>worker_processes  <span class="hljs-number">1</span>;<br>error_log  <span class="hljs-regexp">/var/</span>log<span class="hljs-regexp">/nginx/</span>error.log warn;<br>pid        <span class="hljs-regexp">/var/</span>run/nginx.pid;<br><br>events &#123;<br>    worker_connections  <span class="hljs-number">1024</span>;<br>&#125;<br><br>stream &#123;<br><br>    map <span class="hljs-variable">$server_port</span> <span class="hljs-variable">$tcp_cname</span> &#123;<br>        <span class="hljs-number">80</span> <span class="hljs-string">&quot;www.example.com:8080&quot;</span>;<br>    &#125;<br><br>    server &#123;<br>        resolver <span class="hljs-number">8.8</span>.<span class="hljs-number">8.8</span> valid=<span class="hljs-number">60</span>s;<br>        listen <span class="hljs-number">80</span>;<br>        proxy_pass <span class="hljs-variable">$tcp_cname</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这种解决方法真是一点都高兴不起来。这应该是一种能 work 的方案，好像是解决了问题。但在这一系列的 debug 中，最大的问题是 Nginx 在 stream 和 http 两种 module 中有配置不一致的情况，两种看似等效的方式也能得出不同的结果。</p>
+<p>除此以外，当时想着要换成 traefik 的原因是这篇 <a target="_blank" rel="noopener" href="https://tenzer.dk/nginx-with-dynamic-upstreams/">文章</a>，里面有提到</p>
+<blockquote>
+<p>One way to solve this problem is to pay for Nginx Plus which adds the resolve flag to the server directive in an upstream group. That will make Nginx honour the TTL of the DNS record and occasionally re-resolve the record in order to get an updated list of servers to use.</p>
+</blockquote>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://nginx.org/en/docs/stream/ngx_stream_core_module.html#resolver">http://nginx.org/en/docs/stream/ngx_stream_core_module.html#resolver</a></li>
+<li><a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_core_module.html">http://nginx.org/en/docs/http/ngx_http_core_module.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html#request-routing">https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html#request-routing</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/nginx/" class="print-no-link">#nginx</a>
+      
+        <a href="/tags/tcp/" class="print-no-link">#tcp</a>
+      
+        <a href="/tags/proxy/" class="print-no-link">#proxy</a>
+      
+        <a href="/tags/traefik/" class="print-no-link">#traefik</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Nginx stream debug</div>
+      <div>http://yoursite.com/2020/06/07/nginx-stream-debug/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Shing</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>June 7, 2020</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/08/21/about-ssl-tls/" title="About SSL And TLS">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">About SSL And TLS</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/06/03/jenkins-pipeline-thinking/" title="Jenkins pipeline thinking">
+                        <span class="hidden-mobile">Jenkins pipeline thinking</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

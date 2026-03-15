@@ -1,0 +1,715 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Shing">
+  <meta name="keywords" content="Golang, Python, Engineering">
+  
+    <meta name="description" content="环境：Java8, Idea 社区版，ubuntu 18.04 LTS 背景：基本没有 Java 实战经验，有 Python 和 Golang 的经验 前篇  学习记录 01 学习记录 02  ThreadThread-Object如果需要初始化一个 Thread 对象，则有两种办法 1234567891011121314151617181920212223public class HelloRu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 学习记录 03">
+<meta property="og:url" content="http://yoursite.com/2018/08/27/get-started-in-java-03/index.html">
+<meta property="og:site_name" content="Shing&#39;s logs">
+<meta property="og:description" content="环境：Java8, Idea 社区版，ubuntu 18.04 LTS 背景：基本没有 Java 实战经验，有 Python 和 Golang 的经验 前篇  学习记录 01 学习记录 02  ThreadThread-Object如果需要初始化一个 Thread 对象，则有两种办法 1234567891011121314151617181920212223public class HelloRu">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-08-26T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-03-15T11:41:26.190Z">
+<meta property="article:author" content="Shing">
+<meta property="article:tag" content="concurrency">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="thread">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Java 学习记录 03 - Shing&#39;s logs</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Shing&#39;s Logs</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Java 学习记录 03"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2018-08-27 00:00" pubdate>
+          August 27, 2018 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.1k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          43 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Java 学习记录 03</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>环境：Java8, Idea 社区版，ubuntu 18.04 LTS</p>
+<p>背景：基本没有 Java 实战经验，有 Python 和 Golang 的经验</p>
+<p>前篇</p>
+<ul>
+<li>学习记录 <a href="/2018/07/13/get-started-in-java-01/">01</a></li>
+<li>学习记录 <a href="/2018/07/27/get-started-in-java-02/">02</a></li>
+</ul>
+<h2 id="Thread"><a href="#Thread" class="headerlink" title="Thread"></a>Thread</h2><h3 id="Thread-Object"><a href="#Thread-Object" class="headerlink" title="Thread-Object"></a>Thread-Object</h3><p>如果需要初始化一个 Thread 对象，则有两种办法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">HelloRunnable</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Runnable</span> &#123;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;Hello from a thread!&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String args[])</span> &#123;<br>        (<span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">HelloRunnable</span>())).start();<br>    &#125;<br><br>&#125;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">HelloThread</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Thread</span> &#123;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;Hello from a thread!&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String args[])</span> &#123;<br>        (<span class="hljs-keyword">new</span> <span class="hljs-title class_">HelloThread</span>()).start();<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>上述两种方法在这里是等价的，run 方法实现具体的线程的功能，通过 start 方法去启动线程。具体的选择看具体的要求，一个是实现接口，一个是继承，推荐使用前者。</p>
+<h3 id="Thread-Management"><a href="#Thread-Management" class="headerlink" title="Thread-Management"></a>Thread-Management</h3><p>你看 Thread 相关实现会发现，一些用于暂停，关闭线程的方法都被废弃了。像 Thread.stop 方法，会直接关掉线程，导致没办法去执行一些资源释放的操作，容易造成不一致的情况。所以最好的情况是通知线程，让线程自己处理。</p>
+<p>相关方法为</p>
+<ul>
+<li>public void Thread.interrupt()</li>
+<li>public boolean isInterrupted()</li>
+<li>public static boolean interrupted()</li>
+</ul>
+<p><code>isInterrupted</code> 方法和 <code>interrupted</code> 方法实际上有些不同</p>
+<ul>
+<li><code>isInterrupted</code> 方法仅仅检查是否处于中断状态</li>
+<li><code>interrupted</code> 方法读取中断状态并清除，即设为 false</li>
+</ul>
+<p><code>interrupted</code> 方法可以理解为，当前的请求中断的需求已经知悉，而是否进行处理则是当前线程的责任了。<code>interrupt</code> 方法做的仅仅是将线程内的标志位设为 true。</p>
+<p>除此以外，如果线程正在处于阻塞状态（Thread.sleep, join …）时，则会抛出 <code>InterruptedException</code> 异常，这个异常需要注意下</p>
+<ul>
+<li>当抛出异常，调用 <code>isInterrupted</code> 方法，此时处于 false 状态</li>
+<li>如果捕获该异常，则应重置该状态，即 <code>Thread.currentThread().interrupt()</code></li>
+</ul>
+<p>可见示例代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>    <span class="hljs-type">Thread</span> <span class="hljs-variable">t</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>() &#123;<br>        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>            <span class="hljs-keyword">try</span> &#123;<br>                Thread.sleep(<span class="hljs-number">1000</span>);<br>            &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>                System.out.println(Thread.currentThread().isInterrupted()); <span class="hljs-comment">// false</span><br>            &#125;<br>        &#125;<br>    &#125;;<br>    t.start();<br>    t.interrupt();<br><br>    <span class="hljs-keyword">try</span> &#123;<br>        Thread.sleep(<span class="hljs-number">1000</span>);<br>    &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="Synchronization"><a href="#Synchronization" class="headerlink" title="Synchronization"></a>Synchronization</h2><h3 id="happens-before"><a href="#happens-before" class="headerlink" title="happens-before"></a>happens-before</h3><ul>
+<li>Thread.start 方法调用前的代码 happens-before 线程的创建，相应的修改对新线程可见</li>
+<li>一个线程结束后，则会导致 Thread.join 返回，所有该线程结束前的代码 happens-before join 方法调用，该线程的操作对调用 join 的线程可见</li>
+</ul>
+<h3 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h3><p>synchronized methods</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SynchronizedCounter</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-variable">c</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">increment</span><span class="hljs-params">()</span> &#123;<br>        c++;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">decrement</span><span class="hljs-params">()</span> &#123;<br>        c--;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-type">int</span> <span class="hljs-title function_">value</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> c;<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">// 也可以写成如下方式</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">SynchronizedCounter</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-variable">c</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">increment</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">synchronized</span> (<span class="hljs-built_in">this</span>) &#123;<br>            c++;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">decrement</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">synchronized</span> (<span class="hljs-built_in">this</span>) &#123;<br>            c--;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">value</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">synchronized</span> (<span class="hljs-built_in">this</span>) &#123;<br>            <span class="hljs-keyword">return</span> c;<br>        &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">// 可以明确指定锁来分离不同的需要加锁的逻辑</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MsLunch</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">long</span> <span class="hljs-variable">c1</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">long</span> <span class="hljs-variable">c2</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">Object</span> <span class="hljs-variable">lock1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>();<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">Object</span> <span class="hljs-variable">lock2</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>();<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">inc1</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">synchronized</span>(lock1) &#123;<br>            c1++;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">inc2</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">synchronized</span>(lock2) &#123;<br>            c2++;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>同步方法有下面的特点</p>
+<ul>
+<li>不同的线程对同一个对象的同步方法调用不会交叉，即一个调用时另一个会 block 然后等前一个调用完成</li>
+<li>前一个调用 happens-before 后面别的同步方法的调用，保证改动对所有线程可见</li>
+<li>构造函数不能（也没意义）添加 synchronized 关键字</li>
+</ul>
+<p>这样就保证了不同线程调用同一个对象时，读、写数据不会造成不一致的情况。</p>
+<h3 id="locks"><a href="#locks" class="headerlink" title="locks"></a>locks</h3><p>内在锁（intrinsic lock）或称为监视器锁（monitor lock），用于建立不同线程间调用时 happens-before 的关系。</p>
+<p>具体的定义为</p>
+<blockquote>
+<p>Every object has an intrinsic lock associated with it. By convention, a thread that needs exclusive and consistent access to an object’s fields has to acquire the object’s intrinsic lock before accessing them, and then release the intrinsic lock when it’s done with them. A thread is said to own the intrinsic lock between the time it has acquired the lock and released the lock. As long as a thread owns an intrinsic lock, no other thread can acquire the same lock. The other thread will block when it attempts to acquire the lock.</p>
+</blockquote>
+<blockquote>
+<p>When a thread releases an intrinsic lock, a happens-before relationship is established between that action and any subsequent acquisition of the same lock.</p>
+</blockquote>
+<p>当一个线程执行 synchronized 相关方法时，则申请一个内在锁，等到退出（哪怕是未捕捉的异常退出）时释放锁，别的线程才可继续调用该对象的 synchronized 方法。synchronized 为可重入锁，即同一个线程内的可以直接调用其它 synchronized 修饰的方法。</p>
+<h3 id="atomic-access"><a href="#atomic-access" class="headerlink" title="atomic-access"></a>atomic-access</h3><ul>
+<li>Reads and writes are atomic for reference variables and for most primitive variables (all types except long and double).</li>
+<li>Reads and writes are atomic for all variables declared volatile (including long and double variables).</li>
+</ul>
+<p>关于 long 和 double 类型的读写不是原子性，可见后面的参考文章。即对 long 和 double 类型的读写最好放在 synchronized 中进行。</p>
+<h3 id="guarded-block"><a href="#guarded-block" class="headerlink" title="guarded-block"></a>guarded-block</h3><p>即在线程中循环检查某个条件，条件满足之后才进行后续的行为。比较推荐的做法是，检查该条件，并且调用 wait 方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">guardedJoy</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-comment">// This guard only loops once for each special event, which may not</span><br>    <span class="hljs-comment">// be the event we&#x27;re waiting for.</span><br>    <span class="hljs-keyword">while</span>(!joy) &#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>            wait();<br>        &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;&#125;<br>    &#125;<br>    System.out.println(<span class="hljs-string">&quot;Joy and efficiency have been achieved!&quot;</span>);<br>&#125;<br><br><span class="hljs-comment">// 另一个方法调用 notifyAll() 方法去通知等待锁释放的线程</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-title function_">notifyJoy</span><span class="hljs-params">()</span> &#123;<br>    joy = <span class="hljs-literal">true</span>;<br>    notifyAll();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这里需要注意的是，该处的 wait 方法属于 Object 的方法，只能在 synchronized 修饰的方法中使用。除了 notifyAll 以外，还有个 notify 方法，该方法则是随机唤醒一个在等待锁释放的线程，平时更倾向于使用 notifyAll。</p>
+<h2 id="Immutable-Objects"><a href="#Immutable-Objects" class="headerlink" title="Immutable Objects"></a>Immutable Objects</h2><p>不可变对象，即对象本身的状态（字段）不会更新（不能更新），具体的策略如下</p>
+<ul>
+<li>如果需要修改对象属性，可通过方法新建一个对象，原有的对象不变</li>
+<li>所有的字段都已经是私有的，加上 final</li>
+<li>将类声明为 final 的，子类服务重写其方法，也可以通过将构造函数声明为 private，通过工厂方法创建对象</li>
+<li>只有一个字段是对象引用，并且被引用的对象也是不可变对象</li>
+</ul>
+<h2 id="High-Level-Concurrency-Objects"><a href="#High-Level-Concurrency-Objects" class="headerlink" title="High Level Concurrency Objects"></a>High Level Concurrency Objects</h2><h3 id="Lock-Objects"><a href="#Lock-Objects" class="headerlink" title="Lock-Objects"></a>Lock-Objects</h3><p>Lock 类比之前的 synchronized 提供更加细致的方法，如支持 wait &#x2F; notify 方法，支持 tryLock 可以用于获取锁的超时控制。</p>
+<h3 id="Concurrent-Collections"><a href="#Concurrent-Collections" class="headerlink" title="Concurrent-Collections"></a>Concurrent-Collections</h3><ul>
+<li>BlockingQueue - FIFO 如果队列满了 &#x2F; 空了阻塞相应的请求</li>
+<li>ConcurrentMap - 对 KV 的操作加锁</li>
+</ul>
+<h3 id="Atomic-Variables"><a href="#Atomic-Variables" class="headerlink" title="Atomic-Variables"></a>Atomic-Variables</h3><p>如 <code>java.util.concurrent.atomic.AtomicInteger</code> 对其进行增减操作不需要进行额外的加锁，其内部进行锁的相关操作。</p>
+<p>相比 synchronized 修饰的代码，这边能更精确的控制临界区，减少不必要的同步操作。</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/tutorial/essential/concurrency/index.html">官方教程</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/7/docs/technotes/guides/concurrency/threadPrimitiveDeprecation.html">Why are Thread.stop, Thread.suspend and Thread.resume Deprecated?</a></li>
+<li><a target="_blank" rel="noopener" href="https://dzone.com/articles/longdouble-are-not-atomic-in-java">Long and Double Values Are Not Atomic in Java</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/6155951/whats-the-difference-between-deadlock-and-livelock">死锁和活锁的区别</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/tutorial/essential/concurrency/newlocks.html">Lock Objects</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/java/" class="print-no-link">#java</a>
+      
+        <a href="/tags/thread/" class="print-no-link">#thread</a>
+      
+        <a href="/tags/concurrency/" class="print-no-link">#concurrency</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Java 学习记录 03</div>
+      <div>http://yoursite.com/2018/08/27/get-started-in-java-03/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Shing</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>August 27, 2018</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/09/15/use-python-metaclass/" title="Python metaclass 的使用">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Python metaclass 的使用</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/07/27/get-started-in-java-02/" title="Java 学习记录 02">
+                        <span class="hidden-mobile">Java 学习记录 02</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

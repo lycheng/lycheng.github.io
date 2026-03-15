@@ -1,0 +1,692 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Shing">
+  <meta name="keywords" content="Golang, Python, Engineering">
+  
+    <meta name="description" content="本文旨在简要介绍关于 SSL &#x2F; TLS 的知识 BaseTLS 是 SSL 的迭代版本，SSL 自从 3.0 之后便不再开发，TLS 1.0 为其继任者，目前最新版本为 TLS 1.3，而 TLS 1.0 也在 2020 年被废弃。下文统一使用 TLS 来进行说明，不进行区分 SSL &#x2F; TLS。 HandshakeTLS 连接在建立了 TCP 连接之后，首先是 TLS 握手">
+<meta property="og:type" content="article">
+<meta property="og:title" content="About SSL And TLS">
+<meta property="og:url" content="http://yoursite.com/2020/08/21/about-ssl-tls/index.html">
+<meta property="og:site_name" content="Shing&#39;s logs">
+<meta property="og:description" content="本文旨在简要介绍关于 SSL &#x2F; TLS 的知识 BaseTLS 是 SSL 的迭代版本，SSL 自从 3.0 之后便不再开发，TLS 1.0 为其继任者，目前最新版本为 TLS 1.3，而 TLS 1.0 也在 2020 年被废弃。下文统一使用 TLS 来进行说明，不进行区分 SSL &#x2F; TLS。 HandshakeTLS 连接在建立了 TCP 连接之后，首先是 TLS 握手">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-08-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-03-15T11:41:26.202Z">
+<meta property="article:author" content="Shing">
+<meta property="article:tag" content="https">
+<meta property="article:tag" content="nginx">
+<meta property="article:tag" content="security">
+<meta property="article:tag" content="ssl">
+<meta property="article:tag" content="tls">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>About SSL And TLS - Shing&#39;s logs</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Shing&#39;s Logs</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="About SSL And TLS"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-08-21 00:00" pubdate>
+          August 21, 2020 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.3k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          28 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">About SSL And TLS</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>本文旨在简要介绍关于 SSL &#x2F; TLS 的知识</p>
+<h2 id="Base"><a href="#Base" class="headerlink" title="Base"></a>Base</h2><p>TLS 是 SSL 的迭代版本，SSL 自从 3.0 之后便不再开发，TLS 1.0 为其继任者，目前最新版本为 TLS 1.3，而 TLS 1.0 也在 2020 年被废弃。下文统一使用 TLS 来进行说明，不进行区分 SSL &#x2F; TLS。</p>
+<h3 id="Handshake"><a href="#Handshake" class="headerlink" title="Handshake"></a>Handshake</h3><p>TLS 连接在建立了 TCP 连接之后，首先是 TLS 握手步骤。TLS 安全性是基于非对称加密，而非对称加密对计算资源消耗十分巨大，并不适合在这种非常频繁的连接 &#x2F; 数据传输操作上使用，而 TLS 的做法是先使用非对称加密进行握手，得到一个双方可信的对称加密用的秘钥，然后在此后的数据传输中都使用该秘钥来进行加密。</p>
+<p>握手的步骤大致如下（摘自 <a target="_blank" rel="noopener" href="https://zinglix.xyz/2019/05/07/tls-handshake/">TLS 握手究竟做了什么？</a>）</p>
+<ol>
+<li>客户端发起连接，客户端带上自己产生的随机数 A 和支持的加密套件向服务器发出 <code>Client Hello</code> 请求</li>
+<li>服务器收到请求后带上自己的随机数 B 以及选择的 Cypher Suite 返回 <code>Server Hello</code> 信息。在之后服务器发送自己的证书。<strong>此时服务器也可要求客户端出示证书</strong>。发送完成后发送 <code>Server Hello Done</code> 信息</li>
+<li>客户端通过验证服务器证书是否可靠以决定是否继续通信，若不可信则关闭连接</li>
+<li>若认为可信客户端则会生成一个新随机数 C，称为预主密钥（Pre Master Key），用于之后生成会话密钥，通过来自于证书的公钥进行加密提供给服务器</li>
+<li>客户端会再传递一个 <code>Change Cipher Spec</code>表示之后信息会使用新的会话密钥（session keys）加密信息和哈希。然后客户端发送 <code>Client finished</code> 握手结束</li>
+<li>服务器收到数据后解密得到预主密钥，计算得出会话密钥，然后同样向客户端发送 <code>Change Cipher Spec</code>  和 <code>Server finished</code></li>
+</ol>
+<p>这里可以看到，TLS 握手阶段需要 2 个 RTT。这里面还不包括 TCP 建立连接的三次握手的时间。除此以外，步骤 3 还可能进行一次 OCSP（The Online Certificate Status Protocol） 或者 CRL（Certificate revocation list，证书吊销列表） 的请求，这些请求结果会被缓存，我们更关心的是剩下的这 2 个 RTT。</p>
+<p>除此以外，如果断开了 TLS 连接，本身还支持连接复用机制，这样就可以减少 TLS 握手的时间损耗。</p>
+<p>通信双方握手结束后，双方都有了用于进行对称加密的会话密钥，之后通信都使用该密钥来加密 &#x2F; 解密。上述流程是基于 RSA 算法的秘钥交换，此外还有一种 DH 的算法，可参考文后的链接。</p>
+<h3 id="Certificate"><a href="#Certificate" class="headerlink" title="Certificate"></a>Certificate</h3><p>在上文中提到，握手阶段客户端会验证证书是否可信。在服务器发送自己的证书给到客户端时，客户端需要进行校验该证书是否合法。</p>
+<p>一个证书包括</p>
+<ul>
+<li><strong>The domain name that the certificate was issued for</strong></li>
+<li>Which person, organization, or device it was issued to</li>
+<li><strong>Which certificate authority issued it</strong></li>
+<li><strong>The certificate authority’s digital signature</strong></li>
+<li><strong>Associated subdomains</strong></li>
+<li><strong>Issue date of the certificate</strong></li>
+<li>Expiration date of the certificate</li>
+<li><strong>The public key (the private key is kept secret)</strong></li>
+</ul>
+<p>Certificate Authority（CA）是独立的第三方，负责签发和维护 TLS 证书。证书本身带有数字签名，该数字签名使用的是其父级证书的私钥来签发，通过查询其父级证书通过其公钥即可查询出签名是否一致。而证书校验这个过程是一直递归到根证书，根证书是自签名的，这样就可以验证证书是否合法，这个链路称之为证书链（Chain of trust）。</p>
+<p>而被信任的根证书是随着操作系统，浏览器等分发，只要客户端验证一直到根证书都没问题，则认为该证书是合法的。伪造证书的关键在于 CA 签发证书是否严谨，此外如果没有得到根证书的验证也无法得到信任。</p>
+<p>常用的像 Fiddler 这类抓包工具，需要添加一个它自己的根证书这样才能解析 HTTPS 的流量，它自己本身就是类似于中间人攻击的角色。</p>
+<h3 id="Nginx-Examples"><a href="#Nginx-Examples" class="headerlink" title="Nginx-Examples"></a>Nginx-Examples</h3><p>基本的配置为</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">server</span> &#123;<br>    <span class="hljs-attribute">listen</span>              <span class="hljs-number">443</span> ssl;<br>    <span class="hljs-attribute">server_name</span>         www.example.com;<br>    <span class="hljs-attribute">ssl_certificate</span>     www.example.com.crt;<br>    <span class="hljs-attribute">ssl_certificate_key</span> www.example.com.key;<br>    <span class="hljs-attribute">ssl_protocols</span>       TLSv1 TLSv1.<span class="hljs-number">1</span> TLSv1.<span class="hljs-number">2</span>;<br>    <span class="hljs-attribute">ssl_ciphers</span>         HIGH:!aNULL:!MD5;<br>    <span class="hljs-attribute">ssl_client_certificate</span> xxx.pem;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>其中最重要的是，<code>ssl_certificate</code> 为证书地址，<code>ssl_certificate_key</code> 为私钥地址，其余则为相应的 TLS 的配置，如 TLS 的版本，使用的算法等等。除此以外还有更多的配置可用，具体可查阅 Nginx 的 http ssl module。</p>
+<p>之前的握手阶段也提到过，服务端在返回自己的证书的时候，也可以要求客户端提供证书。客户端证书是用来校验是否是可信用户。上面有个 <code>ssl_client_certificate</code> 配置项，需要制定一个 PEM 格式的 CA 证书来验证客户端。配置了客户端证书就必须在请求是明确指定证书来请求服务端，否则就是 403 错误，常见的 HTTP Library 都支持配置证书。</p>
+<h2 id="Advanced"><a href="#Advanced" class="headerlink" title="Advanced"></a>Advanced</h2><h3 id="False-Start"><a href="#False-Start" class="headerlink" title="False-Start"></a>False-Start</h3><p>之前也提到过，一次 TLS 握手至少需要 2 个 RTT。但其实，在客户端算出随机数 C 时，已经可以得出用于非对称加密用的秘钥。启用 False Start 的特性之后，可以随着 <code>Client finished</code> 返回服务端时，把实际的请求信息也带到服务端。这样算下来，TLS 握手的时间可以减少到 1 个 RTT。</p>
+<h3 id="Keyless"><a href="#Keyless" class="headerlink" title="Keyless"></a>Keyless</h3><p>上述的 Nginx 样例，更多是在自己源站服务端使用 TLS，而现在更多是托管于 CDN 后面，这里就需要一些另外的设置。看了下常见的公有云的文档，都是需要将自己相关域名证书私钥上传才能在 CDN 节点启用 TLS。</p>
+<p>这样子在私钥的管理上会有问题。后来就有了 Cloudflare 提供的 Keyless 服务。其原理就是整个 TLS 握手需要解析一次客户端使用公钥加密的数据，那么只需要额外提供一个 Key Server 去帮忙解析这个加密过的数据就行。而后，我们只需要保证 CDN 节点到 Key Server 的链路是安全的，就可以保证 TLS 的安全性。</p>
+<p>Conclusion</p>
+<p>TLS 本身还是挺有意思的</p>
+<ul>
+<li>对称加密的安全性有问题，于是我们使用非对称加密来加密数据</li>
+<li>非对称加密不能加密太多内容，并且速度比不上对称加密，那么我们就通过非对称加密协商一个用于安全沟通的对称加密秘钥</li>
+<li>握手时考虑了双方的随机数不可信的问题</li>
+<li>有第三方 CA 来保证证书的安全性</li>
+<li>现在有了很多硬件可以加速非对称加密 &#x2F; 解密的速度</li>
+</ul>
+<p>未来浏览器会逐步停止支持 HTTP 协议的网站，一点点的损耗换来安全，何乐而不为呢？参考阅读中重点推荐最后一个，比较完整的展示了 TLS 的特性。</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://zinglix.xyz/2019/05/07/tls-handshake">https://zinglix.xyz/2019/05/07/tls-handshake</a></li>
+<li><a target="_blank" rel="noopener" href="https://razeencheng.com/post/ssl-handshake-detail">https://razeencheng.com/post/ssl-handshake-detail</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.baidu.com/resources/online/doc/security/https-pratice-1.html">https://developer.baidu.com/resources/online/doc/security/https-pratice-1.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cloudflare.com/learning/ssl/what-is-an-ssl-certificate/">https://www.cloudflare.com/learning/ssl/what-is-an-ssl-certificate/</a></li>
+<li><a target="_blank" rel="noopener" href="https://nginx.org/en/docs/http/ngx_http_ssl_module.html">https://nginx.org/en/docs/http/ngx_http_ssl_module.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.cloudflare.com/keyless-ssl-the-nitty-gritty-technical-details/">https://blog.cloudflare.com/keyless-ssl-the-nitty-gritty-technical-details/</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/nginx/" class="print-no-link">#nginx</a>
+      
+        <a href="/tags/security/" class="print-no-link">#security</a>
+      
+        <a href="/tags/ssl/" class="print-no-link">#ssl</a>
+      
+        <a href="/tags/tls/" class="print-no-link">#tls</a>
+      
+        <a href="/tags/https/" class="print-no-link">#https</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>About SSL And TLS</div>
+      <div>http://yoursite.com/2020/08/21/about-ssl-tls/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Shing</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>August 21, 2020</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/09/14/cloud-design-patterns/" title="Cloud Design Patterns">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Cloud Design Patterns</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/06/07/nginx-stream-debug/" title="Nginx stream debug">
+                        <span class="hidden-mobile">Nginx stream debug</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

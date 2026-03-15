@@ -1,0 +1,671 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Shing">
+  <meta name="keywords" content="Golang, Python, Engineering">
+  
+    <meta name="description" content="本文关注的是 python2 和 python3 在编码处理上的异同。所使用的python2 的版本为 2.7.12，python3 的版本为 3.5.2。 unicodeunicode 是为了解决不同的语言背景下的统一的文字编码问题，简单来说就是给全世界所有的语言的字符唯一的 ID 来进行识别。例如，使用 python2 来输出汉字 “你好” 12s &#x3D; u&#x27;你好&#x27;print">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 编码问题">
+<meta property="og:url" content="http://yoursite.com/2017/03/26/python-encoding/index.html">
+<meta property="og:site_name" content="Shing&#39;s logs">
+<meta property="og:description" content="本文关注的是 python2 和 python3 在编码处理上的异同。所使用的python2 的版本为 2.7.12，python3 的版本为 3.5.2。 unicodeunicode 是为了解决不同的语言背景下的统一的文字编码问题，简单来说就是给全世界所有的语言的字符唯一的 ID 来进行识别。例如，使用 python2 来输出汉字 “你好” 12s &#x3D; u&#x27;你好&#x27;print">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2017-03-25T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-03-15T11:41:26.190Z">
+<meta property="article:author" content="Shing">
+<meta property="article:tag" content="encoding">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Python 编码问题 - Shing&#39;s logs</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Shing&#39;s Logs</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Python 编码问题"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2017-03-26 00:00" pubdate>
+          March 26, 2017 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.8k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          24 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Python 编码问题</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>本文关注的是 python2 和 python3 在编码处理上的异同。所使用的python2 的版本为 2.7.12，python3 的版本为 3.5.2。</p>
+<h2 id="unicode"><a href="#unicode" class="headerlink" title="unicode"></a>unicode</h2><p>unicode 是为了解决不同的语言背景下的统一的文字编码问题，简单来说就是给全世界所有的语言的字符唯一的 ID 来进行识别。例如，使用 python2 来输出汉字 “你好”</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">s = <span class="hljs-string">u&#x27;你好&#x27;</span><br><span class="hljs-built_in">print</span>(s) <span class="hljs-comment"># u&#x27;\u4f60\u597d&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>上述的 \u 开头的代码即 unicode 对汉字的唯一代码。但实际上，在计算机中，并不直接存放该代码。在 unicode 之前，普遍使用的是 ASCII 的方式进行编码，在英文世界中，一个字节可表示的 128 个符号已经足够了。如果普遍使用 unicode 则相应的英文存储的空间要扩大一倍以上。</p>
+<p>所以就有了 utf-8 的出现。utf-8 是最普遍的 unicode 的实现方式，最主要的特点是可变长的编码形式。对于 ASCII 这种单字节的形式，第一个 bit 设置为 0，后面 7 位为有效位，即可完美兼容 ASCII。对于其他形式，则相应的位数有相应的规则，这里就不展开讨论了。</p>
+<p>最后，需要注意的是，utf-8 是变长的，由前缀的 bit 位的规则来决定字节数。之后来谈谈在 python 中的实现。</p>
+<h2 id="python2"><a href="#python2" class="headerlink" title="python2"></a>python2</h2><p>python2 的默认编码为 ASCII。在源代码文件中，如果用到非 ASCII 字符，需要在文件头部进行编码声明，当然，这并不影响实际程序的编码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># -*- coding: utf-8 -*-</span><br></code></pre></td></tr></table></figure>
+
+<p>在 python2 中，与编码对应的有两种类型，str 和 unicode。简单来说，str 由 unicode 经过某种编码之后的字节组成。两者的关系如下</p>
+<ul>
+<li>都是 basestring 的子类</li>
+<li>相对来说，unicode 才是真正意义上的字符串，调用 len 方法统计的是有多少个“字”，而 str 则是有多少字节</li>
+<li>str  -&gt; decode(‘the_coding_of_str’) -&gt; unicode</li>
+<li>unicode -&gt; encode(‘the_coding_you_want’) -&gt; str</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># -*- coding: utf-8 -*-</span><br><br>u = <span class="hljs-string">u&#x27;你好&#x27;</span><br>s = u.encode(<span class="hljs-string">&quot;utf-8&quot;</span>)<br><span class="hljs-comment"># u.decode(&quot;utf-8&quot;)  # UnicodeEncodeError: &#x27;ascii&#x27; codec can&#x27;t encode ...</span><br><br>u0 = s.decode(<span class="hljs-string">&quot;utf-8&quot;</span>)<br><span class="hljs-comment"># s.encode(&quot;utf-8&quot;)  # UnicodeDecodeError: &#x27;ascii&#x27; codec can&#x27;t decode ...</span><br><br>s = <span class="hljs-string">&#x27;你好&#x27;</span>  <span class="hljs-comment"># 如果不加源文件的 coding 声明，这里会报错</span><br>u = s.decode(<span class="hljs-string">&quot;utf-8&quot;</span>)<br><span class="hljs-comment">#  u.decode(&quot;utf-8&quot;)  # UnicodeEncodeError: &#x27;ascii&#x27; codec can&#x27;t encode</span><br><br>s = u.encode(<span class="hljs-string">&quot;utf-8&quot;</span>)<br><span class="hljs-comment">#  s.encode(&quot;utf-8&quot;)  # UnicodeDecodeError: &#x27;ascii&#x27; codec can&#x27;t decode</span><br><br>u = <span class="hljs-string">u&#x27;abc&#x27;</span><br>s = <span class="hljs-string">&#x27;abc&#x27;</span><br><br><span class="hljs-built_in">print</span>(s + u)  <span class="hljs-comment"># abcabc</span><br><span class="hljs-built_in">print</span>(s == u)  <span class="hljs-comment"># True</span><br></code></pre></td></tr></table></figure>
+
+<p>上述代码可以看到，decode 和 encode 的调用需要明确，unicode 需要根据一定的编码规则解析成机器可识别的字节流 str，而一堆字节流我们需要知道它所用的编码规则来解析成 unicode。</p>
+<p>需要注意的是，如果是涉及 unicode 和 str 进行拼接和比较，则会有一次隐式转换，即先将 str 转成 unicode 再进行比较。如果 str 不是 ASCII 的话可能会出现转码错误。</p>
+<h3 id="建议"><a href="#建议" class="headerlink" title="建议"></a>建议</h3><ol>
+<li>python 源文件指定编码，一般推荐为 utf-8</li>
+<li>硬编码的字符，使用 unicode 进行声明，如 <code>s = u&#39;你好&#39;</code></li>
+<li>统一转成 unicode 来使用</li>
+<li>Decode early, Unicode everywhere, Encode later</li>
+</ol>
+<h2 id="python3"><a href="#python3" class="headerlink" title="python3"></a>python3</h2><p>python3 中，相关的类型为 unicode 和 byte。与 python2 相对应的是</p>
+<ul>
+<li>python2:str &#x3D;&#x3D; python3:bytes</li>
+<li>python2:unicode &#x3D; python3:str</li>
+</ul>
+<p>这样子更容易理解，str 存放的即是我想要的数据，bytes 存放的是实际的二进制数据。还有就是 python3 中将严格区分 str 和 bytes。str 类型只有 encode 方法，bytes 类型只有 decode 方法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python">s = <span class="hljs-string">&quot;你好&quot;</span><br>b = s.encode(<span class="hljs-string">&quot;utf-8&quot;</span>)<br><span class="hljs-built_in">print</span>(b)  <span class="hljs-comment"># b&#x27;\xe4\xbd\xa0\xe5\xa5\xbd&#x27;</span><br>s0 = b.decode(<span class="hljs-string">&quot;utf-8&quot;</span>)<br><span class="hljs-built_in">print</span>(s0)  <span class="hljs-comment"># 你好</span><br><br><span class="hljs-comment"># str 和 bytes 被认为是两种类型，比较和连接并不会进行自动的类型转换</span><br>s = <span class="hljs-string">&quot;abc&quot;</span><br>b = <span class="hljs-string">b&quot;abc&quot;</span><br><span class="hljs-built_in">print</span>(s == b)  <span class="hljs-comment"># False</span><br><span class="hljs-built_in">print</span>(s + b)  <span class="hljs-comment"># TypeError: Can&#x27;t convert &#x27;bytes&#x27; object to str implicitly</span><br></code></pre></td></tr></table></figure>
+
+<p>对文件的操作也不同了，你通过 open 函数打开的文件返回的东西可能不同了。如果指定 <code>rb</code> 模式打开的文件，其内容为二进制流，即 bytes。如果是 <code>r</code> 模式，其内容为 str，这点需要额外注意。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">fp = <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;./index.html&quot;</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">type</span>(fp.read()))  <span class="hljs-comment"># &lt;class &#x27;str&#x27;&gt;</span><br><br>fp = <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;./index.html&quot;</span>, <span class="hljs-string">&quot;rb&quot;</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">type</span>(fp.read()))  <span class="hljs-comment"># &lt;class &#x27;bytes&#x27;&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>python3 比 python2 在编码上更加严格了，默认的编码就是 utf-8，已经不再需要在原文件头声明编码。decode 和 encode 方法也不再是两个类型都能调用，这个我认为是比较重要的，这样在写代码的时候就不需要纠结要用哪个方法了，最后是推荐阅读参考的第一个文章，很好的讲解了 unicode 的出现背景。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/">unicode 的出现背景和相关知识</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html">阮一峰的关于 unicode 的笔记</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.python.org/2/howto/unicode.html">Unicode HOWTO python2</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/python/" class="print-no-link">#python</a>
+      
+        <a href="/tags/encoding/" class="print-no-link">#encoding</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Python 编码问题</div>
+      <div>http://yoursite.com/2017/03/26/python-encoding/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Shing</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>March 26, 2017</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2017/05/17/python3-str-bytes/" title="Python3 字符串问题">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Python3 字符串问题</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2017/03/14/python-collections/" title="Python collections 库解析">
+                        <span class="hidden-mobile">Python collections 库解析</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

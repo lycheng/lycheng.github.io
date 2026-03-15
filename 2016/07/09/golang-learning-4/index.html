@@ -1,0 +1,670 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Shing">
+  <meta name="keywords" content="Golang, Python, Engineering">
+  
+    <meta name="description" content="前面 1 ~ 3 系列是看着书来写的，后面的是自己遇到的一些问题的总结。 类型转换Golang 是强类型语言，类型的转换必须显式转换，interface 除外。 数值类型的转换，哪怕是底层类型相同的 int 和 int32 也不能直接赋值。同理，自定义的类型哪怕底层类型相同也不能直接赋值。 12345678910type MyInt intfunc main() &#123;    var i i">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang 学习 4">
+<meta property="og:url" content="http://yoursite.com/2016/07/09/golang-learning-4/index.html">
+<meta property="og:site_name" content="Shing&#39;s logs">
+<meta property="og:description" content="前面 1 ~ 3 系列是看着书来写的，后面的是自己遇到的一些问题的总结。 类型转换Golang 是强类型语言，类型的转换必须显式转换，interface 除外。 数值类型的转换，哪怕是底层类型相同的 int 和 int32 也不能直接赋值。同理，自定义的类型哪怕底层类型相同也不能直接赋值。 12345678910type MyInt intfunc main() &#123;    var i i">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2016-07-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-03-15T11:41:26.180Z">
+<meta property="article:author" content="Shing">
+<meta property="article:tag" content="golang">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Golang 学习 4 - Shing&#39;s logs</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Shing&#39;s Logs</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Golang 学习 4"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2016-07-09 00:00" pubdate>
+          July 9, 2016 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          26 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Golang 学习 4</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>前面 1 ~ 3 系列是看着书来写的，后面的是自己遇到的一些问题的总结。</p>
+<h2 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h2><p>Golang 是强类型语言，类型的转换必须显式转换，interface 除外。</p>
+<p>数值类型的转换，哪怕是底层类型相同的 <code>int</code> 和 <code>int32</code> 也不能直接赋值。同理，自定义的类型哪怕底层类型相同也不能直接赋值。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> MyInt <span class="hljs-type">int</span><br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">var</span> i <span class="hljs-type">int</span> = <span class="hljs-number">100</span><br>    <span class="hljs-keyword">var</span> j <span class="hljs-type">int32</span> = <span class="hljs-type">int32</span>(i) <span class="hljs-comment">// 显式类型转换</span><br>    <span class="hljs-keyword">var</span> k MyInt = MyInt(i) <span class="hljs-comment">// 显式类型转换</span><br>    fmt.Println(i)<br>    fmt.Println(j)<br>    fmt.Println(k)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>string 类型的转化可以借助 package <code>fmt</code> 和 <code>strconv</code> 来进行。</p>
+<p>interface 的类型转换没那么复杂，但两者必须是包含关系，例如 A interface 的方法包含 b 的方法，则可以 <code>a = A</code> 但不能 <code>A = a</code>，例如</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">var</span> w io.Writer<br>w = os.Stdout           <span class="hljs-comment">// OK: *os.File has Write method</span><br>w = <span class="hljs-built_in">new</span>(bytes.Buffer)   <span class="hljs-comment">// OK: *bytes.Buffer has Write method</span><br>w = time.Second         <span class="hljs-comment">// compile error: time.Duration lacks Write method</span><br><br><span class="hljs-keyword">var</span> rwc io.ReadWriteCloser<br>rwc = os.Stdout         <span class="hljs-comment">// OK: *os.File has Read, Write, Close methods</span><br>rwc = <span class="hljs-built_in">new</span>(bytes.Buffer) <span class="hljs-comment">// compile error: *bytes.Buffer lacks Close method</span><br><br>w = rwc                 <span class="hljs-comment">// OK</span><br>rwc = w                 <span class="hljs-comment">// compile error: io.Writer lacks Close method</span><br></code></pre></td></tr></table></figure>
+
+<p>当一个变量赋值到一个 interface 变量时，再转换回来需要需要使用类型断言</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> Stringer <span class="hljs-keyword">interface</span> &#123;<br>    String() <span class="hljs-type">string</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">str</span><span class="hljs-params">(val <span class="hljs-keyword">interface</span>&#123;&#125;)</span></span> <span class="hljs-type">string</span> &#123;<br>    <span class="hljs-keyword">switch</span> s := val.(<span class="hljs-keyword">type</span>) &#123; <span class="hljs-comment">// 类型断言</span><br>    <span class="hljs-keyword">case</span> <span class="hljs-type">string</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;I&#x27;m String:&quot;</span> + s<br>    <span class="hljs-keyword">case</span> Stringer:<br>        <span class="hljs-keyword">return</span> s.String()<br>    <span class="hljs-keyword">default</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;I don&#x27;t KNOW&quot;</span><br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">type</span> Human <span class="hljs-keyword">struct</span> &#123;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(h Human)</span></span> String() <span class="hljs-type">string</span> &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;WOW&quot;</span><br>&#125;<br><br><span class="hljs-keyword">type</span> Animal <span class="hljs-keyword">struct</span> &#123;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    fmt.Println(str(<span class="hljs-string">&quot;asdada&quot;</span>)) <span class="hljs-comment">// I&#x27;m String:asdada</span><br><br>    h := Human&#123;&#125;<br>    fmt.Println(str(h)) <span class="hljs-comment">// WOW</span><br><br>    a := Animal&#123;&#125;<br>    fmt.Println(str(a)) <span class="hljs-comment">// I don&#x27;t KNOW</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>上述的函数 <code>str</code> 中，接收的参数是空的 interface，在函数调用的时候进行了隐式的类型转换，因为任何类型都包括空的 interface。</p>
+<h3 id="interface-内存结构"><a href="#interface-内存结构" class="headerlink" title="interface 内存结构"></a>interface 内存结构</h3><p>Golang 中的 interface 包括两个部分</p>
+<ol>
+<li>底层的数据</li>
+<li>描述符，即方法表</li>
+</ol>
+<p>方法表中，关联着相关类型和方法列表。这些都不是动态类型，所以可以用来进行类型检查。底层数据存放的是复制的一份新的原始数据。在调用的时候，将底层数据作为方法的第一个参数来进行调用。</p>
+<p>空的 interface 就是方法表为空的变量。</p>
+<h2 id="slice"><a href="#slice" class="headerlink" title="slice"></a>slice</h2><p>slice 是变长数组，在使用的时候有些需要注意的地方。</p>
+<p>首先看下 slice 的结构</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> Slice <span class="hljs-keyword">struct</span>&#123;<br>    <span class="hljs-type">byte</span>*    array;        <span class="hljs-comment">// actual data</span><br>    uintgo    <span class="hljs-built_in">len</span>;        <span class="hljs-comment">// number of elements</span><br>    uintgo    <span class="hljs-built_in">cap</span>;        <span class="hljs-comment">// allocated number of elements</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">appendSlice</span><span class="hljs-params">(array []<span class="hljs-type">int</span>)</span></span> &#123;<br>    array[<span class="hljs-number">0</span>] = <span class="hljs-number">10000</span><br>    fmt.Printf(<span class="hljs-string">&quot;%p\n&quot;</span>, array)<br>    array = <span class="hljs-built_in">append</span>(array, <span class="hljs-number">5</span>)<br>    fmt.Printf(<span class="hljs-string">&quot;%p\n&quot;</span>, array) <span class="hljs-comment">// 与上面的地址不同</span><br>    array[<span class="hljs-number">0</span>] = <span class="hljs-number">10001</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    l := []<span class="hljs-type">int</span>&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>&#125;<br>    fmt.Println(l) <span class="hljs-comment">// [1 2 3 4]</span><br>    appendSlice(l)<br>    fmt.Println(l) <span class="hljs-comment">// [10000 2 3 4]</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>上述代码中，修改 slice 里面元素的值成功了，但是 append 失败了。因为 Golang 中传参数是复制的，对 slice 内部的 array 复制进去了，所以修改是成功的。但是 append 之后其实是将旧的 slice 复制到了新的 slice，然后已经是一个新的值了，所以修改是不成功的。</p>
+<h2 id="new-make"><a href="#new-make" class="headerlink" title="new &amp; make"></a>new &amp; make</h2><p><code>new</code> 方法返回空值的结构体的指针，类似于 <code>&amp;File{fd, name, nil, 0}</code> 这样的结构，不过其内部的成员都各自为其类型对应的空值。</p>
+<p><code>make</code> 用于 slice, channel, map 类型的初始化。与 <code>new</code> 不同的是，<code>make</code> 分配对象相应的指定的存储空间，但不会置对应的空值，不返回指针。</p>
+<h2 id="重复声明和重复赋值"><a href="#重复声明和重复赋值" class="headerlink" title="重复声明和重复赋值"></a>重复声明和重复赋值</h2><p>Golang 中的 <code>:=</code> 是赋值和声明的简写，该符号左边至少需要有一个新的变量，如果对以后的变量进行操作则会报错。</p>
+<p>需要注意的是，如果在外层作用域定义的变量，再用 <code>:=</code> 进行赋值操作的话，则会屏蔽掉外层作用域的变量，特别是循环内部判断 <code>error</code> 的时候需要特别注意。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">var</span> err <span class="hljs-type">error</span><br><span class="hljs-keyword">for</span> i := <span class="hljs-number">1</span>; i &lt;= <span class="hljs-number">10</span>; i++ &#123;<br>    j, err := f()<br><br>    fmt.Println(j)<br>    fmt.Println(err) <span class="hljs-comment">// some error</span><br>    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>        <span class="hljs-keyword">break</span><br>    &#125;<br>&#125;<br>fmt.Println(err) <span class="hljs-comment">// nil</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="一点总结"><a href="#一点总结" class="headerlink" title="一点总结"></a>一点总结</h2><p>用 Golang 大概一个多月，除了上手时候有点纠结外，感觉这门语言还是很舒服的。当然，标准库和第三方库还是不能和 Python 比，但编译检查静态错误的这个点开发起来很舒服，一些可能的问题能够尽早的发现。</p>
+<p>interface 这点的引入能够减少不少的重复代码，变量默认零值也能让人逃开奇奇怪怪的构造函数的坑。</p>
+<p>感觉在开发大型项目上，特别是系统级软件会比较适合。在使用过 Python 开发之后，越发觉得有必要加强开发工具对人的约束，代码风格的统一以及对无用 import 和无用变量的约束能够对共同开发起到良好的补充。</p>
+<p>之后如果有耐心，希望可以把几个 Golang 常用的场景写下</p>
+<ol>
+<li>Golang 的反射，动态修改</li>
+<li>Golang 的并发</li>
+<li>…</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a target="_blank" rel="noopener" href="http://research.swtch.com/interfaces">interface 内存结构</a></li>
+<li><a target="_blank" rel="noopener" href="https://golang.org/doc/effective_go.html">Effective Go</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/golang/" class="print-no-link">#golang</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Golang 学习 4</div>
+      <div>http://yoursite.com/2016/07/09/golang-learning-4/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Shing</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>July 9, 2016</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2016/07/16/docker-simple-note/" title="Docker 简要记录">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Docker 简要记录</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2016/07/04/golang-learning-3/" title="Golang 学习 3">
+                        <span class="hidden-mobile">Golang 学习 3</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

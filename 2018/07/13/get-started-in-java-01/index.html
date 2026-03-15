@@ -1,0 +1,772 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Shing">
+  <meta name="keywords" content="Golang, Python, Engineering">
+  
+    <meta name="description" content="环境：Java8, Idea 社区版，ubuntu 18.04 LTS 背景：基本没有 Java 实战经验，有 Python 和 Golang 的经验 Intro JVM（Java Virtual Machine，Java 虚拟机）的缩写 JRE（Java Runtime Environment，Java 运行环境），运行 Java 程序所必须的环境的集合，包括 JVM 和 Java 程序所需的核">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 学习记录 01">
+<meta property="og:url" content="http://yoursite.com/2018/07/13/get-started-in-java-01/index.html">
+<meta property="og:site_name" content="Shing&#39;s logs">
+<meta property="og:description" content="环境：Java8, Idea 社区版，ubuntu 18.04 LTS 背景：基本没有 Java 实战经验，有 Python 和 Golang 的经验 Intro JVM（Java Virtual Machine，Java 虚拟机）的缩写 JRE（Java Runtime Environment，Java 运行环境），运行 Java 程序所必须的环境的集合，包括 JVM 和 Java 程序所需的核">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-07-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-03-15T11:41:26.190Z">
+<meta property="article:author" content="Shing">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Java 学习记录 01 - Shing&#39;s logs</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Shing&#39;s Logs</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Java 学习记录 01"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2018-07-13 00:00" pubdate>
+          July 13, 2018 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.1k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          43 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Java 学习记录 01</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>环境：Java8, Idea 社区版，ubuntu 18.04 LTS</p>
+<p>背景：基本没有 Java 实战经验，有 Python 和 Golang 的经验</p>
+<h2 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h2><ul>
+<li>JVM（Java Virtual Machine，Java 虚拟机）的缩写</li>
+<li>JRE（Java Runtime Environment，Java 运行环境），运行 Java 程序所必须的环境的集合，包括 JVM 和 Java 程序所需的核心类库等</li>
+<li>JDK（Java Development Kit ，Java 开发工具包）是 Java 语言的软件开发工具包(SDK)。JDK 是提供给 Java 开发人员使用的，其中包含了 Java 的开发工具，也包括了JRE。</li>
+</ul>
+<p>所以安装了JDK，就不用在单独安装 JRE 了。他们的关系为 JVM &lt;&#x3D; JRE &lt;&#x3D; JDK，包含关系</p>
+<h2 id="Init"><a href="#Init" class="headerlink" title="Init"></a>Init</h2><p>首先下载 JDK，然后设置相关环境变量</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sh"><span class="hljs-built_in">export</span> JAVA_HOME=/home/lycheng/bin/jdk<br><span class="hljs-built_in">export</span> JRE_HOME=/home/lycheng/bin/jdk/jre<br><span class="hljs-built_in">export</span> PATH=<span class="hljs-string">&quot;<span class="hljs-variable">$JAVA_HOME</span>/bin:<span class="hljs-variable">$PATH</span>&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p><code>which java</code> 看下是否有问题，然后就是 HelloWorld 程序</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">HelloWorldApp</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;Hello World!&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>编译，执行</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sh">javac main.java<br><span class="hljs-comment"># 生成 HelloWorldApp.class</span><br>java HelloWorldApp<br></code></pre></td></tr></table></figure>
+
+<h3 id="Maven"><a href="#Maven" class="headerlink" title="Maven"></a>Maven</h3><p>同样也是下载二进制包，可参考 <a target="_blank" rel="noopener" href="https://maven.apache.org/install.html">Maven 安装指南</a></p>
+<p>设置相关环境变量</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sh"><span class="hljs-built_in">export</span> MAVEN_HOME=<span class="hljs-variable">$LOCALBIN</span>/maven<br><span class="hljs-built_in">export</span> PATH=<span class="hljs-string">&quot;<span class="hljs-variable">$MAVEN_HOME</span>/bin:<span class="hljs-variable">$PATH</span>&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>Maven 的全局设置在 <code>path/to/maven/conf/settings.yml</code> 可修改其 <code>localRepository</code> 设置本地仓库的地址</p>
+<h2 id="Basic-Syntax"><a href="#Basic-Syntax" class="headerlink" title="Basic-Syntax"></a>Basic-Syntax</h2><h3 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h3><p>规则</p>
+<ol>
+<li>一个源文件中只能有一个 public 类</li>
+<li>一个源文件可以有多个非 public 类</li>
+<li>源文件的名称应该和 public 类的类名保持一致。例如：源文件中 public 类的类名是 Employee，那么源文件应该命名为 Employee.java</li>
+<li>如果一个类定义在某个 package 中，那么 package 语句应该在源文件的首行</li>
+<li>如果源文件包含 import 语句，那么应该放在 package 语句和类定义之间。如果没有 package 语句，那么 import 语句应该在源文件中最前面</li>
+<li>import 语句和 package 语句对源文件中定义的所有类都有效。在同一源文件中，不能给不同的类不同的包声明</li>
+</ol>
+<p>class 定义的基本语法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Animal</span> &#123;<br><br>    <span class="hljs-comment">// 成员变量</span><br>    <span class="hljs-keyword">private</span> String name;<br><br>    <span class="hljs-comment">// 类变量</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">String</span> <span class="hljs-variable">animalType</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;cat&quot;</span>;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">Animal</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-comment">// 调用其它构造函数</span><br>        <span class="hljs-built_in">this</span>(<span class="hljs-string">&quot;default-name&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">Animal</span><span class="hljs-params">(String name)</span> &#123;<br>        <span class="hljs-built_in">this</span>.name = name;<br>        <span class="hljs-comment">// 可以在实例方法中修改类静态变量，会提示 warning</span><br>        <span class="hljs-comment">// this.animalType = &quot;dog&quot;;</span><br><br>        <span class="hljs-comment">// 也可以简单的，不提示 warning</span><br>        <span class="hljs-comment">// animalType = &quot;dog&quot;;</span><br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">toString</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-comment">// Override 会去检查父类有没该方法，签名是否对的上</span><br>        <span class="hljs-comment">// 不加的话如果对不上，则会认为是新的方法</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Animal&#x27;s name is &quot;</span> + name + <span class="hljs-string">&quot;, type is &quot;</span> + animalType;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title function_">getAnimalType</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> animalType;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setAnimalType</span><span class="hljs-params">(String animalType)</span> &#123;<br>        Animal.animalType = animalType;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>其中 this 的用法</p>
+<ul>
+<li>当你局部变量有和类实例变量同名时，用来明确表示使用的是类实例变量</li>
+<li>当前的对象的引用</li>
+<li>调用别的构造函数</li>
+</ul>
+<h3 id="Inheritance"><a href="#Inheritance" class="headerlink" title="Inheritance"></a>Inheritance</h3><p>Java 中只允许单继承</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Cat</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Animal</span>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">Cat</span><span class="hljs-params">(String name)</span> &#123;<br>        <span class="hljs-built_in">super</span>(name);<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">str</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">super</span>.toString();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>上述的 super(name) 是调用父类的构造函数，第二个 super 则是父类引用，用于调用父类的成员函数。</p>
+<p>关于 static 有以下特性</p>
+<ul>
+<li>在子类调用父类的 static 方法，也会影响到父类</li>
+<li>static 的属性不依赖于任何的对象和子类，在内存中只会存在一份副本</li>
+<li>static 语句在类加载的时候执行，按顺序执行，并只执行一次</li>
+</ul>
+<p>需要注意 Java 的类方法和属性在定义的时候可以设定访问权限，对应的关系如下</p>
+<table>
+<thead>
+<tr>
+<th>Access Level</th>
+<th>Class</th>
+<th>Package</th>
+<th>Subclass</th>
+<th>World</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>public</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>protected</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>N</td>
+</tr>
+<tr>
+<td>no</td>
+<td>Y</td>
+<td>Y</td>
+<td>N</td>
+<td>N</td>
+</tr>
+<tr>
+<td>private</td>
+<td>Y</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+</tr>
+</tbody></table>
+<p>可以看到，private 的最严格，public 最松散。</p>
+<h3 id="Interface"><a href="#Interface" class="headerlink" title="Interface"></a>Interface</h3><p>interface 简单来说就是规定了类的函数签名</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">Bicycle</span> &#123;<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">speedUp</span><span class="hljs-params">(<span class="hljs-type">int</span> incrment)</span>;<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">applyBreaks</span><span class="hljs-params">(<span class="hljs-type">int</span> decrement)</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">TheBicycle</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Bicycle</span> &#123;<br><br>    <span class="hljs-keyword">private</span> String brand;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> speed;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">TheBicycle</span><span class="hljs-params">(String brand)</span> &#123;<br>        <span class="hljs-built_in">this</span>.brand = brand;<br>        <span class="hljs-built_in">this</span>.speed = <span class="hljs-number">0</span>;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">speedUp</span><span class="hljs-params">(<span class="hljs-type">int</span> incrment)</span> &#123;<br>        <span class="hljs-built_in">this</span>.speed += incrment;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">applyBreaks</span><span class="hljs-params">(<span class="hljs-type">int</span> decrement)</span> &#123;<br>        <span class="hljs-keyword">if</span> (decrement &gt; <span class="hljs-built_in">this</span>.speed) &#123;<br>            <span class="hljs-built_in">this</span>.speed -= decrement;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-built_in">this</span>.speed = <span class="hljs-number">0</span>;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>与类继承的异同如下</p>
+<ul>
+<li>类继承仅允许单继承，而接口允许继承（extends）多个接口</li>
+<li>类能实例化对象，但接口不能，所以也没有构造函数<ul>
+<li>抽象类同样不能实例化，继承其的子类也必须实现父类的抽象方法，其余的非抽象方法则可当做为子类提供的默认实现</li>
+</ul>
+</li>
+<li>接口中可以含有变量，但是接口中的变量会被隐式的指定为 <code>public static final</code> 变量（并且只能是 public，用 private 修饰会报编译错误）</li>
+<li>接口被类实现其函数签名</li>
+</ul>
+<p>有了接口，实际调用的时候，可以通过声明接口的参数，至于其底层实现则不关心</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Main</span> &#123;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test</span><span class="hljs-params">(Transportation t)</span> &#123;<br>        System.out.println(t);<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;Hello World!&quot;</span>);<br><br>        <span class="hljs-comment">// Bicycle 和 Car 都实现了 Transportation 这个接口</span><br>        <span class="hljs-type">Bicycle</span> <span class="hljs-variable">b</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TheBicycle</span>(<span class="hljs-string">&quot;Giant&quot;</span>);<br>        <span class="hljs-type">Car</span> <span class="hljs-variable">c</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Car</span>();<br><br>        test(b);<br>        test(c);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>与继承不同，接口实现这种方式不同的对象可以是完全不相干的，保证其接口是相同的就可以。</p>
+<h2 id="Project-Structure"><a href="#Project-Structure" class="headerlink" title="Project-Structure"></a>Project-Structure</h2><h3 id="Package"><a href="#Package" class="headerlink" title="Package"></a>Package</h3><p>首先，一个 java 文件中只能有一个类是 public 的，所以定义多个类的时候必须有多个文件。而多个文件的管理则必须通过 package 来管理。</p>
+<p>package 在文件层面看就是同一个文件夹下的不同 java 文件，代码层面就是 . 分隔的模块。</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">├── core<br>│   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Bicycle</span>.</span></span>java<br>│   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Car</span>.</span></span>java<br>│   └── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Transportation</span>.</span></span>java<br>└── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Main</span>.</span></span>java<br></code></pre></td></tr></table></figure>
+
+<p>每一个 Java 文件必须写明来自哪个 package</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> core;<br><br><span class="hljs-comment">// package name 全小写</span><br></code></pre></td></tr></table></figure>
+
+<p>在实际使用的时候可以通过 <code>import</code> 语句来引入系统 &#x2F; 自定义的 package。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.Date;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Main</span> &#123;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test</span><span class="hljs-params">(core.Transportation t)</span> &#123;<br>        System.out.println(t);<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;Hello World!&quot;</span>);<br><br>        core.<span class="hljs-type">Bicycle</span> <span class="hljs-variable">b</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">core</span>.Bicycle(<span class="hljs-string">&quot;Giant&quot;</span>);<br>        core.<span class="hljs-type">Car</span> <span class="hljs-variable">c</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">core</span>.Car();<br><br>        test(b);<br>        test(c);<br><br>        <span class="hljs-comment">// 如果去掉 Date 的 import</span><br>        <span class="hljs-comment">// java.util.Date d = new java.util.Date();</span><br>        <span class="hljs-comment">// 也可以 import java.util.*; 这样也可以不用写完整的类名，但是不推荐</span><br>        <span class="hljs-type">Date</span> <span class="hljs-variable">d</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>();<br>        System.out.println(d);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>上述的代码也可以添加 <code>import</code> 语句来简化代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> core.Transportation;<br><span class="hljs-keyword">import</span> core.Bicycle;<br><span class="hljs-keyword">import</span> core.Car;<br><br><span class="hljs-comment">// Car c = new Car();</span><br></code></pre></td></tr></table></figure>
+
+<p>需要注意的是，package 里面定义的类只有 public 外部（别的 package）才可见。</p>
+<p>如果使用通配符 * 来 import 还需要注意的是, * 只会 import 那一层级的类，不会递归查找去 import</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.awt.*;<br><span class="hljs-keyword">import</span> java.awt.color.*; <span class="hljs-comment">// 如果想要使用 color 的类，则必须多加一个 import</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="Static-Import"><a href="#Static-Import" class="headerlink" title="Static-Import"></a>Static-Import</h4><p>在类中定义了 static 成员时，如果外部需要使用，则 import 之后需要带上类名 prefix 才能访问。此时就可以使用 static import 就可以减少代码量</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// before</span><br><span class="hljs-comment">// System.out.println(Math.PI);</span><br><br><span class="hljs-comment">// after</span><br><span class="hljs-comment">// import static java.lang.Math.PI;</span><br><br>System.out.println(PI);<br></code></pre></td></tr></table></figure>
+
+<p>方便使用的同时也带来了问题，丢失了这些 static 成员的出处，查看代码是容易混乱，谨慎使用。</p>
+<h3 id="Naming"><a href="#Naming" class="headerlink" title="Naming"></a>Naming</h3><ol>
+<li>驼峰命名</li>
+<li>函数，方法，变量以首字母小写的驼峰命名</li>
+<li>类，接口以首字母大写的驼峰命名</li>
+<li>常量用全大写，下划线分隔的写法</li>
+</ol>
+<p>企业开发的 package 以域名作为项目的 package 命名，如 <code>com/baidu/www/...</code></p>
+<ul>
+<li>package 命名为全小写，原则上不加分隔符</li>
+<li>Java 的关键字 &#x2F; 数字开头 不推荐使用</li>
+</ul>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://www.jetbrains.com/idea/features/editions_comparison_matrix.html">Idea 社区版和商业版的区别</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">JDK 下载</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/tutorial/">Java Tutorial</a></li>
+<li><a target="_blank" rel="noopener" href="https://google.github.io/styleguide/javaguide.html">Google Java Style Guide</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/java/" class="print-no-link">#java</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Java 学习记录 01</div>
+      <div>http://yoursite.com/2018/07/13/get-started-in-java-01/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Shing</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>July 13, 2018</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/07/27/get-started-in-java-02/" title="Java 学习记录 02">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java 学习记录 02</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/07/01/influxdb-intro/" title="InfluxDB 简介">
+                        <span class="hidden-mobile">InfluxDB 简介</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
